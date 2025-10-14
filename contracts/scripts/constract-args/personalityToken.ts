@@ -1,0 +1,1 @@
+export default ["https://ipfs.io/ipfs/xxx/"]
