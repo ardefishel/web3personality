@@ -20,6 +20,20 @@ contract QuizManager is Ownable {
     mapping(uint256 => Quiz) quizzes;
     mapping(address => mapping(uint256 => bool)) public hasParticipated;
 
+    event QuizCreated(
+        uint256 indexed quizId,
+        string quizHash,
+        uint256 personalitiesCount
+    );
+    event QuizActivated(uint256 indexed quizId, address indexed by);
+    event QuizDeactivated(uint256 indexed quizId, address indexed by);
+    event QuizCompleted(
+        uint256 indexed quizId,
+        address indexed user,
+        string personality,
+        uint256 tokenId
+    );
+
     constructor(address _personalityToken) Ownable(msg.sender) {
         require(_personalityToken != address(0), "invalid token address");
         personalityToken = PersonalityToken(_personalityToken);
@@ -57,6 +71,8 @@ contract QuizManager is Ownable {
         }
 
         quizIdCounter++;
+
+        emit QuizCreated(newQuiz.quizId, _quizHash, _personalities.length);
     }
 
     function completeQuiz(
@@ -78,18 +94,24 @@ contract QuizManager is Ownable {
         hasParticipated[msg.sender][_quizId] = true;
 
         personalityToken.mint(msg.sender, _tokenId, _quizId);
+
+        emit QuizCompleted(_quizId, msg.sender, _quizPersonality, _tokenId);
     }
 
     function deactiveQuiz(uint256 _quizId) external onlyOwner {
         require(quizzes[_quizId].quizId != 0, "quiz does not exists");
         require(quizzes[_quizId].isActive == true, "quiz already inactive");
         quizzes[_quizId].isActive = false;
+
+        emit QuizDeactivated(_quizId, msg.sender);
     }
 
     function activateQuiz(uint256 _quizId) external onlyOwner {
         require(quizzes[_quizId].quizId != 0, "quiz does not exists");
         require(quizzes[_quizId].isActive == false, "quiz already active");
         quizzes[_quizId].isActive = true;
+
+        emit QuizActivated(_quizId, msg.sender);
     }
 
     function getQuizInfo(
