@@ -23,7 +23,7 @@ export const Route = createFileRoute("/.well-known/farcaster.json")({
             splashImageUrl: `${import.meta.env.VITE_PUBLIC_URL}/w3p-logo.png`,
             splashBackgroundColor: "#1DEFDB",
             webhookUrl: `${import.meta.env.VITE_PUBLIC_URL}/webhook`,
-            subtitle: "Get your personality NFT on chain",
+            subtitle: "Personality on Chain",
             description: "An on-chain dApp inspired by 16personalities.com.",
             screenshotUrls: [
             ],
