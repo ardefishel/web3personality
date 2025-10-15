@@ -4,10 +4,10 @@ import { lazy, Suspense } from "react";
 
 import appCss from "../styles.css?url";
 import ockCss from "@coinbase/onchainkit/styles.css?url";
-import AppLayout from "@/components/AppLayout";
 
-// Lazy load RootProvider to prevent server-side imports of Web3 packages
+// Lazy load components to prevent server-side imports of Web3 packages
 const RootProvider = lazy(() => import("@/components/RootProvider").then(m => ({ default: m.RootProvider })));
+const AppLayout = lazy(() => import("@/components/AppLayout").then(m => ({ default: m.default })));
 
 export const Route = createRootRoute({
   head: () => ({
