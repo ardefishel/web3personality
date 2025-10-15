@@ -24,7 +24,7 @@ export const Route = createFileRoute("/.well-known/farcaster.json")({
             splashBackgroundColor: "#1DEFDB",
             webhookUrl: `${import.meta.env.VITE_PUBLIC_URL}/webhook`,
             subtitle: "Get your personality NFT on chain",
-            description: "An on-chain dApp inspired by 16personalities.com where users complete seasonal personality quizzes and mint result tokens (ERC1155) redeemable for themed NFT profile art.",
+            description: "An on-chain dApp inspired by 16personalities.com.",
             screenshotUrls: [
             ],
             primaryCategory: "social",
