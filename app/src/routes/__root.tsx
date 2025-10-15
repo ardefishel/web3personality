@@ -7,7 +7,6 @@ import Header from "../components/Header";
 
 import appCss from "../styles.css?url";
 import ockCss from "@coinbase/onchainkit/styles.css?url";
-import { RootProvider } from "@/components/RootProvider";
 
 export const Route = createRootRoute({
   head: () => ({
