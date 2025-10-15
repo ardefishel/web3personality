@@ -33,12 +33,11 @@ export const Route = createRootRoute({
       },
     ],
   }),
-
+  ssr: false,
   shellComponent: RootDocument,
 });
 
 function RootDocument({ children }: { children: React.ReactNode }) {
-
   return (
     <RootProvider>
       <html lang="en">
