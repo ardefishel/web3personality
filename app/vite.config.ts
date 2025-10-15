@@ -7,7 +7,22 @@ import { nitroV2Plugin } from '@tanstack/nitro-v2-vite-plugin'
 
 const config = defineConfig({
   plugins: [
-    nitroV2Plugin(),
+    nitroV2Plugin(
+      {
+        rollupConfig: {
+          external: [
+            '@farcaster/miniapp-sdk',
+            '@farcaster/miniapp-core',
+            '@farcaster/miniapp-wagmi-connector',
+            '@coinbase/onchainkit',
+            '@coinbase/wallet-sdk',
+            'wagmi',
+            '@wagmi/core',
+            '@wagmi/connectors',
+          ],
+        },
+      }
+    ),
     // this is the plugin that enables path aliases
     viteTsConfigPaths({
       projects: ['./tsconfig.json'],
