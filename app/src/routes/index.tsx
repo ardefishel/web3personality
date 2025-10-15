@@ -151,7 +151,7 @@ function LocalFooter() {
       <div className="divider my-0"></div>
       <div className="mt-3 text-sm opacity-80 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
         <span>
-          © 2025 ardefishel and his AI made with love ♥
+          © 2025 Built with ♥ by ardefishel and his AI
         </span>
         <nav className="flex gap-4 underline underline-offset-4">
           <a href="https://github.com/ardefishel" target="_blank" rel="noreferrer">GitHub</a>
