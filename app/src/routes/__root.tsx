@@ -44,11 +44,13 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         <HeadContent />
       </head>
       <body>
-        <Suspense fallback={null}>
+        <Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}>
           <RootProvider>
-            <AppLayout>
-              {children}
-            </AppLayout>
+            <Suspense fallback={null}>
+              <AppLayout>
+                {children}
+              </AppLayout>
+            </Suspense>
           </RootProvider>
         </Suspense>
         <Scripts />
