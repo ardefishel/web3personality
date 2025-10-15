@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { Wallet } from "@coinbase/onchainkit/wallet";
 import { useAccount } from "wagmi";
 
+
 export const Route = createFileRoute("/")({
   component: RouteComponent,
   ssr: false
@@ -20,7 +21,7 @@ function RouteComponent() {
 function FeaturedCarousel() {
   return (
     <section className="px-4">
-      <h2 className="text-xl font-semibold mb-3">Featured Tests</h2>
+      <h2 className="text-xl font-semibold mb-3">Featured Personality Tests</h2>
       <div className="carousel w-full aspect-video rounded-box bg-base-200">
         <div id="slide1" className="carousel-item relative w-full">
           <img
@@ -86,7 +87,7 @@ function IntroSection() {
             <p className="text-lg font-medium">
               🚀 Start your first NFT here! Connect your account to get started.
             </p>
-            <Wallet />
+            <Wallet/>
           </div>
         )}
       </div>
