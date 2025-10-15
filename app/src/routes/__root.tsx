@@ -7,7 +7,6 @@ import Header from "../components/Header";
 import appCss from "../styles.css?url";
 import ockCss from "@coinbase/onchainkit/styles.css?url";
 import { RootProvider } from "@/components/RootProvider";
-import { useEffect } from "react";
 
 export const Route = createRootRoute({
   head: () => ({
@@ -39,16 +38,6 @@ export const Route = createRootRoute({
 });
 
 function RootDocument({ children }: { children: React.ReactNode }) {
-
-  useEffect(() => {
-    // Dynamically import Farcaster SDK only on client side
-    import('@farcaster/miniapp-sdk').then(({ sdk }) => {
-      sdk.actions.ready();
-    }).catch((error) => {
-      console.error('Failed to initialize Farcaster SDK:', error);
-    });
-  }, []);
-
 
   return (
     <RootProvider>

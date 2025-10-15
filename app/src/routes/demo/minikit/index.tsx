@@ -8,6 +8,5 @@ export const Route = createFileRoute('/demo/minikit/')({
 function RouteComponent() {
   return <div>
     <Wallet/>
-
   </div>
 }
