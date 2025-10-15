@@ -13,10 +13,6 @@ export const Route = createFileRoute("/.well-known/farcaster.json")({
             
           },
           baseBuilder: {
-            allowedAddresses: [
-              process.env.BASE_ACCOUNT_ADDRESS,
-              process.env.ALLOW_PERSONAL_ADDRESS,
-            ], // add your Base Account address here
             ownerAddress: process.env.BASE_ACCOUNT_ADDRESS
           },
           miniapp: {
