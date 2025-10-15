@@ -10,6 +10,10 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as DemoIndexRouteImport } from './routes/demo/index'
+import { Route as CollectionIndexRouteImport } from './routes/collection/index'
+import { Route as BrowseIndexRouteImport } from './routes/browse/index'
+import { Route as AccountIndexRouteImport } from './routes/account/index'
 import { Route as DotwellKnownFarcasterDotjsonRouteImport } from './routes/[.]well-known/farcaster[.]json'
 import { Route as DemoMinikitIndexRouteImport } from './routes/demo/minikit/index'
 import { Route as DemoStartServerFuncsRouteImport } from './routes/demo/start.server-funcs'
@@ -23,6 +27,26 @@ import { Route as DemoStartSsrDataOnlyRouteImport } from './routes/demo/start.ss
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DemoIndexRoute = DemoIndexRouteImport.update({
+  id: '/demo/',
+  path: '/demo/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CollectionIndexRoute = CollectionIndexRouteImport.update({
+  id: '/collection/',
+  path: '/collection/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BrowseIndexRoute = BrowseIndexRouteImport.update({
+  id: '/browse/',
+  path: '/browse/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AccountIndexRoute = AccountIndexRouteImport.update({
+  id: '/account/',
+  path: '/account/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DotwellKnownFarcasterDotjsonRoute =
@@ -75,6 +99,10 @@ const DemoStartSsrDataOnlyRoute = DemoStartSsrDataOnlyRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/.well-known/farcaster.json': typeof DotwellKnownFarcasterDotjsonRoute
+  '/account': typeof AccountIndexRoute
+  '/browse': typeof BrowseIndexRoute
+  '/collection': typeof CollectionIndexRoute
+  '/demo': typeof DemoIndexRoute
   '/demo/api/names': typeof DemoApiNamesRoute
   '/demo/start/api-request': typeof DemoStartApiRequestRoute
   '/demo/start/server-funcs': typeof DemoStartServerFuncsRoute
@@ -87,6 +115,10 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/.well-known/farcaster.json': typeof DotwellKnownFarcasterDotjsonRoute
+  '/account': typeof AccountIndexRoute
+  '/browse': typeof BrowseIndexRoute
+  '/collection': typeof CollectionIndexRoute
+  '/demo': typeof DemoIndexRoute
   '/demo/api/names': typeof DemoApiNamesRoute
   '/demo/start/api-request': typeof DemoStartApiRequestRoute
   '/demo/start/server-funcs': typeof DemoStartServerFuncsRoute
@@ -100,6 +132,10 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/.well-known/farcaster.json': typeof DotwellKnownFarcasterDotjsonRoute
+  '/account/': typeof AccountIndexRoute
+  '/browse/': typeof BrowseIndexRoute
+  '/collection/': typeof CollectionIndexRoute
+  '/demo/': typeof DemoIndexRoute
   '/demo/api/names': typeof DemoApiNamesRoute
   '/demo/start/api-request': typeof DemoStartApiRequestRoute
   '/demo/start/server-funcs': typeof DemoStartServerFuncsRoute
@@ -114,6 +150,10 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/.well-known/farcaster.json'
+    | '/account'
+    | '/browse'
+    | '/collection'
+    | '/demo'
     | '/demo/api/names'
     | '/demo/start/api-request'
     | '/demo/start/server-funcs'
@@ -126,6 +166,10 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/.well-known/farcaster.json'
+    | '/account'
+    | '/browse'
+    | '/collection'
+    | '/demo'
     | '/demo/api/names'
     | '/demo/start/api-request'
     | '/demo/start/server-funcs'
@@ -138,6 +182,10 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/.well-known/farcaster.json'
+    | '/account/'
+    | '/browse/'
+    | '/collection/'
+    | '/demo/'
     | '/demo/api/names'
     | '/demo/start/api-request'
     | '/demo/start/server-funcs'
@@ -151,6 +199,10 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   DotwellKnownFarcasterDotjsonRoute: typeof DotwellKnownFarcasterDotjsonRoute
+  AccountIndexRoute: typeof AccountIndexRoute
+  BrowseIndexRoute: typeof BrowseIndexRoute
+  CollectionIndexRoute: typeof CollectionIndexRoute
+  DemoIndexRoute: typeof DemoIndexRoute
   DemoApiNamesRoute: typeof DemoApiNamesRoute
   DemoStartApiRequestRoute: typeof DemoStartApiRequestRoute
   DemoStartServerFuncsRoute: typeof DemoStartServerFuncsRoute
@@ -168,6 +220,34 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/demo/': {
+      id: '/demo/'
+      path: '/demo'
+      fullPath: '/demo'
+      preLoaderRoute: typeof DemoIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/collection/': {
+      id: '/collection/'
+      path: '/collection'
+      fullPath: '/collection'
+      preLoaderRoute: typeof CollectionIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/browse/': {
+      id: '/browse/'
+      path: '/browse'
+      fullPath: '/browse'
+      preLoaderRoute: typeof BrowseIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/account/': {
+      id: '/account/'
+      path: '/account'
+      fullPath: '/account'
+      preLoaderRoute: typeof AccountIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/.well-known/farcaster.json': {
@@ -239,6 +319,10 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   DotwellKnownFarcasterDotjsonRoute: DotwellKnownFarcasterDotjsonRoute,
+  AccountIndexRoute: AccountIndexRoute,
+  BrowseIndexRoute: BrowseIndexRoute,
+  CollectionIndexRoute: CollectionIndexRoute,
+  DemoIndexRoute: DemoIndexRoute,
   DemoApiNamesRoute: DemoApiNamesRoute,
   DemoStartApiRequestRoute: DemoStartApiRequestRoute,
   DemoStartServerFuncsRoute: DemoStartServerFuncsRoute,

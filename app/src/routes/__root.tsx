@@ -1,12 +1,10 @@
 import { HeadContent, Scripts, createRootRoute } from "@tanstack/react-router";
-import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
-import { TanStackDevtools } from "@tanstack/react-devtools";
 import { lazy, Suspense } from "react";
 
-import Header from "../components/Header";
 
 import appCss from "../styles.css?url";
 import ockCss from "@coinbase/onchainkit/styles.css?url";
+import AppLayout from "@/components/AppLayout";
 
 // Lazy load RootProvider to prevent server-side imports of Web3 packages
 const RootProvider = lazy(() => import("@/components/RootProvider").then(m => ({ default: m.RootProvider })));
@@ -48,19 +46,9 @@ function RootDocument({ children }: { children: React.ReactNode }) {
       <body>
         <Suspense fallback={null}>
           <RootProvider>
-            <Header />
-            {children}
-            <TanStackDevtools
-              config={{
-                position: "bottom-right",
-              }}
-              plugins={[
-                {
-                  name: "Tanstack Router",
-                  render: <TanStackRouterDevtoolsPanel />,
-                },
-              ]}
-            />
+            <AppLayout>
+              {children}
+            </AppLayout>
           </RootProvider>
         </Suspense>
         <Scripts />
