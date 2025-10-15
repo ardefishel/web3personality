@@ -7,9 +7,10 @@ export const Route = createFileRoute("/.well-known/farcaster.json")({
       GET: () => {
         return json({
           accountAssociation: {
-            header: "",
-            payload: "",
-            signature: "",
+            header: process.env.ACCOUNT_ASSOCIATION_HEADER,
+            payload: process.env.ACCOUNT_ASSOCIATION_PAYLOAD,
+            signature: process.env.ACCOUNT_ASSOCIATION_SIGNATURE,
+            
           },
           baseBuilder: {
             allowedAddresses: [""], // add your Base Account address here
