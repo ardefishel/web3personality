@@ -7,6 +7,7 @@ import Header from "../components/Header";
 
 import appCss from "../styles.css?url";
 import ockCss from "@coinbase/onchainkit/styles.css?url";
+import { RootProvider } from "@/components/RootProvider";
 
 export const Route = createRootRoute({
   head: () => ({
@@ -37,23 +38,23 @@ export const Route = createRootRoute({
   shellComponent: RootDocument,
 });
 
-function ClientProvider({ children }: { children: React.ReactNode }) {
-  const [RootProvider, setRootProvider] = useState<any>(null);
+// function ClientProvider({ children }: { children: React.ReactNode }) {
+//   const [RootProvider, setRootProvider] = useState<any>(null);
 
-  useEffect(() => {
-    // Dynamically import RootProvider only on client side
-    import("@/components/RootProvider").then((mod) => {
-      setRootProvider(() => mod.RootProvider);
-    });
-  }, []);
+//   useEffect(() => {
+//     // Dynamically import RootProvider only on client side
+//     import("@/components/RootProvider").then((mod) => {
+//       setRootProvider(() => mod.RootProvider);
+//     });
+//   }, []);
 
-  // Return children without provider during SSR and initial render
-  if (!RootProvider) {
-    return <>{children}</>;
-  }
+//   // Return children without provider during SSR and initial render
+//   if (!RootProvider) {
+//     return <>{children}</>;
+//   }
 
-  return <RootProvider>{children}</RootProvider>;
-}
+//   return <RootProvider>{children}</RootProvider>;
+// }
 
 function RootDocument({ children }: { children: React.ReactNode }) {
   return (
@@ -62,7 +63,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         <HeadContent />
       </head>
       <body>
-        <ClientProvider>
+        <RootProvider>
           <Header />
           {children}
           <TanStackDevtools
@@ -76,7 +77,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
               },
             ]}
           />
-        </ClientProvider>
+        </RootProvider>
         <Scripts />
       </body>
     </html>
