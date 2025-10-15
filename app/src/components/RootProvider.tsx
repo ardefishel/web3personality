@@ -21,7 +21,7 @@ export function RootProvider({ children }: { children: ReactNode }) {
   }, []);
 
   return (
-    <ClientOnly>
+    <ClientOnly fallback={null}>
       <WagmiProvider config={wagmiConfig}>
         <QueryClientProvider client={queryClient}>
           <OnchainKitProvider
