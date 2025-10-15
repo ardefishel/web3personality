@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+import { ReactNode, useEffect } from "react";
 import { baseSepolia } from "wagmi/chains";
 import { OnchainKitProvider } from "@coinbase/onchainkit";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -7,6 +7,16 @@ import { wagmiConfig } from "@/lib/wagmi";
 
 export function RootProvider({ children }: { children: ReactNode }) {
   const queryClient = new QueryClient();
+  
+  useEffect(() => {
+    // Initialize Farcaster SDK on client side only
+    import('@farcaster/miniapp-sdk').then(({ sdk }) => {
+      sdk.actions.ready();
+    }).catch((error) => {
+      console.error('Failed to initialize Farcaster SDK:', error);
+    });
+  }, []);
+  
   return (
     <WagmiProvider config={wagmiConfig}>
       <QueryClientProvider client={queryClient}>

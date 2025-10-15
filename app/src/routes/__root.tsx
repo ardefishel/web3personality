@@ -1,12 +1,12 @@
 import { HeadContent, Scripts, createRootRoute } from "@tanstack/react-router";
 import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
 import { TanStackDevtools } from "@tanstack/react-devtools";
+import { useEffect, useState } from "react";
 
 import Header from "../components/Header";
 
 import appCss from "../styles.css?url";
 import ockCss from "@coinbase/onchainkit/styles.css?url";
-import { RootProvider } from "@/components/RootProvider";
 
 export const Route = createRootRoute({
   head: () => ({
@@ -37,14 +37,32 @@ export const Route = createRootRoute({
   shellComponent: RootDocument,
 });
 
+function ClientProvider({ children }: { children: React.ReactNode }) {
+  const [RootProvider, setRootProvider] = useState<any>(null);
+
+  useEffect(() => {
+    // Dynamically import RootProvider only on client side
+    import("@/components/RootProvider").then((mod) => {
+      setRootProvider(() => mod.RootProvider);
+    });
+  }, []);
+
+  // Return children without provider during SSR and initial render
+  if (!RootProvider) {
+    return <>{children}</>;
+  }
+
+  return <RootProvider>{children}</RootProvider>;
+}
+
 function RootDocument({ children }: { children: React.ReactNode }) {
   return (
-    <RootProvider>
-      <html lang="en">
-        <head>
-          <HeadContent />
-        </head>
-        <body>
+    <html lang="en">
+      <head>
+        <HeadContent />
+      </head>
+      <body>
+        <ClientProvider>
           <Header />
           {children}
           <TanStackDevtools
@@ -58,9 +76,9 @@ function RootDocument({ children }: { children: React.ReactNode }) {
               },
             ]}
           />
-          <Scripts />
-        </body>
-      </html>
-    </RootProvider>
+        </ClientProvider>
+        <Scripts />
+      </body>
+    </html>
   );
 }
