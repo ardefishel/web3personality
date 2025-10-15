@@ -39,24 +39,6 @@ export const Route = createRootRoute({
   shellComponent: RootDocument,
 });
 
-// function ClientProvider({ children }: { children: React.ReactNode }) {
-//   const [RootProvider, setRootProvider] = useState<any>(null);
-
-//   useEffect(() => {
-//     // Dynamically import RootProvider only on client side
-//     import("@/components/RootProvider").then((mod) => {
-//       setRootProvider(() => mod.RootProvider);
-//     });
-//   }, []);
-
-//   // Return children without provider during SSR and initial render
-//   if (!RootProvider) {
-//     return <>{children}</>;
-//   }
-
-//   return <RootProvider>{children}</RootProvider>;
-// }
-
 function RootDocument({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
