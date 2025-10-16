@@ -32,6 +32,14 @@ const pinata = new PinataSDK({
   pinataGateway: process.env.PINATA_GATEAWAY,
 });
 
+const { viem } = await network.connect({ network: "baseSepolia" });
+  const [myWallet] = await viem.getWalletClients();
+  const publicClient = await viem.getPublicClient();
+  const quizManagerContract = await viem.getContractAt(
+    "QuizManager",
+    QUIZ_CONTRACT_ADDRESS
+  );
+
 async function uploadImages() {
   const imgsPath = path.join(themeFolderPath, "/img");
   const imgs = fs.readdirSync(imgsPath);
@@ -109,13 +117,47 @@ async function uploadQuestionAndPersonalities(
     JSON.stringify(themeInfo, null, 2)
   );
 
+  //
+
+  const counter = await quizManagerContract.read.quizIdCounter()
+
+  const tokenIdPrefix = Number(counter) * 1000;
+
+  personalities.forEach((per) => {
+    const newData = {
+      tokenId: tokenIdPrefix + per.id,
+      image: per.fullurl,
+      name: per.name,
+      description: `${theme.title} - ${per.name}`,
+    };
+
+    fs.writeFileSync(
+      path.join(
+        themeFolderPath,
+        "/output",
+        `${newData.tokenId.toString()}.json`
+      ),
+      JSON.stringify(newData, null, 2)
+    );
+  });
+
   try {
-    const filePath = path.join(themeFolderPath, "/output/info.json");
-    const fileBuffer = fs.readFileSync(filePath);
-    const fileToUpload = new File([fileBuffer], "info.json");
+
+    const outDir = path.join(themeFolderPath,"/output")
+    const outDatas = fs.readdirSync(outDir);
+    const outDatasArr = outDatas.map((json) => {
+      return path.join(outDir, json);
+    });
+
+    const fileArray = outDatasArr.map((filePath) => {
+      const fileBuffer = fs.readFileSync(filePath);
+      const fileName = path.basename(filePath);
+      return new File([fileBuffer], fileName);
+    });
+
     const { cid } = await pinata.upload.public
-      .file(fileToUpload)
-      .name(`${theme.title} - Info`);
+      .fileArray(fileArray)
+      .name(`${theme.title} - Metadata`);
 
     return {
       cid,
@@ -134,13 +176,7 @@ async function createNewQuizOnChain(
     id: number;
   }[]
 ) {
-  const { viem } = await network.connect({ network: "baseSepolia" });
-  const [myWallet] = await viem.getWalletClients();
-  const publicClient = await viem.getPublicClient();
-  const quizManagerContract = await viem.getContractAt(
-    "QuizManager",
-    QUIZ_CONTRACT_ADDRESS
-  );
+  
 
   const hash = await myWallet.writeContract({
     address: quizManagerContract.address,
@@ -231,7 +267,7 @@ async function createAndUploadImgMetadata(
       .fileArray(fileArray)
       .name(`${theme.title} - Metadata`);
     return cid;
-    
+
   } catch (error) {
     console.error("Upload images error", error);
     process.exit(1);
@@ -244,7 +280,8 @@ async function createAndUploadImgMetadata(
     const { personalities, cid: contentHash } =
       await uploadQuestionAndPersonalities(imgsData);
     const { quizId } = await createNewQuizOnChain(contentHash, personalities);
-    await createAndUploadImgMetadata(quizId, personalities);
+    // await createAndUploadImgMetadata(quizId, personalities);
+
   } catch (error) {
     console.error("Error creating quiz:", error);
     process.exit(1);
