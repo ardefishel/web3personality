@@ -1,13 +1,10 @@
 import { HeadContent, Scripts, createRootRoute } from "@tanstack/react-router";
-import { lazy, Suspense } from "react";
 
 
 import appCss from "../styles.css?url";
 import ockCss from "@coinbase/onchainkit/styles.css?url";
 
 // Lazy load components to prevent server-side imports of Web3 packages
-const RootProvider = lazy(() => import("@/components/RootProvider").then(m => ({ default: m.RootProvider })));
-const AppLayout = lazy(() => import("@/components/AppLayout").then(m => ({ default: m.default })));
 
 export const Route = createRootRoute({
   head: () => ({
@@ -44,7 +41,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         <HeadContent />
       </head>
       <body>
-        <Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}>
+        {/* <Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}>
           <RootProvider>
             <Suspense fallback={null}>
               <AppLayout>
@@ -52,7 +49,8 @@ function RootDocument({ children }: { children: React.ReactNode }) {
               </AppLayout>
             </Suspense>
           </RootProvider>
-        </Suspense>
+        </Suspense> */}
+        {children}
         <Scripts />
       </body>
     </html>

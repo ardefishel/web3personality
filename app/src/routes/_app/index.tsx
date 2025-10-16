@@ -2,11 +2,9 @@ import { createFileRoute } from "@tanstack/react-router";
 import { Wallet } from "@coinbase/onchainkit/wallet";
 import { useAccount } from "wagmi";
 
-
-export const Route = createFileRoute("/")({
+export const Route = createFileRoute('/_app/')({
   component: RouteComponent,
-  ssr: false
-});
+})
 
 function RouteComponent() {
   return (
