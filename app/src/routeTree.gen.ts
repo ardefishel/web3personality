@@ -9,7 +9,6 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as TempRouteImport } from './routes/temp'
 import { Route as AppRouteImport } from './routes/_app'
 import { Route as DemoIndexRouteImport } from './routes/demo/index'
 import { Route as AppIndexRouteImport } from './routes/_app/index'
@@ -26,11 +25,6 @@ import { Route as DemoStartSsrSpaModeRouteImport } from './routes/demo/start.ssr
 import { Route as DemoStartSsrFullSsrRouteImport } from './routes/demo/start.ssr.full-ssr'
 import { Route as DemoStartSsrDataOnlyRouteImport } from './routes/demo/start.ssr.data-only'
 
-const TempRoute = TempRouteImport.update({
-  id: '/temp',
-  path: '/temp',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const AppRoute = AppRouteImport.update({
   id: '/_app',
   getParentRoute: () => rootRouteImport,
@@ -108,7 +102,6 @@ const DemoStartSsrDataOnlyRoute = DemoStartSsrDataOnlyRouteImport.update({
 } as any)
 
 export interface FileRoutesByFullPath {
-  '/temp': typeof TempRoute
   '/.well-known/farcaster.json': typeof DotwellKnownFarcasterDotjsonRoute
   '/': typeof AppIndexRoute
   '/demo': typeof DemoIndexRoute
@@ -125,7 +118,6 @@ export interface FileRoutesByFullPath {
   '/demo/start/ssr': typeof DemoStartSsrIndexRoute
 }
 export interface FileRoutesByTo {
-  '/temp': typeof TempRoute
   '/.well-known/farcaster.json': typeof DotwellKnownFarcasterDotjsonRoute
   '/': typeof AppIndexRoute
   '/demo': typeof DemoIndexRoute
@@ -144,7 +136,6 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_app': typeof AppRouteWithChildren
-  '/temp': typeof TempRoute
   '/.well-known/farcaster.json': typeof DotwellKnownFarcasterDotjsonRoute
   '/_app/': typeof AppIndexRoute
   '/demo/': typeof DemoIndexRoute
@@ -163,7 +154,6 @@ export interface FileRoutesById {
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    | '/temp'
     | '/.well-known/farcaster.json'
     | '/'
     | '/demo'
@@ -180,7 +170,6 @@ export interface FileRouteTypes {
     | '/demo/start/ssr'
   fileRoutesByTo: FileRoutesByTo
   to:
-    | '/temp'
     | '/.well-known/farcaster.json'
     | '/'
     | '/demo'
@@ -198,7 +187,6 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/_app'
-    | '/temp'
     | '/.well-known/farcaster.json'
     | '/_app/'
     | '/demo/'
@@ -217,7 +205,6 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   AppRoute: typeof AppRouteWithChildren
-  TempRoute: typeof TempRoute
   DotwellKnownFarcasterDotjsonRoute: typeof DotwellKnownFarcasterDotjsonRoute
   DemoIndexRoute: typeof DemoIndexRoute
   DemoApiNamesRoute: typeof DemoApiNamesRoute
@@ -232,13 +219,6 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/temp': {
-      id: '/temp'
-      path: '/temp'
-      fullPath: '/temp'
-      preLoaderRoute: typeof TempRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/_app': {
       id: '/_app'
       path: ''
@@ -365,7 +345,6 @@ const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
   AppRoute: AppRouteWithChildren,
-  TempRoute: TempRoute,
   DotwellKnownFarcasterDotjsonRoute: DotwellKnownFarcasterDotjsonRoute,
   DemoIndexRoute: DemoIndexRoute,
   DemoApiNamesRoute: DemoApiNamesRoute,
