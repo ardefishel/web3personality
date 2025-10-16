@@ -1,10 +1,7 @@
 import { HeadContent, Scripts, createRootRoute } from "@tanstack/react-router";
 
-
 import appCss from "../styles.css?url";
 import ockCss from "@coinbase/onchainkit/styles.css?url";
-
-// Lazy load components to prevent server-side imports of Web3 packages
 
 export const Route = createRootRoute({
   head: () => ({
@@ -41,15 +38,6 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         <HeadContent />
       </head>
       <body>
-        {/* <Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}>
-          <RootProvider>
-            <Suspense fallback={null}>
-              <AppLayout>
-                {children}
-              </AppLayout>
-            </Suspense>
-          </RootProvider>
-        </Suspense> */}
         {children}
         <Scripts />
       </body>
