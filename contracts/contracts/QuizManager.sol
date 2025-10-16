@@ -70,6 +70,8 @@ contract QuizManager is Ownable {
             newQuiz.personalityToTokenId[_personalities[i]] = tokenId;
         }
 
+        personalityToken.pushHash(newQuiz.quizHash);
+
         quizIdCounter++;
 
         emit QuizCreated(newQuiz.quizId, _quizHash, _personalities.length);
