@@ -1,83 +1,60 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { useState } from 'react'
-import { useReadContract } from 'wagmi'
-import quizManagerContract from '@/lib/contract/quizManager'
-import { useQuery } from '@tanstack/react-query'
-
-// Type definitions based on ABI and IPFS structure
-interface PersonalityData {
-  name: string
-  id: number
-  filename: string
-  fullurl: string
-}
-
-interface QuizDetailData {
-  title: string
-  description: string
-  image: string
-  questions: string[]
-  personalities: PersonalityData[]
-}
-
-// Type for getQuizInfo contract function return
-type QuizInfo = [bigint, string, boolean] // [quizId, quizHash, isActive]
+import { useQuizIds, useQuiz } from '@/hooks/useQuizzes'
+import { Quiz } from '@/types/quiz'
 
 export const Route = createFileRoute('/_app/browse/')({
   component: RouteComponent,
 })
 
-
 function RouteComponent() {
   const [searchQuery, setSearchQuery] = useState('')
+  const quizIds = useQuizIds()
 
-  const {data: quizIdCounter} = useReadContract({
-    address: quizManagerContract.address,
-    abi: quizManagerContract.abi,
-    functionName: 'quizIdCounter'
-  })
+  return (
+    <div className="flex-1 flex flex-col gap-6 px-4 py-6">
+      <div className="max-w-5xl mx-auto w-full">
+        <h1 className="text-3xl font-bold mb-6">Browse Collections</h1>
 
-  // Generate array of quiz IDs from 1 to quizIdCounter-1
-  const quizIds = quizIdCounter ? Array.from({length: Number(quizIdCounter) - 1}, (_, i) => i + 1) : []
+        {/* Search Field */}
+        <div className="mb-6">
+          <input
+            type="text"
+            placeholder="Search collections..."
+            className="input input-bordered w-full"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+        </div>
+
+        {/* Quiz Grid */}
+        <div className="grid grid-cols-2 gap-3">
+          {quizIds.map((quizId) => (
+            <QuizCard key={quizId} quizId={quizId} />
+          ))}
+        </div>
+
+        {/* No Quizzes Available */}
+        {quizIds.length === 0 && (
+          <div className="text-center py-12">
+            <p className="text-lg opacity-70">No quizzes available</p>
+          </div>
+        )}
+      </div>
+    </div>
+  )
+}
 
 // Individual Quiz Component that handles its own data fetching
 function QuizCard({ quizId }: { quizId: number }) {
-  // Get quiz info for this specific quiz
-  const { data: quizInfo, isLoading: infoLoading, isError: infoError } = useReadContract({
-    address: quizManagerContract.address,
-    abi: quizManagerContract.abi,
-    functionName: 'getQuizInfo',
-    args: [BigInt(quizId)],
-  }) as {
-    data: QuizInfo | undefined
-    isLoading: boolean
-    isError: boolean
-    error: Error | null
-  }
-
-  // Get quiz detail from IPFS
-  const ipfsHash = quizInfo?.[1] || ''
-  const { data: quizDetail, isLoading: detailLoading, isError: detailError } = useQuery<QuizDetailData>({
-    queryKey: ['quizDetail', ipfsHash],
-    queryFn: async (): Promise<QuizDetailData> => {
-      const response = await fetch(`https://ipfs.io/ipfs/${ipfsHash}/info.json`)
-      if (!response.ok) {
-        throw new Error(`Failed to fetch quiz detail: ${response.statusText}`)
-      }
-      const data = await response.json() as QuizDetailData
-      return data
-    },
-    enabled: !!ipfsHash
-  })
-
-  const isLoading = infoLoading || detailLoading
-  const isError = infoError || detailError
-  const title = quizDetail?.title || `Quiz ${quizId}`
-  const description = quizDetail?.description || 'No description available'
-  const image = quizDetail?.image || 'https://via.placeholder.com/300x200?text=Quiz'
+  const quiz = useQuiz(quizId)
+  
+  const title = quiz.detail?.title || `Quiz ${quiz.id}`
+  const description = quiz.detail?.description || 'No description available'
+  const image = quiz.detail?.image || 'https://via.placeholder.com/300x200?text=Quiz'
 
   // Show loading spinner while fetching data
-  if (isLoading) {
+  if (quiz.isLoading) {
     return (
       <div className="card bg-base-100 shadow-xl flex flex-col">
         <div className="flex items-center justify-center h-32 bg-base-200">
@@ -96,7 +73,7 @@ function QuizCard({ quizId }: { quizId: number }) {
   }
 
   // Show error state
-  if (isError) {
+  if (quiz.isError) {
     return (
       <div className="card bg-base-100 shadow-xl flex flex-col">
         <div className="flex items-center justify-center h-32 bg-error/10">
@@ -146,41 +123,6 @@ function QuizCard({ quizId }: { quizId: number }) {
             Take Quiz
           </Link>
         </div>
-      </div>
-    </div>
-  )
-}
-
-
-  return (
-    <div className="flex-1 flex flex-col gap-6 px-4 py-6">
-      <div className="max-w-5xl mx-auto w-full">
-        <h1 className="text-3xl font-bold mb-6">Browse Collections</h1>
-
-        {/* Search Field */}
-        <div className="mb-6">
-          <input
-            type="text"
-            placeholder="Search collections..."
-            className="input input-bordered w-full"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-          />
-        </div>
-
-        {/* Quiz Grid */}
-        <div className="grid grid-cols-2 gap-3">
-          {quizIds.map((quizId) => (
-            <QuizCard key={quizId} quizId={quizId} />
-          ))}
-        </div>
-
-        {/* No Quizzes Available */}
-        {quizIds.length === 0 && (
-          <div className="text-center py-12">
-            <p className="text-lg opacity-70">No quizzes available</p>
-          </div>
-        )}
       </div>
     </div>
   )

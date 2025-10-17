@@ -1,6 +1,7 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { Wallet } from "@coinbase/onchainkit/wallet";
 import { useAccount } from "wagmi";
+import { useLatestQuizzes } from "@/hooks/useQuizzes";
 
 export const Route = createFileRoute('/_app/')({
   component: RouteComponent,
@@ -17,55 +18,97 @@ function RouteComponent() {
 }
 
 function FeaturedCarousel() {
+  const latestQuizzes = useLatestQuizzes(3);
+
+  // Show loading state while quizzes are loading
+  const isLoading = latestQuizzes.some(quiz => quiz.isLoading);
+  const hasQuizzes = latestQuizzes.length > 0;
+
+  if (isLoading) {
+    return (
+      <section className="px-4">
+        <h2 className="text-xl font-semibold mb-3">Latest Personality Tests</h2>
+        <div className="w-full aspect-video rounded-box bg-base-200 flex items-center justify-center">
+          <div className="text-center">
+            <div className="loading loading-spinner loading-lg text-primary mb-2"></div>
+            <p className="text-sm opacity-70">Loading latest quizzes...</p>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  if (!hasQuizzes) {
+    return (
+      <section className="px-4">
+        <h2 className="text-xl font-semibold mb-3">Latest Personality Tests</h2>
+        <div className="w-full aspect-video rounded-box bg-base-200 flex items-center justify-center">
+          <div className="text-center">
+            <p className="text-lg opacity-70">No quizzes available yet</p>
+            <p className="text-sm opacity-50 mt-2">Check back soon for new personality tests!</p>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
   return (
     <section className="px-4">
-      <h2 className="text-xl font-semibold mb-3">Featured Personality Tests</h2>
+      <h2 className="text-xl font-semibold mb-3">Latest Personality Tests</h2>
       <div className="carousel w-full aspect-video rounded-box bg-base-200">
-        <div id="slide1" className="carousel-item relative w-full">
-          <img
-            src="https://img.tradeport.gg/?url=https%3A%2F%2Fwalrus.tusky.io%2FIYiaBFukGZBwMCBiQ5ya3Updq2onTJOSxqJtiIbT8zU&profile=c94c9db4-efda-42f1-9b6c-5b83d0340acd"
-            alt="Walruz Personality Collection"
-            className="w-full h-full object-cover"
-          />
-          <div className="absolute inset-x-0 bottom-0 p-4 bg-gradient-to-t from-black/60 to-transparent text-white">
-            <h3 className="text-lg font-medium">Walruz Personality Collection</h3>
-          </div>
-          <div className="absolute inset-y-1/2 left-2 right-2 flex items-center justify-between">
-            <a href="#slide3" className="btn btn-circle btn-sm">❮</a>
-            <a href="#slide2" className="btn btn-circle btn-sm">❯</a>
-          </div>
-        </div>
-
-        <div id="slide2" className="carousel-item relative w-full">
-          <img
-            src="https://img.tradeport.gg/?url=https%3A%2F%2Ftradeport.mypinata.cloud%2Fipfs%2Fbafybeibpm6pdsabp6zswzcimky6j6kc3m3urh4d34fxt5xh3ubzsvnnxfy%3FpinataGatewayToken%3D5Uc_j2QFWW75kVPmXB6eWCJ0aVZmc4o9QAq5TiuPfMHZQLKa_VNL3uaXj5NKrq0w%26img-width%3D700%26img-height%3D700%26img-fit%3Dcover%26img-quality%3D80%26img-onerror%3Dredirect%26img-fit%3Dpad%26img-format%3Dwebp&profile=39f29b4d-02ca-4157-a034-2686ee4a0e0f&mime-type=io%2Fipfs%2Fbafybeibpm6pdsabp6zswzcimky6j6kc3m3urh4d34fxt5xh3ubzsvnnxfy"
-            alt="Tally Personality Collection"
-            className="w-full h-full object-cover"
-          />
-          <div className="absolute inset-x-0 bottom-0 p-4 bg-gradient-to-t from-black/60 to-transparent text-white">
-            <h3 className="text-lg font-medium">Tally Personality Collection</h3>
-          </div>
-          <div className="absolute inset-y-1/2 left-2 right-2 flex items-center justify-between">
-            <a href="#slide1" className="btn btn-circle btn-sm">❮</a>
-            <a href="#slide3" className="btn btn-circle btn-sm">❯</a>
-          </div>
-        </div>
-
-        <div id="slide3" className="carousel-item relative w-full">
-          <img
-            src="https://img.tradeport.gg/?url=https%3A%2F%2Fwalrus.tusky.io%2FaCAL9atS22PWMs5Bv1C6x49YYTc5vxuDj9cfrd5ZH-8&profile=821b4657-5c30-4941-9b13-2b96b4af61f0"
-            alt="Death Corp Personality Collection"
-            className="w-full h-full object-cover"
-          />
-          <div className="absolute inset-x-0 bottom-0 p-4 bg-gradient-to-t from-black/60 to-transparent text-white">
-            <h3 className="text-lg font-medium">Death Corp Personality Collection</h3>
-          </div>
-          <div className="absolute inset-y-1/2 left-2 right-2 flex items-center justify-between">
-            <a href="#slide2" className="btn btn-circle btn-sm">❮</a>
-            <a href="#slide1" className="btn btn-circle btn-sm">❯</a>
-          </div>
-        </div>
+        {latestQuizzes.map((quiz, index) => {
+          const slideId = `slide${index + 1}`;
+          const prevSlideId = index === 0 ? `slide${latestQuizzes.length}` : `slide${index}`;
+          const nextSlideId = index === latestQuizzes.length - 1 ? `slide1` : `slide${index + 2}`;
+          
+          const title = quiz.detail?.title || `Quiz ${quiz.id}`;
+          const image = quiz.detail?.image || 'https://via.placeholder.com/800x400?text=Quiz';
+          
+          return (
+            <div key={quiz.id} id={slideId} className="carousel-item relative w-full">
+              <img
+                src={image}
+                alt={title}
+                className="w-full h-full object-cover"
+                onError={(e) => {
+                  e.currentTarget.src = 'https://via.placeholder.com/800x400?text=Quiz'
+                }}
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+              <div className="absolute inset-x-0 bottom-0 p-4 text-white">
+                <h3 className="text-lg font-medium mb-2">{title}</h3>
+                <p className="text-sm opacity-90 mb-3">{quiz.detail?.description || 'No description available'}</p>
+                <Link 
+                  to="/take-quiz/$quizId" 
+                  params={{ quizId: quiz.id.toString() }}
+                  className="btn btn-primary btn-sm"
+                >
+                  Take Quiz
+                </Link>
+              </div>
+              {latestQuizzes.length > 1 && (
+                <div className="absolute inset-y-1/2 left-2 right-2 flex items-center justify-between">
+                  <a href={`#${prevSlideId}`} className="btn btn-circle btn-sm bg-black/20 hover:bg-black/40 border-white/20">❮</a>
+                  <a href={`#${nextSlideId}`} className="btn btn-circle btn-sm bg-black/20 hover:bg-black/40 border-white/20">❯</a>
+                </div>
+              )}
+            </div>
+          );
+        })}
       </div>
+      
+      {/* Carousel indicators */}
+      {latestQuizzes.length > 1 && (
+        <div className="flex justify-center mt-4 gap-2">
+          {latestQuizzes.map((_, index) => (
+            <a
+              key={index}
+              href={`#slide${index + 1}`}
+              className="w-3 h-3 rounded-full bg-white/30 hover:bg-white/60 transition-colors"
+            />
+          ))}
+        </div>
+      )}
     </section>
   );
 }
