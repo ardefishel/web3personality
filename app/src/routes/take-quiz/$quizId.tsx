@@ -2,10 +2,18 @@ import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { useState } from 'react'
 import { useReadContract } from 'wagmi'
 import quizManagerContract from '@/lib/contract/quizManager'
-import { useQuery } from 'wagmi/query'
+import { useQuery } from '@tanstack/react-query'
 import { ArrowLeft } from 'lucide-react'
 import { SafeArea } from '@coinbase/onchainkit/minikit'
 import { Wallet } from '@coinbase/onchainkit/wallet'
+import { 
+  Transaction, 
+  TransactionButton, 
+  TransactionSponsor, 
+  TransactionStatus, 
+  TransactionStatusLabel, 
+  TransactionStatusAction 
+} from '@coinbase/onchainkit/transaction'
 import { RootProvider } from '@/components/RootProvider'
 
 // Type definitions
@@ -24,7 +32,10 @@ interface QuizDetailData {
   personalities: PersonalityData[]
 }
 
-type QuizInfo = [bigint, string, boolean] // [quizId, quizHash, isActive]
+interface PersonalityResult {
+  personality: string
+  rationale: string
+}
 
 // Scale options for quiz questions
 const SCALE_OPTIONS = [
@@ -67,8 +78,11 @@ function CustomTopBar() {
 
 function TakeQuizComponent() {
   const { quizId } = Route.useParams()
+  const navigate = useNavigate()
   const [answers, setAnswers] = useState<Record<number, number>>({})
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [personalityResult, setPersonalityResult] = useState<PersonalityResult | null>(null)
+  const [showResultModal, setShowResultModal] = useState(false)
 
   // Get quiz info for this specific quiz
   const { data: quizInfo, isLoading: infoLoading, isError: infoError } = useReadContract({
@@ -76,16 +90,19 @@ function TakeQuizComponent() {
     abi: quizManagerContract.abi,
     functionName: 'getQuizInfo',
     args: [BigInt(quizId)],
-  }) as {
-    data: QuizInfo | undefined
-    isLoading: boolean
-    isError: boolean
-    error: Error | null
-  }
+  })
+
+  // Note: hasParticipated check would need wallet address - commented out for now
+  // const { data: hasParticipated } = useReadContract({
+  //   address: quizManagerContract.address as Address,
+  //   abi: quizManagerContract.abi,
+  //   functionName: 'hasParticipated',
+  //   args: [userAddress, BigInt(quizId)], // Need user address from wallet
+  // })
 
   // Get quiz detail from IPFS
   const ipfsHash = quizInfo?.[1] || ''
-  const { data: quizDetail, isLoading: detailLoading, isError: detailError } = useQuery<QuizDetailData>({
+  const { data: quizDetail, isLoading: detailLoading, isError: detailError } = useQuery({
     queryKey: ['quizDetail', ipfsHash],
     queryFn: async (): Promise<QuizDetailData> => {
       const response = await fetch(`https://ipfs.io/ipfs/${ipfsHash}/info.json`)
@@ -138,7 +155,7 @@ function TakeQuizComponent() {
         body: JSON.stringify(requestPayload)
       })
 
-      const result = await response.json()
+      const result = await response.json() as PersonalityResult
       
       if (response.ok) {
         console.log('Personality Analysis Result:', {
@@ -150,7 +167,8 @@ function TakeQuizComponent() {
           answers: answersArray
         })
         
-        alert(`Quiz completed! Your personality: ${result.personality}\n\nRationale: ${result.rationale}`)
+        setPersonalityResult(result)
+        setShowResultModal(true)
       } else {
         console.error('API Error:', result)
         alert('There was an error analyzing your personality. Please try again.')
@@ -164,6 +182,16 @@ function TakeQuizComponent() {
   }
 
   const allQuestionsAnswered = quizDetail?.questions.every((_, index) => answers[index] !== undefined) || false
+
+  // Prepare contract calls for minting NFT
+  const contracts = personalityResult ? [
+    {
+      address: quizManagerContract.address,
+      abi: quizManagerContract.abi,
+      functionName: 'completeQuiz',
+      args: [BigInt(quizId), personalityResult.personality],
+    }
+  ] : []
 
   if (isLoading) {
     return (
@@ -327,6 +355,84 @@ function TakeQuizComponent() {
             </div>
           </div>
         </div>
+
+        {/* Personality Result Modal */}
+        {personalityResult && (
+          <dialog className={`modal ${showResultModal ? 'modal-open' : ''}`}>
+            <div className="modal-box max-w-2xl">
+              <div className="text-center">
+                <div className="text-6xl mb-4">🎉</div>
+                <h3 className="font-bold text-2xl mb-4">Quiz Completed!</h3>
+                
+                <div className="card bg-gradient-to-br from-primary to-secondary text-primary-content mb-6">
+                  <div className="card-body">
+                    <h4 className="card-title text-3xl justify-center mb-2">{personalityResult.personality}</h4>
+                    <p className="text-lg opacity-90">Your Personality Match</p>
+                  </div>
+                </div>
+
+                <div className="text-left mb-6">
+                  <h5 className="font-semibold text-lg mb-2">Why this personality fits you:</h5>
+                  <p className="text-base-content/80 leading-relaxed">{personalityResult.rationale}</p>
+                </div>
+
+                {/* Debug Info */}
+                <div className="text-xs bg-base-200 p-2 rounded mb-4 text-left">
+                  <div><strong>Quiz ID:</strong> {quizId}</div>
+                  <div><strong>AI Result:</strong> "{personalityResult.personality}"</div>
+                  <div><strong>Available Personalities:</strong> {quizDetail?.personalities.map(p => `"${p.name}"`).join(', ')}</div>
+                  <div><strong>Contract:</strong> {quizManagerContract.address}</div>
+                  <div><strong>Quiz Active:</strong> {quizInfo ? quizInfo[2].toString() : 'Loading...'}</div>
+                  <div><strong>Exact Match Found:</strong> {quizDetail?.personalities.some(p => p.name === personalityResult.personality) ? 'Yes' : 'No'}</div>
+                </div>
+
+                {/* Mint NFT Transaction */}
+                <div className="mb-6">
+                  {contracts.length > 0 ? (
+                    <Transaction
+                      calls={contracts}
+                      onSuccess={(response) => {
+                        console.log('NFT minted successfully!', response);
+                      }}
+                      onError={(error) => {
+                        console.error('Transaction failed:', error);
+                        console.error('Quiz ID:', quizId);
+                        console.error('Personality:', personalityResult.personality);
+                        console.error('Contract Address:', quizManagerContract.address);
+                      }}
+                    >
+                      <TransactionButton className="btn btn-primary btn-lg w-full mb-4" text="Mint Your Personality NFT" />
+                      <TransactionSponsor />
+                      <TransactionStatus>
+                        <TransactionStatusLabel />
+                        <TransactionStatusAction />
+                      </TransactionStatus>
+                    </Transaction>
+                  ) : (
+                    <button className="btn btn-disabled btn-lg w-full mb-4" disabled>
+                      Loading...
+                    </button>
+                  )}
+                </div>
+
+                <div className="modal-action">
+                  <button 
+                    className="btn btn-outline"
+                    onClick={() => {
+                      setShowResultModal(false)
+                      navigate({ to: '/browse' })
+                    }}
+                  >
+                    Back to Browse
+                  </button>
+                </div>
+              </div>
+            </div>
+            <form method="dialog" className="modal-backdrop">
+              <button onClick={() => setShowResultModal(false)}>close</button>
+            </form>
+          </dialog>
+        )}
       </SafeArea>
     </div>
   )
