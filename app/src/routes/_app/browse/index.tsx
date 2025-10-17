@@ -1,9 +1,8 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { useReadContract } from 'wagmi'
 import quizManagerContract from '@/lib/contract/quizManager'
-import { useQuery } from 'wagmi/query'
-import type { Address } from 'viem'
+import { useQuery } from '@tanstack/react-query'
 
 // Type definitions based on ABI and IPFS structure
 interface PersonalityData {
@@ -24,21 +23,6 @@ interface QuizDetailData {
 // Type for getQuizInfo contract function return
 type QuizInfo = [bigint, string, boolean] // [quizId, quizHash, isActive]
 
-// Complete quiz structure type
-interface Quiz {
-  id: number
-  info: QuizInfo | undefined
-  detail: {
-    data: QuizDetailData | undefined
-    isLoading: boolean
-    isError: boolean
-    error: Error | null
-  }
-  isLoading: boolean
-  isError: boolean
-  error: Error | null
-}
-
 export const Route = createFileRoute('/_app/browse/')({
   component: RouteComponent,
 })
@@ -46,7 +30,6 @@ export const Route = createFileRoute('/_app/browse/')({
 
 function RouteComponent() {
   const [searchQuery, setSearchQuery] = useState('')
-
 
   const {data: quizIdCounter} = useReadContract({
     address: quizManagerContract.address,
