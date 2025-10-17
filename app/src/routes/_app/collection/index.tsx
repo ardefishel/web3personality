@@ -3,7 +3,7 @@ import { useAccount, useReadContract } from 'wagmi'
 import { Wallet } from '@coinbase/onchainkit/wallet'
 import personalityTokenContract from '@/lib/contract/personalityToken'
 import { useQuery } from '@tanstack/react-query'
-import { useOwnedTokensReal } from '@/hooks/usePersonalityTokens'
+import { useOwnedTokensFromEvents } from '@/hooks/usePersonalityTokens'
 
 export const Route = createFileRoute('/_app/collection/')({ 
   component: RouteComponent,
@@ -53,7 +53,7 @@ function WalletConnectionPrompt() {
 }
 
 function NFTCollection({ address }: { address: `0x${string}` }) {
-  const { ownedTokens, isLoading: isLoadingTokens, error } = useOwnedTokensReal(address)
+  const { data: ownedTokens = [], isLoading: isLoadingTokens, error } = useOwnedTokensFromEvents(address)
   
   if (error) {
     return (
@@ -64,7 +64,7 @@ function NFTCollection({ address }: { address: `0x${string}` }) {
           </svg>
         </div>
         <h3 className="text-xl font-semibold mb-2">Error Loading Collection</h3>
-        <p className="text-base-content/70 mb-4">{error}</p>
+        <p className="text-base-content/70 mb-4">{error instanceof Error ? error.message : 'Unknown error occurred'}</p>
       </div>
     )
   }
@@ -110,7 +110,7 @@ function NFTCard({ tokenId }: { tokenId: number }) {
   // Get token URI from contract
   const { data: tokenUri } = useReadContract({
     address: personalityTokenContract.address as `0x${string}`,
-    abi: personalityTokenContract.contract.abi,
+    abi: personalityTokenContract.abi,
     functionName: 'uri',
     args: [BigInt(tokenId)],
   })

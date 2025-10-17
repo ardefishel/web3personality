@@ -1,7 +1,11 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { useState } from 'react'
+import { useReadContract } from 'wagmi'
+import { useAccount } from 'wagmi'
 import { useQuizIds, useQuiz } from '@/hooks/useQuizzes'
 import { Quiz } from '@/types/quiz'
+import quizManagerContract from '@/lib/contract/quizManager'
+import type { Address } from 'viem'
 
 export const Route = createFileRoute('/_app/browse/')({
   component: RouteComponent,
@@ -48,10 +52,24 @@ function RouteComponent() {
 // Individual Quiz Component that handles its own data fetching
 function QuizCard({ quizId }: { quizId: number }) {
   const quiz = useQuiz(quizId)
+  const { address: userAddress } = useAccount()
+  
+  // Check if user has participated in this quiz
+  const { data: hasParticipated } = useReadContract({
+    address: quizManagerContract.address as Address,
+    abi: quizManagerContract.abi,
+    functionName: 'hasParticipated',
+    args: userAddress ? [userAddress, BigInt(quizId)] : undefined,
+    query: {
+      enabled: !!userAddress
+    }
+  })
   
   const title = quiz.detail?.title || `Quiz ${quiz.id}`
   const description = quiz.detail?.description || 'No description available'
   const image = quiz.detail?.image || 'https://via.placeholder.com/300x200?text=Quiz'
+  const isActive = quiz.info?.[2] // Third element is isActive boolean
+  const userHasParticipated = Boolean(hasParticipated)
 
   // Show loading spinner while fetching data
   if (quiz.isLoading) {
@@ -109,19 +127,35 @@ function QuizCard({ quizId }: { quizId: number }) {
         <h2 className="card-title text-sm leading-tight flex-grow">{title}</h2>
         <p className="text-xs opacity-70 mb-2">{description}</p>
         
-        {/* Quiz Ready Badge */}
+        {/* Quiz Status Badge */}
         <div className="mb-2">
-          <div className="badge badge-success badge-sm">Ready</div>
+          {userHasParticipated ? (
+            <div className="badge badge-secondary badge-sm">Completed</div>
+          ) : isActive ? (
+            <div className="badge badge-success badge-sm">Active</div>
+          ) : (
+            <div className="badge badge-warning badge-sm">Inactive</div>
+          )}
         </div>
         
         <div className="card-actions mt-2">
-          <Link 
-            to="/take-quiz/$quizId" 
-            params={{ quizId: quizId.toString() }}
-            className="btn btn-primary btn-sm w-full"
-          >
-            Take Quiz
-          </Link>
+          {userHasParticipated ? (
+            <button className="btn btn-disabled btn-sm w-full" disabled>
+              Already Completed
+            </button>
+          ) : isActive ? (
+            <Link 
+              to="/take-quiz/$quizId" 
+              params={{ quizId: quizId.toString() }}
+              className="btn btn-primary btn-sm w-full"
+            >
+              Take Quiz
+            </Link>
+          ) : (
+            <button className="btn btn-disabled btn-sm w-full" disabled>
+              Quiz Inactive
+            </button>
+          )}
         </div>
       </div>
     </div>

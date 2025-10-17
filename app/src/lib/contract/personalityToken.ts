@@ -1,6 +1,6 @@
-import PersonalityToken from './PersonalityToken.json'
+import { PERSONALITY_TOKEN_ABI } from "./abis/personalityToken";
 
 export default {
     address: import.meta.env.VITE_CONTRACT_PERSONALITY_TOKEN || "",
-    contract: PersonalityToken
+    abi: PERSONALITY_TOKEN_ABI
 }
