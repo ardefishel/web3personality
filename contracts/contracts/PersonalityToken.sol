@@ -8,6 +8,7 @@ import {Strings} from "@openzeppelin/contracts/utils/Strings.sol";
 
 contract PersonalityToken is ERC1155, AccessControl {
     string[] private _metadataURI;
+    string private _contractURI;
 
     bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
 
@@ -20,7 +21,7 @@ contract PersonalityToken is ERC1155, AccessControl {
 
     function setURI(string memory newuri) public onlyRole(DEFAULT_ADMIN_ROLE) {
         _setURI(newuri);
-        // _metadataURI.push(newuri);
+        _contractURI = newuri;
     }
 
     function pushHash(string memory newuri) public onlyRole(MINTER_ROLE) {
@@ -37,7 +38,7 @@ contract PersonalityToken is ERC1155, AccessControl {
     }
 
     function contractURI() public view returns (string memory) {
-        return string(abi.encodePacked(_metadataURI[0], "collection.json"));
+        return string(abi.encodePacked(_contractURI, "collection.json"));
     }
 
     function uri(
