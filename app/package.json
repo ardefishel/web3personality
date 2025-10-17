@@ -9,19 +9,24 @@
     "test": "vitest run"
   },
   "dependencies": {
-    "@tailwindcss/vite": "^4.0.6",
+    "@coinbase/onchainkit": "^1.1.1",
+    "@farcaster/miniapp-sdk": "^0.2.0",
+    "@tailwindcss/vite": "^4.1.14",
     "@tanstack/nitro-v2-vite-plugin": "^1.132.31",
     "@tanstack/react-devtools": "^0.7.0",
+    "@tanstack/react-query": "^5.90.3",
     "@tanstack/react-router": "^1.132.0",
     "@tanstack/react-router-devtools": "^1.132.0",
     "@tanstack/react-router-ssr-query": "^1.131.7",
     "@tanstack/react-start": "^1.132.0",
     "@tanstack/router-plugin": "^1.132.0",
+    "daisyui": "^5.3.2",
     "lucide-react": "^0.544.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "tailwindcss": "^4.0.6",
-    "vite-tsconfig-paths": "^5.1.4"
+    "tailwindcss": "^4.1.14",
+    "vite-tsconfig-paths": "^5.1.4",
+    "wagmi": "^2.18.1"
   },
   "devDependencies": {
     "@testing-library/dom": "^10.4.0",

@@ -9,7 +9,7 @@ import {
   Sparkles,
 } from 'lucide-react'
 
-export const Route = createFileRoute('/')({
+export const Route = createFileRoute('/demo/')({
   component: App,
 })
 
