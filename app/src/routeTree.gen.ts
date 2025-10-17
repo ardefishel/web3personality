@@ -21,6 +21,7 @@ import { Route as AppAccountIndexRouteImport } from './routes/_app/account/index
 import { Route as DemoStartServerFuncsRouteImport } from './routes/demo/start.server-funcs'
 import { Route as DemoStartApiRequestRouteImport } from './routes/demo/start.api-request'
 import { Route as DemoApiNamesRouteImport } from './routes/demo/api.names'
+import { Route as ApiAiCompleteTestRouteImport } from './routes/api/ai/complete-test'
 import { Route as DemoStartSsrIndexRouteImport } from './routes/demo/start.ssr.index'
 import { Route as DemoStartSsrSpaModeRouteImport } from './routes/demo/start.ssr.spa-mode'
 import { Route as DemoStartSsrFullSsrRouteImport } from './routes/demo/start.ssr.full-ssr'
@@ -86,6 +87,11 @@ const DemoApiNamesRoute = DemoApiNamesRouteImport.update({
   path: '/demo/api/names',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiAiCompleteTestRoute = ApiAiCompleteTestRouteImport.update({
+  id: '/api/ai/complete-test',
+  path: '/api/ai/complete-test',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const DemoStartSsrIndexRoute = DemoStartSsrIndexRouteImport.update({
   id: '/demo/start/ssr/',
   path: '/demo/start/ssr/',
@@ -112,6 +118,7 @@ export interface FileRoutesByFullPath {
   '/take-quiz/$quizId': typeof TakeQuizQuizIdRoute
   '/': typeof AppIndexRoute
   '/demo': typeof DemoIndexRoute
+  '/api/ai/complete-test': typeof ApiAiCompleteTestRoute
   '/demo/api/names': typeof DemoApiNamesRoute
   '/demo/start/api-request': typeof DemoStartApiRequestRoute
   '/demo/start/server-funcs': typeof DemoStartServerFuncsRoute
@@ -129,6 +136,7 @@ export interface FileRoutesByTo {
   '/take-quiz/$quizId': typeof TakeQuizQuizIdRoute
   '/': typeof AppIndexRoute
   '/demo': typeof DemoIndexRoute
+  '/api/ai/complete-test': typeof ApiAiCompleteTestRoute
   '/demo/api/names': typeof DemoApiNamesRoute
   '/demo/start/api-request': typeof DemoStartApiRequestRoute
   '/demo/start/server-funcs': typeof DemoStartServerFuncsRoute
@@ -148,6 +156,7 @@ export interface FileRoutesById {
   '/take-quiz/$quizId': typeof TakeQuizQuizIdRoute
   '/_app/': typeof AppIndexRoute
   '/demo/': typeof DemoIndexRoute
+  '/api/ai/complete-test': typeof ApiAiCompleteTestRoute
   '/demo/api/names': typeof DemoApiNamesRoute
   '/demo/start/api-request': typeof DemoStartApiRequestRoute
   '/demo/start/server-funcs': typeof DemoStartServerFuncsRoute
@@ -167,6 +176,7 @@ export interface FileRouteTypes {
     | '/take-quiz/$quizId'
     | '/'
     | '/demo'
+    | '/api/ai/complete-test'
     | '/demo/api/names'
     | '/demo/start/api-request'
     | '/demo/start/server-funcs'
@@ -184,6 +194,7 @@ export interface FileRouteTypes {
     | '/take-quiz/$quizId'
     | '/'
     | '/demo'
+    | '/api/ai/complete-test'
     | '/demo/api/names'
     | '/demo/start/api-request'
     | '/demo/start/server-funcs'
@@ -202,6 +213,7 @@ export interface FileRouteTypes {
     | '/take-quiz/$quizId'
     | '/_app/'
     | '/demo/'
+    | '/api/ai/complete-test'
     | '/demo/api/names'
     | '/demo/start/api-request'
     | '/demo/start/server-funcs'
@@ -220,6 +232,7 @@ export interface RootRouteChildren {
   DotwellKnownFarcasterDotjsonRoute: typeof DotwellKnownFarcasterDotjsonRoute
   TakeQuizQuizIdRoute: typeof TakeQuizQuizIdRoute
   DemoIndexRoute: typeof DemoIndexRoute
+  ApiAiCompleteTestRoute: typeof ApiAiCompleteTestRoute
   DemoApiNamesRoute: typeof DemoApiNamesRoute
   DemoStartApiRequestRoute: typeof DemoStartApiRequestRoute
   DemoStartServerFuncsRoute: typeof DemoStartServerFuncsRoute
@@ -316,6 +329,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DemoApiNamesRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/ai/complete-test': {
+      id: '/api/ai/complete-test'
+      path: '/api/ai/complete-test'
+      fullPath: '/api/ai/complete-test'
+      preLoaderRoute: typeof ApiAiCompleteTestRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/demo/start/ssr/': {
       id: '/demo/start/ssr/'
       path: '/demo/start/ssr'
@@ -368,6 +388,7 @@ const rootRouteChildren: RootRouteChildren = {
   DotwellKnownFarcasterDotjsonRoute: DotwellKnownFarcasterDotjsonRoute,
   TakeQuizQuizIdRoute: TakeQuizQuizIdRoute,
   DemoIndexRoute: DemoIndexRoute,
+  ApiAiCompleteTestRoute: ApiAiCompleteTestRoute,
   DemoApiNamesRoute: DemoApiNamesRoute,
   DemoStartApiRequestRoute: DemoStartApiRequestRoute,
   DemoStartServerFuncsRoute: DemoStartServerFuncsRoute,

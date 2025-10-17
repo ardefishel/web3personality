@@ -47,18 +47,16 @@ function CustomTopBar() {
   const navigate = useNavigate()
   
   return (
-    <div className="navbar px-4 py-2">
-      <div className="flex-none">
+    <div className="navbar bg-base-100 px-4 py-2 border-b border-base-300">
+      <div className="flex-1 flex items-center gap-2">
         <button 
           onClick={() => navigate({ to: '/browse' })}
           className="btn btn-ghost btn-circle"
         >
           <ArrowLeft className="h-5 w-5" />
         </button>
-      </div>
-      <div className="flex-1 flex items-center justify-center gap-1">
-        <img src="/w3p-logo.png" alt="W3P" className="h-8 w-auto" />
-        <h2 className="text-white font-bold">Quiz</h2>
+        <img src="/w3p-logo.png" alt="W3P" className="h-6 w-auto" />
+        <span className="font-bold text-lg">Quiz</span>
       </div>
       <div className="flex-none">
         <Wallet />
@@ -110,31 +108,59 @@ function TakeQuizComponent() {
     }))
   }
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (!quizDetail) return
 
     setIsSubmitting(true)
     
-    // Create result mapping
-    const results = quizDetail.questions.map((question, index) => ({
+    // Create answers array
+    const answersArray = quizDetail.questions.map((question, index) => ({
       questionIndex: index,
       question: question,
-      answer: answers[index] || null,
-      answerLabel: answers[index] ? SCALE_OPTIONS.find(opt => opt.value === answers[index])?.label : 'Not answered'
+      answer: answers[index],
+      answerLabel: SCALE_OPTIONS.find(opt => opt.value === answers[index])?.label || ''
     }))
 
-    console.log('Quiz Results:', {
+    // Prepare request payload
+    const requestPayload = {
       quizId: quizId,
-      quizTitle: quizDetail.title,
-      totalQuestions: quizDetail.questions.length,
-      answeredQuestions: Object.keys(answers).length,
-      results: results
-    })
+      personalities: quizDetail.personalities.map(p => p.name),
+      answers: answersArray
+    }
 
-    setIsSubmitting(false)
-    
-    // Show success message
-    alert('Quiz submitted successfully! Check the console for detailed results.')
+    try {
+      // Call the personality analysis API
+      const response = await fetch('/api/ai/complete-test', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(requestPayload)
+      })
+
+      const result = await response.json()
+      
+      if (response.ok) {
+        console.log('Personality Analysis Result:', {
+          quizId: quizId,
+          quizTitle: quizDetail.title,
+          selectedPersonality: result.personality,
+          rationale: result.rationale,
+          totalQuestions: quizDetail.questions.length,
+          answers: answersArray
+        })
+        
+        alert(`Quiz completed! Your personality: ${result.personality}\n\nRationale: ${result.rationale}`)
+      } else {
+        console.error('API Error:', result)
+        alert('There was an error analyzing your personality. Please try again.')
+      }
+    } catch (error) {
+      console.error('Failed to submit quiz:', error)
+      alert('Network error. Please check your connection and try again.')
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   const allQuestionsAnswered = quizDetail?.questions.every((_, index) => answers[index] !== undefined) || false
