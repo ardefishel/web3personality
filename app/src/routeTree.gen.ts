@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as AppRouteImport } from './routes/_app'
 import { Route as DemoIndexRouteImport } from './routes/demo/index'
 import { Route as AppIndexRouteImport } from './routes/_app/index'
+import { Route as TakeQuizQuizIdRouteImport } from './routes/take-quiz/$quizId'
 import { Route as DotwellKnownFarcasterDotjsonRouteImport } from './routes/[.]well-known/farcaster[.]json'
 import { Route as DemoMinikitIndexRouteImport } from './routes/demo/minikit/index'
 import { Route as AppCollectionIndexRouteImport } from './routes/_app/collection/index'
@@ -38,6 +39,11 @@ const AppIndexRoute = AppIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => AppRoute,
+} as any)
+const TakeQuizQuizIdRoute = TakeQuizQuizIdRouteImport.update({
+  id: '/take-quiz/$quizId',
+  path: '/take-quiz/$quizId',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const DotwellKnownFarcasterDotjsonRoute =
   DotwellKnownFarcasterDotjsonRouteImport.update({
@@ -103,6 +109,7 @@ const DemoStartSsrDataOnlyRoute = DemoStartSsrDataOnlyRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/.well-known/farcaster.json': typeof DotwellKnownFarcasterDotjsonRoute
+  '/take-quiz/$quizId': typeof TakeQuizQuizIdRoute
   '/': typeof AppIndexRoute
   '/demo': typeof DemoIndexRoute
   '/demo/api/names': typeof DemoApiNamesRoute
@@ -119,6 +126,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/.well-known/farcaster.json': typeof DotwellKnownFarcasterDotjsonRoute
+  '/take-quiz/$quizId': typeof TakeQuizQuizIdRoute
   '/': typeof AppIndexRoute
   '/demo': typeof DemoIndexRoute
   '/demo/api/names': typeof DemoApiNamesRoute
@@ -137,6 +145,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_app': typeof AppRouteWithChildren
   '/.well-known/farcaster.json': typeof DotwellKnownFarcasterDotjsonRoute
+  '/take-quiz/$quizId': typeof TakeQuizQuizIdRoute
   '/_app/': typeof AppIndexRoute
   '/demo/': typeof DemoIndexRoute
   '/demo/api/names': typeof DemoApiNamesRoute
@@ -155,6 +164,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/.well-known/farcaster.json'
+    | '/take-quiz/$quizId'
     | '/'
     | '/demo'
     | '/demo/api/names'
@@ -171,6 +181,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/.well-known/farcaster.json'
+    | '/take-quiz/$quizId'
     | '/'
     | '/demo'
     | '/demo/api/names'
@@ -188,6 +199,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/_app'
     | '/.well-known/farcaster.json'
+    | '/take-quiz/$quizId'
     | '/_app/'
     | '/demo/'
     | '/demo/api/names'
@@ -206,6 +218,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   AppRoute: typeof AppRouteWithChildren
   DotwellKnownFarcasterDotjsonRoute: typeof DotwellKnownFarcasterDotjsonRoute
+  TakeQuizQuizIdRoute: typeof TakeQuizQuizIdRoute
   DemoIndexRoute: typeof DemoIndexRoute
   DemoApiNamesRoute: typeof DemoApiNamesRoute
   DemoStartApiRequestRoute: typeof DemoStartApiRequestRoute
@@ -239,6 +252,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/'
       preLoaderRoute: typeof AppIndexRouteImport
       parentRoute: typeof AppRoute
+    }
+    '/take-quiz/$quizId': {
+      id: '/take-quiz/$quizId'
+      path: '/take-quiz/$quizId'
+      fullPath: '/take-quiz/$quizId'
+      preLoaderRoute: typeof TakeQuizQuizIdRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/.well-known/farcaster.json': {
       id: '/.well-known/farcaster.json'
@@ -346,6 +366,7 @@ const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
 const rootRouteChildren: RootRouteChildren = {
   AppRoute: AppRouteWithChildren,
   DotwellKnownFarcasterDotjsonRoute: DotwellKnownFarcasterDotjsonRoute,
+  TakeQuizQuizIdRoute: TakeQuizQuizIdRoute,
   DemoIndexRoute: DemoIndexRoute,
   DemoApiNamesRoute: DemoApiNamesRoute,
   DemoStartApiRequestRoute: DemoStartApiRequestRoute,
