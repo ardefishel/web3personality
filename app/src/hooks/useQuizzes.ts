@@ -69,13 +69,23 @@ export function useQuizIds() {
   return quizIds
 }
 
-// Hook to get the latest N quizzes
+// Hook to get the latest N quizzes (max 5 to comply with Rules of Hooks)
 export function useLatestQuizzes(count: number = 3): Quiz[] {
   const quizIds = useQuizIds()
-  const latestIds = quizIds.slice(0, count)
   
-  // Use individual quiz hooks for each latest quiz
-  const quizzes = latestIds.map(id => useQuiz(id))
+  // Always call the same number of hooks (max 5) to comply with Rules of Hooks
+  const quiz1 = useQuiz(quizIds[0] || 0)
+  const quiz2 = useQuiz(quizIds[1] || 0)
+  const quiz3 = useQuiz(quizIds[2] || 0)
+  const quiz4 = useQuiz(quizIds[3] || 0)
+  const quiz5 = useQuiz(quizIds[4] || 0)
   
-  return quizzes
+  // Collect all quizzes and filter/slice based on what's available
+  const allQuizzes = [quiz1, quiz2, quiz3, quiz4, quiz5]
+  const validQuizzes = allQuizzes.filter((quiz, index) => {
+    return index < quizIds.length && quiz.id > 0
+  })
+  
+  // Return only the requested count
+  return validQuizzes.slice(0, Math.min(count, 5))
 }
