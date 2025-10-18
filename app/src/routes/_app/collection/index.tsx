@@ -27,9 +27,9 @@ function RouteComponent() {
   }
   
   return (
-    <div className="flex-1 flex flex-col gap-6 px-4 py-6">
+    <div className="flex-1 flex flex-col gap-6 lg:gap-8 px-4 lg:px-8 py-6 lg:py-8">
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold">My Collection</h1>
+        <h1 className="text-2xl lg:text-4xl font-bold">My Collection</h1>
       </div>
       <NFTCollection address={address!} />
     </div>
@@ -38,14 +38,14 @@ function RouteComponent() {
 
 function WalletConnectionPrompt() {
   return (
-    <div className="flex-1 flex flex-col items-center justify-center px-4 py-12 gap-6">
+    <div className="flex-1 flex flex-col items-center justify-center px-4 lg:px-8 py-12 lg:py-20 gap-6 lg:gap-8">
       <div className="text-center">
-        <h1 className="text-2xl font-bold mb-2">Connect Your Wallet</h1>
-        <p className="text-base-content/70 mb-6">
+        <h1 className="text-2xl lg:text-4xl font-bold mb-2 lg:mb-4">Connect Your Wallet</h1>
+        <p className="text-base-content/70 mb-6 lg:text-lg lg:leading-relaxed">
           Connect your wallet to view your PersonalityToken NFT collection
         </p>
       </div>
-      <div className="w-full max-w-sm">
+      <div className="w-full max-w-sm lg:max-w-md">
         <Wallet />
       </div>
     </div>
@@ -57,14 +57,14 @@ function NFTCollection({ address }: { address: `0x${string}` }) {
   
   if (error) {
     return (
-      <div className="flex flex-col items-center justify-center py-12 text-center">
-        <div className="w-24 h-24 rounded-full bg-error/20 flex items-center justify-center mb-4">
-          <svg className="w-12 h-12 text-error" fill="currentColor" viewBox="0 0 20 20">
+      <div className="flex flex-col items-center justify-center py-12 lg:py-20 text-center">
+        <div className="w-24 h-24 lg:w-32 lg:h-32 rounded-full bg-error/20 flex items-center justify-center mb-4 lg:mb-6">
+          <svg className="w-12 h-12 lg:w-16 lg:h-16 text-error" fill="currentColor" viewBox="0 0 20 20">
             <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
           </svg>
         </div>
-        <h3 className="text-xl font-semibold mb-2">Error Loading Collection</h3>
-        <p className="text-base-content/70 mb-4">{error instanceof Error ? error.message : 'Unknown error occurred'}</p>
+        <h3 className="text-xl lg:text-2xl font-semibold mb-2">Error Loading Collection</h3>
+        <p className="text-base-content/70 mb-4 lg:text-lg">{error instanceof Error ? error.message : 'Unknown error occurred'}</p>
       </div>
     )
   }
@@ -98,7 +98,7 @@ function NFTCollection({ address }: { address: `0x${string}` }) {
   }
   
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-6 lg:gap-8">
       {ownedTokens.map(tokenId => (
         <NFTCard key={tokenId} tokenId={tokenId} />
       ))}
@@ -169,7 +169,7 @@ function NFTCard({ tokenId }: { tokenId: number }) {
   }
   
   return (
-    <div className="card bg-base-200 hover:shadow-lg transition-shadow">
+    <div className="card bg-base-200 hover:shadow-lg lg:hover:shadow-xl transition-shadow">
       <figure className="aspect-square">
         <img 
           src={imageUrl} 
@@ -180,11 +180,11 @@ function NFTCard({ tokenId }: { tokenId: number }) {
           }}
         />
       </figure>
-      <div className="card-body p-4">
-        <h3 className="card-title text-sm">
+      <div className="card-body p-4 lg:p-5">
+        <h3 className="card-title text-sm lg:text-base">
           {metadata.name || `PersonalityToken #${tokenId}`}
         </h3>
-        <p className="text-xs text-base-content/70 line-clamp-2">
+        <p className="text-xs lg:text-sm text-base-content/70 line-clamp-2">
           {metadata.description || 'Your unique personality NFT'}
         </p>
         
