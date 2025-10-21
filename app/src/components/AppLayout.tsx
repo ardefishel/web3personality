@@ -224,7 +224,7 @@ function DesktopSidebar() {
 const AppLayout = ({ children }: Props) => {
   return (
     <div className="min-h-dvh flex">
-      <SafeArea className="flex w-full">
+      <SafeArea>
         {/* Desktop layout with sidebar */}
         <DesktopSidebar />
         

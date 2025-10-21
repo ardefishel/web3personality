@@ -8,12 +8,17 @@
 // You should NOT make any changes in this file as it will be overwritten.
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
+import { createFileRoute } from '@tanstack/react-router'
+
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as AppRouteImport } from './routes/_app'
 import { Route as DemoIndexRouteImport } from './routes/demo/index'
 import { Route as AppIndexRouteImport } from './routes/_app/index'
+import { Route as V2OnboardRouteImport } from './routes/v2/onboard'
+import { Route as V2Appv2LayoutRouteImport } from './routes/v2/_appv2Layout'
 import { Route as TakeQuizQuizIdRouteImport } from './routes/take-quiz/$quizId'
 import { Route as DotwellKnownFarcasterDotjsonRouteImport } from './routes/[.]well-known/farcaster[.]json'
+import { Route as V2Appv2LayoutIndexRouteImport } from './routes/v2/_appv2Layout.index'
 import { Route as DemoMinikitIndexRouteImport } from './routes/demo/minikit/index'
 import { Route as AppCollectionIndexRouteImport } from './routes/_app/collection/index'
 import { Route as AppBrowseIndexRouteImport } from './routes/_app/browse/index'
@@ -27,6 +32,13 @@ import { Route as DemoStartSsrSpaModeRouteImport } from './routes/demo/start.ssr
 import { Route as DemoStartSsrFullSsrRouteImport } from './routes/demo/start.ssr.full-ssr'
 import { Route as DemoStartSsrDataOnlyRouteImport } from './routes/demo/start.ssr.data-only'
 
+const V2RouteImport = createFileRoute('/v2')()
+
+const V2Route = V2RouteImport.update({
+  id: '/v2',
+  path: '/v2',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AppRoute = AppRouteImport.update({
   id: '/_app',
   getParentRoute: () => rootRouteImport,
@@ -41,6 +53,15 @@ const AppIndexRoute = AppIndexRouteImport.update({
   path: '/',
   getParentRoute: () => AppRoute,
 } as any)
+const V2OnboardRoute = V2OnboardRouteImport.update({
+  id: '/onboard',
+  path: '/onboard',
+  getParentRoute: () => V2Route,
+} as any)
+const V2Appv2LayoutRoute = V2Appv2LayoutRouteImport.update({
+  id: '/_appv2Layout',
+  getParentRoute: () => V2Route,
+} as any)
 const TakeQuizQuizIdRoute = TakeQuizQuizIdRouteImport.update({
   id: '/take-quiz/$quizId',
   path: '/take-quiz/$quizId',
@@ -52,6 +73,11 @@ const DotwellKnownFarcasterDotjsonRoute =
     path: '/.well-known/farcaster.json',
     getParentRoute: () => rootRouteImport,
   } as any)
+const V2Appv2LayoutIndexRoute = V2Appv2LayoutIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => V2Appv2LayoutRoute,
+} as any)
 const DemoMinikitIndexRoute = DemoMinikitIndexRouteImport.update({
   id: '/demo/minikit/',
   path: '/demo/minikit/',
@@ -116,6 +142,8 @@ const DemoStartSsrDataOnlyRoute = DemoStartSsrDataOnlyRouteImport.update({
 export interface FileRoutesByFullPath {
   '/.well-known/farcaster.json': typeof DotwellKnownFarcasterDotjsonRoute
   '/take-quiz/$quizId': typeof TakeQuizQuizIdRoute
+  '/v2': typeof V2Appv2LayoutRouteWithChildren
+  '/v2/onboard': typeof V2OnboardRoute
   '/': typeof AppIndexRoute
   '/demo': typeof DemoIndexRoute
   '/api/ai/complete-test': typeof ApiAiCompleteTestRoute
@@ -126,6 +154,7 @@ export interface FileRoutesByFullPath {
   '/browse': typeof AppBrowseIndexRoute
   '/collection': typeof AppCollectionIndexRoute
   '/demo/minikit': typeof DemoMinikitIndexRoute
+  '/v2/': typeof V2Appv2LayoutIndexRoute
   '/demo/start/ssr/data-only': typeof DemoStartSsrDataOnlyRoute
   '/demo/start/ssr/full-ssr': typeof DemoStartSsrFullSsrRoute
   '/demo/start/ssr/spa-mode': typeof DemoStartSsrSpaModeRoute
@@ -134,6 +163,8 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/.well-known/farcaster.json': typeof DotwellKnownFarcasterDotjsonRoute
   '/take-quiz/$quizId': typeof TakeQuizQuizIdRoute
+  '/v2': typeof V2Appv2LayoutIndexRoute
+  '/v2/onboard': typeof V2OnboardRoute
   '/': typeof AppIndexRoute
   '/demo': typeof DemoIndexRoute
   '/api/ai/complete-test': typeof ApiAiCompleteTestRoute
@@ -154,6 +185,9 @@ export interface FileRoutesById {
   '/_app': typeof AppRouteWithChildren
   '/.well-known/farcaster.json': typeof DotwellKnownFarcasterDotjsonRoute
   '/take-quiz/$quizId': typeof TakeQuizQuizIdRoute
+  '/v2': typeof V2RouteWithChildren
+  '/v2/_appv2Layout': typeof V2Appv2LayoutRouteWithChildren
+  '/v2/onboard': typeof V2OnboardRoute
   '/_app/': typeof AppIndexRoute
   '/demo/': typeof DemoIndexRoute
   '/api/ai/complete-test': typeof ApiAiCompleteTestRoute
@@ -164,6 +198,7 @@ export interface FileRoutesById {
   '/_app/browse/': typeof AppBrowseIndexRoute
   '/_app/collection/': typeof AppCollectionIndexRoute
   '/demo/minikit/': typeof DemoMinikitIndexRoute
+  '/v2/_appv2Layout/': typeof V2Appv2LayoutIndexRoute
   '/demo/start/ssr/data-only': typeof DemoStartSsrDataOnlyRoute
   '/demo/start/ssr/full-ssr': typeof DemoStartSsrFullSsrRoute
   '/demo/start/ssr/spa-mode': typeof DemoStartSsrSpaModeRoute
@@ -174,6 +209,8 @@ export interface FileRouteTypes {
   fullPaths:
     | '/.well-known/farcaster.json'
     | '/take-quiz/$quizId'
+    | '/v2'
+    | '/v2/onboard'
     | '/'
     | '/demo'
     | '/api/ai/complete-test'
@@ -184,6 +221,7 @@ export interface FileRouteTypes {
     | '/browse'
     | '/collection'
     | '/demo/minikit'
+    | '/v2/'
     | '/demo/start/ssr/data-only'
     | '/demo/start/ssr/full-ssr'
     | '/demo/start/ssr/spa-mode'
@@ -192,6 +230,8 @@ export interface FileRouteTypes {
   to:
     | '/.well-known/farcaster.json'
     | '/take-quiz/$quizId'
+    | '/v2'
+    | '/v2/onboard'
     | '/'
     | '/demo'
     | '/api/ai/complete-test'
@@ -211,6 +251,9 @@ export interface FileRouteTypes {
     | '/_app'
     | '/.well-known/farcaster.json'
     | '/take-quiz/$quizId'
+    | '/v2'
+    | '/v2/_appv2Layout'
+    | '/v2/onboard'
     | '/_app/'
     | '/demo/'
     | '/api/ai/complete-test'
@@ -221,6 +264,7 @@ export interface FileRouteTypes {
     | '/_app/browse/'
     | '/_app/collection/'
     | '/demo/minikit/'
+    | '/v2/_appv2Layout/'
     | '/demo/start/ssr/data-only'
     | '/demo/start/ssr/full-ssr'
     | '/demo/start/ssr/spa-mode'
@@ -231,6 +275,7 @@ export interface RootRouteChildren {
   AppRoute: typeof AppRouteWithChildren
   DotwellKnownFarcasterDotjsonRoute: typeof DotwellKnownFarcasterDotjsonRoute
   TakeQuizQuizIdRoute: typeof TakeQuizQuizIdRoute
+  V2Route: typeof V2RouteWithChildren
   DemoIndexRoute: typeof DemoIndexRoute
   ApiAiCompleteTestRoute: typeof ApiAiCompleteTestRoute
   DemoApiNamesRoute: typeof DemoApiNamesRoute
@@ -245,6 +290,13 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/v2': {
+      id: '/v2'
+      path: '/v2'
+      fullPath: '/v2'
+      preLoaderRoute: typeof V2RouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_app': {
       id: '/_app'
       path: ''
@@ -266,6 +318,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppIndexRouteImport
       parentRoute: typeof AppRoute
     }
+    '/v2/onboard': {
+      id: '/v2/onboard'
+      path: '/onboard'
+      fullPath: '/v2/onboard'
+      preLoaderRoute: typeof V2OnboardRouteImport
+      parentRoute: typeof V2Route
+    }
+    '/v2/_appv2Layout': {
+      id: '/v2/_appv2Layout'
+      path: '/v2'
+      fullPath: '/v2'
+      preLoaderRoute: typeof V2Appv2LayoutRouteImport
+      parentRoute: typeof V2Route
+    }
     '/take-quiz/$quizId': {
       id: '/take-quiz/$quizId'
       path: '/take-quiz/$quizId'
@@ -279,6 +345,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/.well-known/farcaster.json'
       preLoaderRoute: typeof DotwellKnownFarcasterDotjsonRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/v2/_appv2Layout/': {
+      id: '/v2/_appv2Layout/'
+      path: '/'
+      fullPath: '/v2/'
+      preLoaderRoute: typeof V2Appv2LayoutIndexRouteImport
+      parentRoute: typeof V2Appv2LayoutRoute
     }
     '/demo/minikit/': {
       id: '/demo/minikit/'
@@ -383,10 +456,35 @@ const AppRouteChildren: AppRouteChildren = {
 
 const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
 
+interface V2Appv2LayoutRouteChildren {
+  V2Appv2LayoutIndexRoute: typeof V2Appv2LayoutIndexRoute
+}
+
+const V2Appv2LayoutRouteChildren: V2Appv2LayoutRouteChildren = {
+  V2Appv2LayoutIndexRoute: V2Appv2LayoutIndexRoute,
+}
+
+const V2Appv2LayoutRouteWithChildren = V2Appv2LayoutRoute._addFileChildren(
+  V2Appv2LayoutRouteChildren,
+)
+
+interface V2RouteChildren {
+  V2Appv2LayoutRoute: typeof V2Appv2LayoutRouteWithChildren
+  V2OnboardRoute: typeof V2OnboardRoute
+}
+
+const V2RouteChildren: V2RouteChildren = {
+  V2Appv2LayoutRoute: V2Appv2LayoutRouteWithChildren,
+  V2OnboardRoute: V2OnboardRoute,
+}
+
+const V2RouteWithChildren = V2Route._addFileChildren(V2RouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   AppRoute: AppRouteWithChildren,
   DotwellKnownFarcasterDotjsonRoute: DotwellKnownFarcasterDotjsonRoute,
   TakeQuizQuizIdRoute: TakeQuizQuizIdRoute,
+  V2Route: V2RouteWithChildren,
   DemoIndexRoute: DemoIndexRoute,
   ApiAiCompleteTestRoute: ApiAiCompleteTestRoute,
   DemoApiNamesRoute: DemoApiNamesRoute,
