@@ -11,7 +11,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // Configuration
-const THEME_FOLDER_TITLE = "00-space-cat";
+const THEME_FOLDER_TITLE = "02-jakartan-ninja";
 const NETWORK_NAME = "baseSepolia";
 
 // Environment variables validation
