@@ -8,7 +8,7 @@ export const Route = createFileRoute("/v2/_appv2Layout/")({
 
 function HomePage() {
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 lg:space-y-12">
       <FeaturedQuizHighlight />
       <QuizBrowser />
     </div>

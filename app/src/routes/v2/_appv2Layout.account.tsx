@@ -7,8 +7,7 @@ import {
   LogOut,
   Network,
   HelpCircle,
-  TwitterIcon,
-  InstagramIcon,
+  Twitter,
   Instagram,
 } from "lucide-react";
 
@@ -20,7 +19,7 @@ function AccountPage() {
   const appVersion = "1.0.0";
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 max-w-2xl lg:mx-auto">
       <UserProfile />
 
       <div className="space-y-2">
@@ -122,7 +121,7 @@ function UserProfile() {
             }
             onClick={() => {}}
           />
-          <SocialButton name="X" icon={<TwitterIcon />} onClick={() => {}} />
+          <SocialButton name="X" icon={<Twitter />} onClick={() => {}} />
           <SocialButton
             name="Instagram"
             icon={<Instagram />}

@@ -309,7 +309,7 @@ interface QuizGridProps {
 
 function QuizGrid({ quizzes, onQuizClick }: QuizGridProps) {
   return (
-    <div className="grid grid-cols-2 gap-4">
+    <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 lg:gap-6">
       {quizzes.map((quiz) => (
         <QuizGridCard key={quiz.id} quiz={quiz} onClick={() => onQuizClick(quiz)} />
       ))}
@@ -326,20 +326,20 @@ function QuizGridCard({ quiz, onClick }: QuizGridCardProps) {
   return (
     <article
       onClick={onClick}
-      className="card bg-gradient-to-br from-accent to-accent/80 h-48 relative overflow-hidden cursor-pointer transition-transform hover:scale-105 active:scale-95"
+      className="card bg-gradient-to-br from-accent to-accent/80 h-48 lg:h-56 relative overflow-hidden cursor-pointer transition-transform hover:scale-105 active:scale-95"
     >
       <div className="absolute inset-0 bg-[url('https://img.daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.webp')] bg-cover bg-center opacity-20" />
 
       <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
 
-      <div className="relative h-full p-4 flex flex-col justify-between">
+      <div className="relative h-full p-4 lg:p-6 flex flex-col justify-between">
         <div>
           <span className="badge badge-sm badge-ghost">{quiz.category}</span>
         </div>
 
         <div className="space-y-1">
           <div className="text-xs text-white/70">#{quiz.id}</div>
-          <h4 className="text-lg font-bold text-white leading-tight line-clamp-2">
+          <h4 className="text-lg lg:text-xl font-bold text-white leading-tight line-clamp-2">
             {quiz.title}
           </h4>
         </div>

@@ -7,11 +7,15 @@ export const Route = createFileRoute("/v2/_generalLayout")({
 
 function GeneralLayout() {
   return (
-    <div className="max-w-md overflow-hidden mx-auto min-h-dvh relative bg-base-100">
-      <GeneralHeader />
-      <main className="pt-16 px-4 pb-8">
-        <Outlet />
-      </main>
+    <div className="min-h-dvh relative bg-base-100">
+      <div className="max-w-md lg:max-w-4xl overflow-hidden mx-auto min-h-dvh relative">
+        <GeneralHeader />
+        <main className="pt-16 px-4 lg:px-8 pb-8 lg:pb-16">
+          <div className="max-w-3xl mx-auto">
+            <Outlet />
+          </div>
+        </main>
+      </div>
     </div>
   );
 }
@@ -30,8 +34,8 @@ function GeneralHeader() {
   };
 
   return (
-    <header className="navbar bg-base-100/95 backdrop-blur-sm fixed top-0 max-w-md shadow-sm px-4 py-3 z-10 border-b border-base-300">
-      <div className="flex-1 flex items-center gap-3">
+    <header className="navbar bg-base-100/95 backdrop-blur-sm fixed top-0 w-full shadow-sm px-4 lg:px-8 py-3 z-10 border-b border-base-300">
+      <div className="max-w-md lg:max-w-4xl mx-auto w-full flex items-center gap-3">
         <button
           onClick={() => navigate({ to: "/v2/account" })}
           className="btn btn-ghost btn-circle btn-sm"
@@ -39,7 +43,7 @@ function GeneralHeader() {
         >
           <ArrowLeft className="w-5 h-5" />
         </button>
-        <h1 className="text-lg font-semibold">{getPageTitle()}</h1>
+        <h1 className="text-lg lg:text-xl font-semibold">{getPageTitle()}</h1>
       </div>
     </header>
   );
