@@ -1,6 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
 
-import Type3Logo from "./-components/assets/type3-logo.png";
 import OnBoardCarousel from "./-components/onboard-carousel";
 import { Brand } from "./-components/brand";
 
