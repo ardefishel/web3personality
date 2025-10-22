@@ -24,7 +24,9 @@ import { Route as DemoMinikitIndexRouteImport } from './routes/demo/minikit/inde
 import { Route as AppCollectionIndexRouteImport } from './routes/_app/collection/index'
 import { Route as AppBrowseIndexRouteImport } from './routes/_app/browse/index'
 import { Route as AppAccountIndexRouteImport } from './routes/_app/account/index'
+import { Route as V2GeneralLayoutProfileRouteImport } from './routes/v2/_generalLayout.profile'
 import { Route as V2GeneralLayoutPrivacyRouteImport } from './routes/v2/_generalLayout.privacy'
+import { Route as V2GeneralLayoutNetworkRouteImport } from './routes/v2/_generalLayout.network'
 import { Route as V2GeneralLayoutFaqRouteImport } from './routes/v2/_generalLayout.faq'
 import { Route as V2GeneralLayoutAboutRouteImport } from './routes/v2/_generalLayout.about'
 import { Route as V2Appv2LayoutCollectionRouteImport } from './routes/v2/_appv2Layout.collection'
@@ -108,9 +110,19 @@ const AppAccountIndexRoute = AppAccountIndexRouteImport.update({
   path: '/account/',
   getParentRoute: () => AppRoute,
 } as any)
+const V2GeneralLayoutProfileRoute = V2GeneralLayoutProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
+  getParentRoute: () => V2GeneralLayoutRoute,
+} as any)
 const V2GeneralLayoutPrivacyRoute = V2GeneralLayoutPrivacyRouteImport.update({
   id: '/privacy',
   path: '/privacy',
+  getParentRoute: () => V2GeneralLayoutRoute,
+} as any)
+const V2GeneralLayoutNetworkRoute = V2GeneralLayoutNetworkRouteImport.update({
+  id: '/network',
+  path: '/network',
   getParentRoute: () => V2GeneralLayoutRoute,
 } as any)
 const V2GeneralLayoutFaqRoute = V2GeneralLayoutFaqRouteImport.update({
@@ -189,7 +201,9 @@ export interface FileRoutesByFullPath {
   '/v2/collection': typeof V2Appv2LayoutCollectionRoute
   '/v2/about': typeof V2GeneralLayoutAboutRoute
   '/v2/faq': typeof V2GeneralLayoutFaqRoute
+  '/v2/network': typeof V2GeneralLayoutNetworkRoute
   '/v2/privacy': typeof V2GeneralLayoutPrivacyRoute
+  '/v2/profile': typeof V2GeneralLayoutProfileRoute
   '/account': typeof AppAccountIndexRoute
   '/browse': typeof AppBrowseIndexRoute
   '/collection': typeof AppCollectionIndexRoute
@@ -215,7 +229,9 @@ export interface FileRoutesByTo {
   '/v2/collection': typeof V2Appv2LayoutCollectionRoute
   '/v2/about': typeof V2GeneralLayoutAboutRoute
   '/v2/faq': typeof V2GeneralLayoutFaqRoute
+  '/v2/network': typeof V2GeneralLayoutNetworkRoute
   '/v2/privacy': typeof V2GeneralLayoutPrivacyRoute
+  '/v2/profile': typeof V2GeneralLayoutProfileRoute
   '/account': typeof AppAccountIndexRoute
   '/browse': typeof AppBrowseIndexRoute
   '/collection': typeof AppCollectionIndexRoute
@@ -244,7 +260,9 @@ export interface FileRoutesById {
   '/v2/_appv2Layout/collection': typeof V2Appv2LayoutCollectionRoute
   '/v2/_generalLayout/about': typeof V2GeneralLayoutAboutRoute
   '/v2/_generalLayout/faq': typeof V2GeneralLayoutFaqRoute
+  '/v2/_generalLayout/network': typeof V2GeneralLayoutNetworkRoute
   '/v2/_generalLayout/privacy': typeof V2GeneralLayoutPrivacyRoute
+  '/v2/_generalLayout/profile': typeof V2GeneralLayoutProfileRoute
   '/_app/account/': typeof AppAccountIndexRoute
   '/_app/browse/': typeof AppBrowseIndexRoute
   '/_app/collection/': typeof AppCollectionIndexRoute
@@ -272,7 +290,9 @@ export interface FileRouteTypes {
     | '/v2/collection'
     | '/v2/about'
     | '/v2/faq'
+    | '/v2/network'
     | '/v2/privacy'
+    | '/v2/profile'
     | '/account'
     | '/browse'
     | '/collection'
@@ -298,7 +318,9 @@ export interface FileRouteTypes {
     | '/v2/collection'
     | '/v2/about'
     | '/v2/faq'
+    | '/v2/network'
     | '/v2/privacy'
+    | '/v2/profile'
     | '/account'
     | '/browse'
     | '/collection'
@@ -326,7 +348,9 @@ export interface FileRouteTypes {
     | '/v2/_appv2Layout/collection'
     | '/v2/_generalLayout/about'
     | '/v2/_generalLayout/faq'
+    | '/v2/_generalLayout/network'
     | '/v2/_generalLayout/privacy'
+    | '/v2/_generalLayout/profile'
     | '/_app/account/'
     | '/_app/browse/'
     | '/_app/collection/'
@@ -455,11 +479,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppAccountIndexRouteImport
       parentRoute: typeof AppRoute
     }
+    '/v2/_generalLayout/profile': {
+      id: '/v2/_generalLayout/profile'
+      path: '/profile'
+      fullPath: '/v2/profile'
+      preLoaderRoute: typeof V2GeneralLayoutProfileRouteImport
+      parentRoute: typeof V2GeneralLayoutRoute
+    }
     '/v2/_generalLayout/privacy': {
       id: '/v2/_generalLayout/privacy'
       path: '/privacy'
       fullPath: '/v2/privacy'
       preLoaderRoute: typeof V2GeneralLayoutPrivacyRouteImport
+      parentRoute: typeof V2GeneralLayoutRoute
+    }
+    '/v2/_generalLayout/network': {
+      id: '/v2/_generalLayout/network'
+      path: '/network'
+      fullPath: '/v2/network'
+      preLoaderRoute: typeof V2GeneralLayoutNetworkRouteImport
       parentRoute: typeof V2GeneralLayoutRoute
     }
     '/v2/_generalLayout/faq': {
@@ -584,13 +622,17 @@ const V2Appv2LayoutRouteWithChildren = V2Appv2LayoutRoute._addFileChildren(
 interface V2GeneralLayoutRouteChildren {
   V2GeneralLayoutAboutRoute: typeof V2GeneralLayoutAboutRoute
   V2GeneralLayoutFaqRoute: typeof V2GeneralLayoutFaqRoute
+  V2GeneralLayoutNetworkRoute: typeof V2GeneralLayoutNetworkRoute
   V2GeneralLayoutPrivacyRoute: typeof V2GeneralLayoutPrivacyRoute
+  V2GeneralLayoutProfileRoute: typeof V2GeneralLayoutProfileRoute
 }
 
 const V2GeneralLayoutRouteChildren: V2GeneralLayoutRouteChildren = {
   V2GeneralLayoutAboutRoute: V2GeneralLayoutAboutRoute,
   V2GeneralLayoutFaqRoute: V2GeneralLayoutFaqRoute,
+  V2GeneralLayoutNetworkRoute: V2GeneralLayoutNetworkRoute,
   V2GeneralLayoutPrivacyRoute: V2GeneralLayoutPrivacyRoute,
+  V2GeneralLayoutProfileRoute: V2GeneralLayoutProfileRoute,
 }
 
 const V2GeneralLayoutRouteWithChildren = V2GeneralLayoutRoute._addFileChildren(

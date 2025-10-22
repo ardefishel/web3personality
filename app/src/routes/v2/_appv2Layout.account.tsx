@@ -1,28 +1,39 @@
-import { createFileRoute, Link } from '@tanstack/react-router'
-import { User2, ChevronRight, Shield, Info, LogOut, Network, HelpCircle } from 'lucide-react'
+import { createFileRoute, Link } from "@tanstack/react-router";
+import {
+  User2,
+  ChevronRight,
+  Shield,
+  Info,
+  LogOut,
+  Network,
+  HelpCircle,
+  TwitterIcon,
+  InstagramIcon,
+  Instagram,
+} from "lucide-react";
 
-export const Route = createFileRoute('/v2/_appv2Layout/account')({
+export const Route = createFileRoute("/v2/_appv2Layout/account")({
   component: AccountPage,
-})
+});
 
 function AccountPage() {
-  const appVersion = '1.0.0'
+  const appVersion = "1.0.0";
 
   return (
     <div className="space-y-6">
       <UserProfile />
-      
+
       <div className="space-y-2">
         <MenuSection title="Account">
-          <MenuItem
+          <MenuLink
             icon={<User2 className="w-5 h-5" />}
             label="Profile Settings"
-            onClick={() => {}}
+            to="/v2/profile"
           />
-          <MenuItem
+          <MenuLink
             icon={<Network className="w-5 h-5" />}
             label="Change Network"
-            onClick={() => {}}
+            to="/v2/network"
           />
         </MenuSection>
 
@@ -58,11 +69,11 @@ function AccountPage() {
         <span className="badge badge-ghost badge-sm">v{appVersion}</span>
       </div>
     </div>
-  )
+  );
 }
 
 function UserProfile() {
-  const username = '0x1234...5678'
+  const username = "0x1234...5678";
 
   return (
     <div className="bg-base-300 rounded-2xl p-6 space-y-6">
@@ -79,8 +90,8 @@ function UserProfile() {
           <h2 className="font-bold text-xl">{username}</h2>
           <div className="flex items-center gap-2 mt-1">
             <span className="relative flex h-3 w-3">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-success opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-3 w-3 bg-success"></span>
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-warning opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-3 w-3 bg-warning"></span>
             </span>
             <span className="text-xs text-base-content/70">Base Sepolia</span>
           </div>
@@ -97,57 +108,53 @@ function UserProfile() {
           <SocialButton
             name="Farcaster"
             icon={
-              <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M21.5 5h-19A.5.5 0 0 0 2 5.5v13a.5.5 0 0 0 .5.5H6v-8h2.5v8h7V11H18v7.5h3.5a.5.5 0 0 0 .5-.5v-13a.5.5 0 0 0-.5-.5zM9 9H7V7h2v2z"/>
+              <svg
+                viewBox="0 0 24 24"
+                height="24"
+                width="24"
+              >
+                <path
+                  d="M18.24 0.24H5.76C2.5789 0.24 0 2.8188 0 6v12c0 3.1811 2.5789 5.76 5.76 5.76h12.48c3.1812 0 5.76 -2.5789 5.76 -5.76V6C24 2.8188 21.4212 0.24 18.24 0.24m0.8155 17.1662v0.504c0.2868 -0.0256 0.5458 0.1905 0.5439 0.479v0.5688h-5.1437v-0.5688c-0.0019 -0.2885 0.2576 -0.5047 0.5443 -0.479v-0.504c0 -0.22 0.1525 -0.402 0.358 -0.458l-0.0095 -4.3645c-0.1589 -1.7366 -1.6402 -3.0979 -3.4435 -3.0979 -1.8038 0 -3.2846 1.3613 -3.4435 3.0979l-0.0096 4.3578c0.2276 0.0424 0.5318 0.2083 0.5395 0.4648v0.504c0.2863 -0.0256 0.5457 0.1905 0.5438 0.479v0.5688H4.3915v-0.5688c-0.0019 -0.2885 0.2575 -0.5047 0.5438 -0.479v-0.504c0 -0.2529 0.2011 -0.4548 0.4536 -0.4724v-7.895h-0.4905L4.2898 7.008l2.6405 -0.0005V5.0419h9.9495v1.9656h2.8219l-0.6091 2.0314h-0.4901v7.8949c0.2519 0.0177 0.453 0.2195 0.453 0.4724"
+                  fill="currentColor"
+                  stroke-width="1"
+                ></path>
               </svg>
             }
             onClick={() => {}}
           />
-          <SocialButton
-            name="X"
-            icon={
-              <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
-              </svg>
-            }
-            onClick={() => {}}
-          />
+          <SocialButton name="X" icon={<TwitterIcon />} onClick={() => {}} />
           <SocialButton
             name="Instagram"
-            icon={
-              <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M12 2c2.717 0 3.056.01 4.122.06 1.065.05 1.79.217 2.428.465.66.254 1.216.598 1.772 1.153a4.908 4.908 0 0 1 1.153 1.772c.247.637.415 1.363.465 2.428.047 1.066.06 1.405.06 4.122 0 2.717-.01 3.056-.06 4.122-.05 1.065-.218 1.79-.465 2.428a4.883 4.883 0 0 1-1.153 1.772 4.915 4.915 0 0 1-1.772 1.153c-.637.247-1.363.415-2.428.465-1.066.047-1.405.06-4.122.06-2.717 0-3.056-.01-4.122-.06-1.065-.05-1.79-.218-2.428-.465a4.89 4.89 0 0 1-1.772-1.153 4.904 4.904 0 0 1-1.153-1.772c-.248-.637-.415-1.363-.465-2.428C2.013 15.056 2 14.717 2 12c0-2.717.01-3.056.06-4.122.05-1.066.217-1.79.465-2.428a4.88 4.88 0 0 1 1.153-1.772A4.897 4.897 0 0 1 5.45 2.525c.638-.248 1.362-.415 2.428-.465C8.944 2.013 9.283 2 12 2zm0 5a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm6.5-.25a1.25 1.25 0 0 0-2.5 0 1.25 1.25 0 0 0 2.5 0zM12 9a3 3 0 1 1 0 6 3 3 0 0 1 0-6z"/>
-              </svg>
-            }
+            icon={<Instagram />}
             onClick={() => {}}
           />
         </div>
       </div>
     </div>
-  )
+  );
 }
 
 interface SocialButtonProps {
-  name: string
-  icon: React.ReactNode
-  onClick: () => void
+  name: string;
+  icon: React.ReactNode;
+  onClick: () => void;
 }
 
 function SocialButton({ name, icon, onClick }: SocialButtonProps) {
   return (
     <button
       onClick={onClick}
-      className="flex-1 btn btn-outline hover:btn-primary h-12"
+      className="flex-1 btn btn-outline hover:btn-accent h-12"
       aria-label={`Share on ${name}`}
     >
       {icon}
     </button>
-  )
+  );
 }
 
 interface MenuSectionProps {
-  title?: string
-  children: React.ReactNode
+  title?: string;
+  children: React.ReactNode;
 }
 
 function MenuSection({ title, children }: MenuSectionProps) {
@@ -160,23 +167,26 @@ function MenuSection({ title, children }: MenuSectionProps) {
           </h3>
         </div>
       )}
-      <div className="divide-y divide-base-300">
-        {children}
-      </div>
+      <div className="divide-y divide-base-300">{children}</div>
     </div>
-  )
+  );
 }
 
 interface MenuItemProps {
-  icon: React.ReactNode
-  label: string
-  onClick: () => void
-  variant?: 'default' | 'danger'
+  icon: React.ReactNode;
+  label: string;
+  onClick: () => void;
+  variant?: "default" | "danger";
 }
 
-function MenuItem({ icon, label, onClick, variant = 'default' }: MenuItemProps) {
-  const textColor = variant === 'danger' ? 'text-error' : 'text-base-content'
-  
+function MenuItem({
+  icon,
+  label,
+  onClick,
+  variant = "default",
+}: MenuItemProps) {
+  const textColor = variant === "danger" ? "text-error" : "text-base-content";
+
   return (
     <button
       onClick={onClick}
@@ -186,13 +196,13 @@ function MenuItem({ icon, label, onClick, variant = 'default' }: MenuItemProps) 
       <span className={`flex-1 text-left ${textColor}`}>{label}</span>
       <ChevronRight className="w-5 h-5 text-base-content/40" />
     </button>
-  )
+  );
 }
 
 interface MenuLinkProps {
-  icon: React.ReactNode
-  label: string
-  to: string
+  icon: React.ReactNode;
+  label: string;
+  to: string;
 }
 
 function MenuLink({ icon, label, to }: MenuLinkProps) {
@@ -205,5 +215,5 @@ function MenuLink({ icon, label, to }: MenuLinkProps) {
       <span className="flex-1 text-left text-base-content">{label}</span>
       <ChevronRight className="w-5 h-5 text-base-content/40" />
     </Link>
-  )
+  );
 }

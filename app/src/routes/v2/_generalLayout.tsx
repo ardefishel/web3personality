@@ -24,6 +24,8 @@ function GeneralHeader() {
     if (pathname.includes("/faq")) return "FAQ";
     if (pathname.includes("/privacy")) return "Privacy Policy";
     if (pathname.includes("/about")) return "About";
+    if (pathname.includes("/profile")) return "Profile Settings";
+    if (pathname.includes("/network")) return "Change Network";
     return "";
   };
 
