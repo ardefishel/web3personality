@@ -23,6 +23,8 @@ import { Route as DemoMinikitIndexRouteImport } from './routes/demo/minikit/inde
 import { Route as AppCollectionIndexRouteImport } from './routes/_app/collection/index'
 import { Route as AppBrowseIndexRouteImport } from './routes/_app/browse/index'
 import { Route as AppAccountIndexRouteImport } from './routes/_app/account/index'
+import { Route as V2Appv2LayoutCollectionRouteImport } from './routes/v2/_appv2Layout.collection'
+import { Route as V2Appv2LayoutAccountRouteImport } from './routes/v2/_appv2Layout.account'
 import { Route as DemoStartServerFuncsRouteImport } from './routes/demo/start.server-funcs'
 import { Route as DemoStartApiRequestRouteImport } from './routes/demo/start.api-request'
 import { Route as DemoApiNamesRouteImport } from './routes/demo/api.names'
@@ -98,6 +100,16 @@ const AppAccountIndexRoute = AppAccountIndexRouteImport.update({
   path: '/account/',
   getParentRoute: () => AppRoute,
 } as any)
+const V2Appv2LayoutCollectionRoute = V2Appv2LayoutCollectionRouteImport.update({
+  id: '/collection',
+  path: '/collection',
+  getParentRoute: () => V2Appv2LayoutRoute,
+} as any)
+const V2Appv2LayoutAccountRoute = V2Appv2LayoutAccountRouteImport.update({
+  id: '/account',
+  path: '/account',
+  getParentRoute: () => V2Appv2LayoutRoute,
+} as any)
 const DemoStartServerFuncsRoute = DemoStartServerFuncsRouteImport.update({
   id: '/demo/start/server-funcs',
   path: '/demo/start/server-funcs',
@@ -150,6 +162,8 @@ export interface FileRoutesByFullPath {
   '/demo/api/names': typeof DemoApiNamesRoute
   '/demo/start/api-request': typeof DemoStartApiRequestRoute
   '/demo/start/server-funcs': typeof DemoStartServerFuncsRoute
+  '/v2/account': typeof V2Appv2LayoutAccountRoute
+  '/v2/collection': typeof V2Appv2LayoutCollectionRoute
   '/account': typeof AppAccountIndexRoute
   '/browse': typeof AppBrowseIndexRoute
   '/collection': typeof AppCollectionIndexRoute
@@ -171,6 +185,8 @@ export interface FileRoutesByTo {
   '/demo/api/names': typeof DemoApiNamesRoute
   '/demo/start/api-request': typeof DemoStartApiRequestRoute
   '/demo/start/server-funcs': typeof DemoStartServerFuncsRoute
+  '/v2/account': typeof V2Appv2LayoutAccountRoute
+  '/v2/collection': typeof V2Appv2LayoutCollectionRoute
   '/account': typeof AppAccountIndexRoute
   '/browse': typeof AppBrowseIndexRoute
   '/collection': typeof AppCollectionIndexRoute
@@ -194,6 +210,8 @@ export interface FileRoutesById {
   '/demo/api/names': typeof DemoApiNamesRoute
   '/demo/start/api-request': typeof DemoStartApiRequestRoute
   '/demo/start/server-funcs': typeof DemoStartServerFuncsRoute
+  '/v2/_appv2Layout/account': typeof V2Appv2LayoutAccountRoute
+  '/v2/_appv2Layout/collection': typeof V2Appv2LayoutCollectionRoute
   '/_app/account/': typeof AppAccountIndexRoute
   '/_app/browse/': typeof AppBrowseIndexRoute
   '/_app/collection/': typeof AppCollectionIndexRoute
@@ -217,6 +235,8 @@ export interface FileRouteTypes {
     | '/demo/api/names'
     | '/demo/start/api-request'
     | '/demo/start/server-funcs'
+    | '/v2/account'
+    | '/v2/collection'
     | '/account'
     | '/browse'
     | '/collection'
@@ -238,6 +258,8 @@ export interface FileRouteTypes {
     | '/demo/api/names'
     | '/demo/start/api-request'
     | '/demo/start/server-funcs'
+    | '/v2/account'
+    | '/v2/collection'
     | '/account'
     | '/browse'
     | '/collection'
@@ -260,6 +282,8 @@ export interface FileRouteTypes {
     | '/demo/api/names'
     | '/demo/start/api-request'
     | '/demo/start/server-funcs'
+    | '/v2/_appv2Layout/account'
+    | '/v2/_appv2Layout/collection'
     | '/_app/account/'
     | '/_app/browse/'
     | '/_app/collection/'
@@ -381,6 +405,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppAccountIndexRouteImport
       parentRoute: typeof AppRoute
     }
+    '/v2/_appv2Layout/collection': {
+      id: '/v2/_appv2Layout/collection'
+      path: '/collection'
+      fullPath: '/v2/collection'
+      preLoaderRoute: typeof V2Appv2LayoutCollectionRouteImport
+      parentRoute: typeof V2Appv2LayoutRoute
+    }
+    '/v2/_appv2Layout/account': {
+      id: '/v2/_appv2Layout/account'
+      path: '/account'
+      fullPath: '/v2/account'
+      preLoaderRoute: typeof V2Appv2LayoutAccountRouteImport
+      parentRoute: typeof V2Appv2LayoutRoute
+    }
     '/demo/start/server-funcs': {
       id: '/demo/start/server-funcs'
       path: '/demo/start/server-funcs'
@@ -457,10 +495,14 @@ const AppRouteChildren: AppRouteChildren = {
 const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
 
 interface V2Appv2LayoutRouteChildren {
+  V2Appv2LayoutAccountRoute: typeof V2Appv2LayoutAccountRoute
+  V2Appv2LayoutCollectionRoute: typeof V2Appv2LayoutCollectionRoute
   V2Appv2LayoutIndexRoute: typeof V2Appv2LayoutIndexRoute
 }
 
 const V2Appv2LayoutRouteChildren: V2Appv2LayoutRouteChildren = {
+  V2Appv2LayoutAccountRoute: V2Appv2LayoutAccountRoute,
+  V2Appv2LayoutCollectionRoute: V2Appv2LayoutCollectionRoute,
   V2Appv2LayoutIndexRoute: V2Appv2LayoutIndexRoute,
 }
 

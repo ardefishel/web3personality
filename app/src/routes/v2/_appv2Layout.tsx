@@ -1,4 +1,9 @@
-import { createFileRoute, Outlet } from "@tanstack/react-router";
+import {
+  createFileRoute,
+  Outlet,
+  Link,
+  useRouterState,
+} from "@tanstack/react-router";
 import { Brand } from "./-components/brand";
 import { HomeIcon, Layers2, User2 } from "lucide-react";
 
@@ -31,7 +36,10 @@ function AppHeader() {
 
 function UserAvatar() {
   return (
-    <button className="avatar hover:opacity-80 transition-opacity" aria-label="User profile">
+    <button
+      className="avatar hover:opacity-80 transition-opacity"
+      aria-label="User profile"
+    >
       <div className="mask mask-squircle w-10">
         <img
           src="https://img.daisyui.com/images/profile/demo/distracted1@192.webp"
@@ -43,11 +51,30 @@ function UserAvatar() {
 }
 
 function BottomNavigation() {
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
+
+  const isHome = pathname.startsWith("/v2");
+  const isCollection = pathname.includes("/v2/collection");
+  const isProfile = pathname.includes("/v2/account");
+
   return (
-    <nav className="dock max-w-md mx-auto dock-xl bg-base-100/95 backdrop-blur-sm supports-[backdrop-filter]:bg-base-100/90 border-t border-base-300" aria-label="Main navigation">
-      <NavButton icon={<HomeIcon />} label="Home" active />
-      <NavButton icon={<Layers2 />} label="Collection" />
-      <NavButton icon={<User2 />} label="Profile" />
+    <nav
+      className="dock max-w-md mx-auto dock-xl bg-base-100/95 backdrop-blur-sm supports-[backdrop-filter]:bg-base-100/90 border-t border-base-300"
+      aria-label="Main navigation"
+    >
+      <NavButton icon={<HomeIcon />} label="Home" to="." active={isHome} />
+      <NavButton
+        icon={<Layers2 />}
+        label="Collection"
+        to="./collection"
+        active={isCollection}
+      />
+      <NavButton
+        icon={<User2 />}
+        label="Profile"
+        to="./account"
+        active={isProfile}
+      />
     </nav>
   );
 }
@@ -55,14 +82,29 @@ function BottomNavigation() {
 interface NavButtonProps {
   icon: React.ReactNode;
   label: string;
+  to?: string;
   active?: boolean;
 }
 
-function NavButton({ icon, label, active = false }: NavButtonProps) {
+function NavButton({ icon, label, to, active = false }: NavButtonProps) {
   return (
-    <button className={active ? "dock-active" : ""} aria-label={label} aria-current={active ? "page" : undefined}>
+    <Link
+      from="/v2"
+      to={to}
+      activeProps={{
+        className: "dock-active",
+      }}
+      inactiveProps={{
+        className: undefined,
+      }}
+      activeOptions={{
+        exact: to == ".",
+      }}
+      aria-label={label}
+      aria-current={active ? "page" : undefined}
+    >
       {icon}
       <span className="dock-label">{label}</span>
-    </button>
+    </Link>
   );
 }
