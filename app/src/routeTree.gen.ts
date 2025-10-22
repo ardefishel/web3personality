@@ -15,6 +15,7 @@ import { Route as AppRouteImport } from './routes/_app'
 import { Route as DemoIndexRouteImport } from './routes/demo/index'
 import { Route as AppIndexRouteImport } from './routes/_app/index'
 import { Route as V2OnboardRouteImport } from './routes/v2/onboard'
+import { Route as V2GeneralLayoutRouteImport } from './routes/v2/_generalLayout'
 import { Route as V2Appv2LayoutRouteImport } from './routes/v2/_appv2Layout'
 import { Route as TakeQuizQuizIdRouteImport } from './routes/take-quiz/$quizId'
 import { Route as DotwellKnownFarcasterDotjsonRouteImport } from './routes/[.]well-known/farcaster[.]json'
@@ -23,6 +24,9 @@ import { Route as DemoMinikitIndexRouteImport } from './routes/demo/minikit/inde
 import { Route as AppCollectionIndexRouteImport } from './routes/_app/collection/index'
 import { Route as AppBrowseIndexRouteImport } from './routes/_app/browse/index'
 import { Route as AppAccountIndexRouteImport } from './routes/_app/account/index'
+import { Route as V2GeneralLayoutPrivacyRouteImport } from './routes/v2/_generalLayout.privacy'
+import { Route as V2GeneralLayoutFaqRouteImport } from './routes/v2/_generalLayout.faq'
+import { Route as V2GeneralLayoutAboutRouteImport } from './routes/v2/_generalLayout.about'
 import { Route as V2Appv2LayoutCollectionRouteImport } from './routes/v2/_appv2Layout.collection'
 import { Route as V2Appv2LayoutAccountRouteImport } from './routes/v2/_appv2Layout.account'
 import { Route as DemoStartServerFuncsRouteImport } from './routes/demo/start.server-funcs'
@@ -58,6 +62,10 @@ const AppIndexRoute = AppIndexRouteImport.update({
 const V2OnboardRoute = V2OnboardRouteImport.update({
   id: '/onboard',
   path: '/onboard',
+  getParentRoute: () => V2Route,
+} as any)
+const V2GeneralLayoutRoute = V2GeneralLayoutRouteImport.update({
+  id: '/_generalLayout',
   getParentRoute: () => V2Route,
 } as any)
 const V2Appv2LayoutRoute = V2Appv2LayoutRouteImport.update({
@@ -99,6 +107,21 @@ const AppAccountIndexRoute = AppAccountIndexRouteImport.update({
   id: '/account/',
   path: '/account/',
   getParentRoute: () => AppRoute,
+} as any)
+const V2GeneralLayoutPrivacyRoute = V2GeneralLayoutPrivacyRouteImport.update({
+  id: '/privacy',
+  path: '/privacy',
+  getParentRoute: () => V2GeneralLayoutRoute,
+} as any)
+const V2GeneralLayoutFaqRoute = V2GeneralLayoutFaqRouteImport.update({
+  id: '/faq',
+  path: '/faq',
+  getParentRoute: () => V2GeneralLayoutRoute,
+} as any)
+const V2GeneralLayoutAboutRoute = V2GeneralLayoutAboutRouteImport.update({
+  id: '/about',
+  path: '/about',
+  getParentRoute: () => V2GeneralLayoutRoute,
 } as any)
 const V2Appv2LayoutCollectionRoute = V2Appv2LayoutCollectionRouteImport.update({
   id: '/collection',
@@ -154,7 +177,7 @@ const DemoStartSsrDataOnlyRoute = DemoStartSsrDataOnlyRouteImport.update({
 export interface FileRoutesByFullPath {
   '/.well-known/farcaster.json': typeof DotwellKnownFarcasterDotjsonRoute
   '/take-quiz/$quizId': typeof TakeQuizQuizIdRoute
-  '/v2': typeof V2Appv2LayoutRouteWithChildren
+  '/v2': typeof V2GeneralLayoutRouteWithChildren
   '/v2/onboard': typeof V2OnboardRoute
   '/': typeof AppIndexRoute
   '/demo': typeof DemoIndexRoute
@@ -164,6 +187,9 @@ export interface FileRoutesByFullPath {
   '/demo/start/server-funcs': typeof DemoStartServerFuncsRoute
   '/v2/account': typeof V2Appv2LayoutAccountRoute
   '/v2/collection': typeof V2Appv2LayoutCollectionRoute
+  '/v2/about': typeof V2GeneralLayoutAboutRoute
+  '/v2/faq': typeof V2GeneralLayoutFaqRoute
+  '/v2/privacy': typeof V2GeneralLayoutPrivacyRoute
   '/account': typeof AppAccountIndexRoute
   '/browse': typeof AppBrowseIndexRoute
   '/collection': typeof AppCollectionIndexRoute
@@ -187,6 +213,9 @@ export interface FileRoutesByTo {
   '/demo/start/server-funcs': typeof DemoStartServerFuncsRoute
   '/v2/account': typeof V2Appv2LayoutAccountRoute
   '/v2/collection': typeof V2Appv2LayoutCollectionRoute
+  '/v2/about': typeof V2GeneralLayoutAboutRoute
+  '/v2/faq': typeof V2GeneralLayoutFaqRoute
+  '/v2/privacy': typeof V2GeneralLayoutPrivacyRoute
   '/account': typeof AppAccountIndexRoute
   '/browse': typeof AppBrowseIndexRoute
   '/collection': typeof AppCollectionIndexRoute
@@ -203,6 +232,7 @@ export interface FileRoutesById {
   '/take-quiz/$quizId': typeof TakeQuizQuizIdRoute
   '/v2': typeof V2RouteWithChildren
   '/v2/_appv2Layout': typeof V2Appv2LayoutRouteWithChildren
+  '/v2/_generalLayout': typeof V2GeneralLayoutRouteWithChildren
   '/v2/onboard': typeof V2OnboardRoute
   '/_app/': typeof AppIndexRoute
   '/demo/': typeof DemoIndexRoute
@@ -212,6 +242,9 @@ export interface FileRoutesById {
   '/demo/start/server-funcs': typeof DemoStartServerFuncsRoute
   '/v2/_appv2Layout/account': typeof V2Appv2LayoutAccountRoute
   '/v2/_appv2Layout/collection': typeof V2Appv2LayoutCollectionRoute
+  '/v2/_generalLayout/about': typeof V2GeneralLayoutAboutRoute
+  '/v2/_generalLayout/faq': typeof V2GeneralLayoutFaqRoute
+  '/v2/_generalLayout/privacy': typeof V2GeneralLayoutPrivacyRoute
   '/_app/account/': typeof AppAccountIndexRoute
   '/_app/browse/': typeof AppBrowseIndexRoute
   '/_app/collection/': typeof AppCollectionIndexRoute
@@ -237,6 +270,9 @@ export interface FileRouteTypes {
     | '/demo/start/server-funcs'
     | '/v2/account'
     | '/v2/collection'
+    | '/v2/about'
+    | '/v2/faq'
+    | '/v2/privacy'
     | '/account'
     | '/browse'
     | '/collection'
@@ -260,6 +296,9 @@ export interface FileRouteTypes {
     | '/demo/start/server-funcs'
     | '/v2/account'
     | '/v2/collection'
+    | '/v2/about'
+    | '/v2/faq'
+    | '/v2/privacy'
     | '/account'
     | '/browse'
     | '/collection'
@@ -275,6 +314,7 @@ export interface FileRouteTypes {
     | '/take-quiz/$quizId'
     | '/v2'
     | '/v2/_appv2Layout'
+    | '/v2/_generalLayout'
     | '/v2/onboard'
     | '/_app/'
     | '/demo/'
@@ -284,6 +324,9 @@ export interface FileRouteTypes {
     | '/demo/start/server-funcs'
     | '/v2/_appv2Layout/account'
     | '/v2/_appv2Layout/collection'
+    | '/v2/_generalLayout/about'
+    | '/v2/_generalLayout/faq'
+    | '/v2/_generalLayout/privacy'
     | '/_app/account/'
     | '/_app/browse/'
     | '/_app/collection/'
@@ -349,6 +392,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof V2OnboardRouteImport
       parentRoute: typeof V2Route
     }
+    '/v2/_generalLayout': {
+      id: '/v2/_generalLayout'
+      path: ''
+      fullPath: '/v2'
+      preLoaderRoute: typeof V2GeneralLayoutRouteImport
+      parentRoute: typeof V2Route
+    }
     '/v2/_appv2Layout': {
       id: '/v2/_appv2Layout'
       path: '/v2'
@@ -404,6 +454,27 @@ declare module '@tanstack/react-router' {
       fullPath: '/account'
       preLoaderRoute: typeof AppAccountIndexRouteImport
       parentRoute: typeof AppRoute
+    }
+    '/v2/_generalLayout/privacy': {
+      id: '/v2/_generalLayout/privacy'
+      path: '/privacy'
+      fullPath: '/v2/privacy'
+      preLoaderRoute: typeof V2GeneralLayoutPrivacyRouteImport
+      parentRoute: typeof V2GeneralLayoutRoute
+    }
+    '/v2/_generalLayout/faq': {
+      id: '/v2/_generalLayout/faq'
+      path: '/faq'
+      fullPath: '/v2/faq'
+      preLoaderRoute: typeof V2GeneralLayoutFaqRouteImport
+      parentRoute: typeof V2GeneralLayoutRoute
+    }
+    '/v2/_generalLayout/about': {
+      id: '/v2/_generalLayout/about'
+      path: '/about'
+      fullPath: '/v2/about'
+      preLoaderRoute: typeof V2GeneralLayoutAboutRouteImport
+      parentRoute: typeof V2GeneralLayoutRoute
     }
     '/v2/_appv2Layout/collection': {
       id: '/v2/_appv2Layout/collection'
@@ -510,13 +581,31 @@ const V2Appv2LayoutRouteWithChildren = V2Appv2LayoutRoute._addFileChildren(
   V2Appv2LayoutRouteChildren,
 )
 
+interface V2GeneralLayoutRouteChildren {
+  V2GeneralLayoutAboutRoute: typeof V2GeneralLayoutAboutRoute
+  V2GeneralLayoutFaqRoute: typeof V2GeneralLayoutFaqRoute
+  V2GeneralLayoutPrivacyRoute: typeof V2GeneralLayoutPrivacyRoute
+}
+
+const V2GeneralLayoutRouteChildren: V2GeneralLayoutRouteChildren = {
+  V2GeneralLayoutAboutRoute: V2GeneralLayoutAboutRoute,
+  V2GeneralLayoutFaqRoute: V2GeneralLayoutFaqRoute,
+  V2GeneralLayoutPrivacyRoute: V2GeneralLayoutPrivacyRoute,
+}
+
+const V2GeneralLayoutRouteWithChildren = V2GeneralLayoutRoute._addFileChildren(
+  V2GeneralLayoutRouteChildren,
+)
+
 interface V2RouteChildren {
   V2Appv2LayoutRoute: typeof V2Appv2LayoutRouteWithChildren
+  V2GeneralLayoutRoute: typeof V2GeneralLayoutRouteWithChildren
   V2OnboardRoute: typeof V2OnboardRoute
 }
 
 const V2RouteChildren: V2RouteChildren = {
   V2Appv2LayoutRoute: V2Appv2LayoutRouteWithChildren,
+  V2GeneralLayoutRoute: V2GeneralLayoutRouteWithChildren,
   V2OnboardRoute: V2OnboardRoute,
 }
 

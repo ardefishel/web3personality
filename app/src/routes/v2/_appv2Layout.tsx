@@ -24,12 +24,15 @@ function MobileLayout() {
 }
 
 function AppHeader() {
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const isAccountPage = pathname.includes("/v2/account");
+
   return (
     <header className="navbar bg-base-100/95 backdrop-blur-sm fixed top-0 max-w-md shadow-sm px-4 py-3 z-10 border-b border-base-300">
       <div className="flex-1">
         <Brand />
       </div>
-      <UserAvatar />
+      {!isAccountPage && <UserAvatar />}
     </header>
   );
 }
