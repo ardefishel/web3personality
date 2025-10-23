@@ -63,6 +63,21 @@ interface PersonalityMetadata {
   attributes: Array<{ trait_type: string; value: string }>;
 }
 
+interface CollectionMetadata {
+  name: string;
+  description: string;
+  quizId: number;
+  totalPersonalities: number;
+  questions: string[];
+  attributes: string[];
+  personalities: Array<{
+    name: string;
+    tokenId: number;
+    image: string;
+    attributes: Array<{ trait_type: string; value: string }>;
+  }>;
+}
+
 function capitalizeEachWord(sentence: string) {
   // Handle empty or non-string inputs
   if (typeof sentence !== "string" || sentence.length === 0) {
@@ -325,7 +340,38 @@ function capitalizeEachWord(sentence: string) {
       console.log("\n✅ Using existing metadata files");
     }
 
-    // Step 7: Upload metadata to Pinata
+    // Step 7: Create collection metadata
+    console.log("\n📦 Creating collection metadata...");
+    const collectionMetadata: CollectionMetadata = {
+      name: themeData.name,
+      description: themeData.description,
+      quizId,
+      totalPersonalities: personalities.length,
+      questions: themeData.questions,
+      attributes: themeData.attributes,
+      personalities: personalities.map((personality) => {
+        const ext = path.extname(personality.originalFilename);
+        const imageUrl = `https://ipfs.io/ipfs/${imageCid}/${personality.tokenId}${ext}`;
+        return {
+          name: personality.name,
+          tokenId: personality.tokenId,
+          image: imageUrl,
+          attributes: personality.attributes,
+        };
+      }),
+    };
+
+    const collectionMetadataPath = path.join(
+      outputMetadataPath,
+      "collection.json"
+    );
+    fs.writeFileSync(
+      collectionMetadataPath,
+      JSON.stringify(collectionMetadata, null, 2)
+    );
+    console.log(`✅ Collection metadata created: collection.json`);
+
+    // Step 8: Upload metadata to Pinata
     console.log("\n☁️  Uploading metadata to Pinata...");
     const metadataFiles = fs.readdirSync(outputMetadataPath);
     const metadataFilePaths = metadataFiles.map((file) =>
@@ -348,7 +394,7 @@ function capitalizeEachWord(sentence: string) {
     console.log(`✅ Metadata uploaded to IPFS`);
     console.log(`🔗 Metadata CID: ${metadataCid}`);
 
-    // Step 8: Create quiz on blockchain
+    // Step 9: Create quiz on blockchain
     console.log("\n🔗 Creating quiz on blockchain...");
     const personalityNames = personalities.map((p) => p.name);
     console.log("📋 Quiz parameters:");
@@ -400,6 +446,7 @@ function capitalizeEachWord(sentence: string) {
     console.log(`   • Images URL: https://ipfs.io/ipfs/${imageCid}`);
     console.log(`   • Metadata CID: ${metadataCid}`);
     console.log(`   • Metadata URL: https://ipfs.io/ipfs/${metadataCid}`);
+    console.log(`   • Collection Metadata: https://ipfs.io/ipfs/${metadataCid}/collection.json`);
     console.log(`\n⛓️  Blockchain:`);
     console.log(`   • Transaction: ${hash}`);
     console.log(`   • Block: ${receipt.blockNumber}`);
@@ -407,6 +454,7 @@ function capitalizeEachWord(sentence: string) {
     console.log(`\n📁 Output directories:`);
     console.log(`   • Images: ${outputImgsPath}`);
     console.log(`   • Metadata: ${outputMetadataPath}`);
+    console.log(`   • Collection: ${path.join(outputMetadataPath, "collection.json")}`);
     console.log("\n✨ Quiz is ready to use!");
   } catch (error) {
     console.error("\n❌ Error:", error);
