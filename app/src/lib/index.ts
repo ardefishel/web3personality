@@ -12,4 +12,5 @@ export {
   useQuizzes,
   useFeaturedQuiz,
   useActiveQuizzes,
+  type IPFSCollectionMetadata,
 } from './hooks/useQuizzes'

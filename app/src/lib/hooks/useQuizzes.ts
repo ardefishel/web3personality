@@ -3,12 +3,21 @@ import { useQuery } from '@tanstack/react-query'
 import { quizManagerContract } from '../contracts'
 import { QuizData } from '@/components/list-quiz'
 
-interface IPFSQuizMetadata {
+interface IPFSCollectionMetadata {
   name: string
-  description?: string
+  description: string
+  quizId: number
+  totalPersonalities: number
+  questions: string[]
+  attributes: string[]
   category?: string
-  questions?: string[]
   featuredImage?: string
+  personalities: Array<{
+    name: string
+    tokenId: number
+    image: string
+    attributes: Array<{ trait_type: string; value: string }>
+  }>
 }
 
 interface IPFSPersonalityMetadata {
@@ -27,16 +36,29 @@ interface ContractQuizInfo {
 async function fetchQuizMetadataFromIPFS(
   cid: string,
   quizId: number
-): Promise<{
-  quiz: IPFSQuizMetadata
-  personalities: IPFSPersonalityMetadata[]
-}> {
+): Promise<IPFSCollectionMetadata> {
+  try {
+    const collectionResponse = await fetch(`https://ipfs.io/ipfs/${cid}/collection.json`)
+    if (collectionResponse.ok) {
+      const collectionData = await collectionResponse.json() as IPFSCollectionMetadata
+      return collectionData
+    }
+  } catch {
+  }
+
   try {
     const indexResponse = await fetch(`https://ipfs.io/ipfs/${cid}/index.json`)
     if (indexResponse.ok) {
       const indexData = await indexResponse.json()
       return {
-        quiz: indexData,
+        name: indexData.name || 'Quiz',
+        description: indexData.description || '',
+        quizId,
+        totalPersonalities: indexData.personalities?.length || 0,
+        questions: indexData.questions || [],
+        attributes: indexData.attributes || [],
+        category: indexData.category,
+        featuredImage: indexData.featuredImage,
         personalities: indexData.personalities || [],
       }
     }
@@ -62,32 +84,37 @@ async function fetchQuizMetadataFromIPFS(
   }
 
   return {
-    quiz: {
-      name: 'Quiz',
-      description: '',
-      questions: [],
-    },
-    personalities,
+    name: 'Quiz',
+    description: '',
+    quizId,
+    totalPersonalities: personalities.length,
+    questions: [],
+    attributes: [],
+    personalities: personalities.map(p => ({
+      name: p.name,
+      tokenId: p.tokenId,
+      image: p.image,
+      attributes: p.attributes || [],
+    })),
   }
 }
 
 function transformToQuizData(
   quizId: number,
-  ipfsData: { quiz: IPFSQuizMetadata; personalities: IPFSPersonalityMetadata[] }
+  collectionData: IPFSCollectionMetadata
 ): QuizData {
-  console.log({ipfsData})
   return {
     id: String(quizId),
-    title: ipfsData.quiz.name || `Quiz #${quizId}`,
-    category: ipfsData.quiz.category || 'General',
-    description: ipfsData.quiz.description || '',
-    featuredImage: ipfsData.quiz.featuredImage || ipfsData.personalities[0]?.image || '',
-    personalityTypes: ipfsData.personalities.map(p => ({
+    title: collectionData.name || `Quiz #${quizId}`,
+    category: collectionData.category || 'General',
+    description: collectionData.description || '',
+    featuredImage: collectionData.featuredImage || collectionData.personalities[0]?.image || '',
+    personalityTypes: collectionData.personalities.map(p => ({
       id: String(p.tokenId),
       imageUrl: p.image,
       name: p.name,
     })),
-    questions: ipfsData.quiz.questions || [],
+    questions: collectionData.questions || [],
   }
 }
 
@@ -149,17 +176,18 @@ export function useQuiz(quizId: number) {
   const quizCid = resultArray?.[1]
   const isActive = resultArray?.[2]
 
-  const { data: ipfsData, isLoading: isLoadingIPFS, error: ipfsError } = useQuery({
+  const { data: collectionData, isLoading: isLoadingIPFS, error: ipfsError } = useQuery({
     queryKey: ['quiz-data', quizId, quizCid],
     queryFn: () => fetchQuizMetadataFromIPFS(quizCid!, quizId),
     enabled: !!quizCid,
     staleTime: 5 * 60 * 1000,
   })
 
-  const quizData = ipfsData ? transformToQuizData(quizId, ipfsData) : null
+  const quizData = collectionData ? transformToQuizData(quizId, collectionData) : null
 
   return {
     data: quizData,
+    collectionData,
     isActive,
     isLoading: isLoadingInfo || isLoadingIPFS,
     error: infoError || ipfsError,
@@ -176,18 +204,19 @@ export function useQuizzes() {
 
       const results = await Promise.allSettled(
         contractQuizzes.map(async (quiz) => {
-          const ipfsData = await fetchQuizMetadataFromIPFS(quiz.quizCid, quiz.quizId)
-          const quizData = transformToQuizData(quiz.quizId, ipfsData)
+          const collectionData = await fetchQuizMetadataFromIPFS(quiz.quizCid, quiz.quizId)
+          const quizData = transformToQuizData(quiz.quizId, collectionData)
 
           return {
             ...quizData,
             isActive: quiz.isActive,
+            collectionData,
           }
         })
       )
 
       return results
-        .filter((result): result is PromiseFulfilledResult<QuizData & { isActive: boolean }> =>
+        .filter((result): result is PromiseFulfilledResult<QuizData & { isActive: boolean; collectionData: IPFSCollectionMetadata }> =>
           result.status === 'fulfilled'
         )
         .map(result => result.value)
@@ -203,7 +232,7 @@ export function useQuizzes() {
 }
 
 export function useFeaturedQuiz(quizId?: number) {
-  const { data: singleQuiz, isActive: singleIsActive, isLoading: isLoadingSingle } = useQuiz(quizId ?? 0)
+  const { data: singleQuiz, collectionData: singleCollection, isActive: singleIsActive, isLoading: isLoadingSingle } = useQuiz(quizId ?? 0)
   const { data: allQuizzes, isLoading: isLoadingAll } = useQuizzes()
 
   const shouldFetchAll = quizId === undefined
@@ -213,6 +242,7 @@ export function useFeaturedQuiz(quizId?: number) {
 
     return {
       data: featuredQuiz || null,
+      collectionData: featuredQuiz?.collectionData,
       isActive: featuredQuiz?.isActive,
       isLoading: isLoadingAll,
     }
@@ -220,6 +250,7 @@ export function useFeaturedQuiz(quizId?: number) {
 
   return {
     data: singleQuiz,
+    collectionData: singleCollection,
     isActive: singleIsActive,
     isLoading: isLoadingSingle,
   }
@@ -233,3 +264,5 @@ export function useActiveQuizzes() {
     isLoading,
   }
 }
+
+export type { IPFSCollectionMetadata }
