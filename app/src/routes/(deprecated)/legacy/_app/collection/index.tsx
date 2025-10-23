@@ -1,11 +1,11 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { useAccount, useReadContract } from 'wagmi'
 import { Wallet } from '@coinbase/onchainkit/wallet'
-import personalityTokenContract from '@/lib/contract/personalityToken'
+import personalityTokenContract from '../../-lib/contract/personalityToken'
 import { useQuery } from '@tanstack/react-query'
-import { useOwnedTokensFromEvents } from '@/hooks/usePersonalityTokens'
+import { useOwnedTokensFromEvents } from '../../-hooks/usePersonalityTokens'
 
-export const Route = createFileRoute('/_app/collection/')({ 
+export const Route = createFileRoute('/(deprecated)/legacy/_app/collection/')({ 
   component: RouteComponent,
 })
 

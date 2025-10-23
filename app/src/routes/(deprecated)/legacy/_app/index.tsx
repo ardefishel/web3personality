@@ -1,9 +1,9 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Wallet } from "@coinbase/onchainkit/wallet";
 import { useAccount } from "wagmi";
-import { useLatestQuizzes } from "@/hooks/useQuizzes";
+import { useLatestQuizzes } from "../-hooks/useQuizzes";
 
-export const Route = createFileRoute('/_app/')({
+export const Route = createFileRoute('/(deprecated)/legacy/_app/')({
   component: RouteComponent,
 })
 
@@ -79,7 +79,7 @@ function FeaturedCarousel() {
                 <h3 className="text-lg lg:text-2xl font-medium mb-2">{title}</h3>
                 <p className="text-sm lg:text-base opacity-90 mb-3">{quiz.detail?.description || 'No description available'}</p>
                 <Link 
-                  to="/take-quiz/$quizId" 
+                  to="/legacy/take-quiz/$quizId" 
                   params={{ quizId: quiz.id.toString() }}
                   className="btn btn-primary btn-sm lg:btn-md"
                 >

@@ -2,12 +2,11 @@ import { createFileRoute, Link } from '@tanstack/react-router'
 import { useState } from 'react'
 import { useReadContract } from 'wagmi'
 import { useAccount } from 'wagmi'
-import { useQuizIds, useQuiz } from '@/hooks/useQuizzes'
-import { Quiz } from '@/types/quiz'
-import quizManagerContract from '@/lib/contract/quizManager'
+import { useQuizIds, useQuiz } from '../../-hooks/useQuizzes'
+import quizManagerContract from '../../-lib/contract/quizManager'
 import type { Address } from 'viem'
 
-export const Route = createFileRoute('/_app/browse/')({
+export const Route = createFileRoute('/(deprecated)/legacy/_app/browse/')({
   component: RouteComponent,
 })
 
@@ -145,7 +144,7 @@ function QuizCard({ quizId }: { quizId: number }) {
             </button>
           ) : isActive ? (
             <Link 
-              to="/take-quiz/$quizId" 
+              to="/legacy/take-quiz/$quizId" 
               params={{ quizId: quizId.toString() }}
               className="btn btn-primary btn-sm w-full"
             >

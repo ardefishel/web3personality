@@ -1,6 +1,6 @@
 import { useAccount, usePublicClient, useReadContract } from 'wagmi'
 import { useQuery } from '@tanstack/react-query'
-import personalityTokenContract from '@/lib/contract/personalityToken'
+import personalityTokenContract from '../-lib/contract/personalityToken'
 import { parseAbiItem, type Address } from 'viem'
 
 

@@ -46,7 +46,7 @@ const SCALE_OPTIONS = [
   { value: 5, label: 'Very Disagree', color: 'text-error' },
 ]
 
-export const Route = createFileRoute('/take-quiz/$quizId')({
+export const Route = createFileRoute('/(deprecated)/legacy/_app/take-quiz/$quizId')({
   component: () => (
     <RootProvider>
       <TakeQuizComponent />

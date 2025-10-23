@@ -1,6 +1,6 @@
 import { useReadContract } from 'wagmi'
 import { useQuery } from '@tanstack/react-query'
-import quizManagerContract from '@/lib/contract/quizManager'
+import quizManagerContract from '../-lib/contract/quizManager'
 import { QuizInfo, QuizDetailData, Quiz } from '@/types/quiz'
 
 // Hook to get the total number of quizzes

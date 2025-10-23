@@ -11,19 +11,11 @@
 import { createFileRoute } from '@tanstack/react-router'
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as AppRouteImport } from './routes/_app'
-import { Route as DemoIndexRouteImport } from './routes/demo/index'
-import { Route as AppIndexRouteImport } from './routes/_app/index'
 import { Route as V2OnboardRouteImport } from './routes/v2/onboard'
 import { Route as V2GeneralLayoutRouteImport } from './routes/v2/_generalLayout'
 import { Route as V2Appv2LayoutRouteImport } from './routes/v2/_appv2Layout'
-import { Route as TakeQuizQuizIdRouteImport } from './routes/take-quiz/$quizId'
 import { Route as DotwellKnownFarcasterDotjsonRouteImport } from './routes/[.]well-known/farcaster[.]json'
 import { Route as V2Appv2LayoutIndexRouteImport } from './routes/v2/_appv2Layout.index'
-import { Route as DemoMinikitIndexRouteImport } from './routes/demo/minikit/index'
-import { Route as AppCollectionIndexRouteImport } from './routes/_app/collection/index'
-import { Route as AppBrowseIndexRouteImport } from './routes/_app/browse/index'
-import { Route as AppAccountIndexRouteImport } from './routes/_app/account/index'
 import { Route as V2QuizQuizIdRouteImport } from './routes/v2/quiz/$quizId'
 import { Route as V2GeneralLayoutProfileRouteImport } from './routes/v2/_generalLayout.profile'
 import { Route as V2GeneralLayoutPrivacyRouteImport } from './routes/v2/_generalLayout.privacy'
@@ -32,35 +24,26 @@ import { Route as V2GeneralLayoutFaqRouteImport } from './routes/v2/_generalLayo
 import { Route as V2GeneralLayoutAboutRouteImport } from './routes/v2/_generalLayout.about'
 import { Route as V2Appv2LayoutCollectionRouteImport } from './routes/v2/_appv2Layout.collection'
 import { Route as V2Appv2LayoutAccountRouteImport } from './routes/v2/_appv2Layout.account'
-import { Route as DemoStartServerFuncsRouteImport } from './routes/demo/start.server-funcs'
-import { Route as DemoStartApiRequestRouteImport } from './routes/demo/start.api-request'
-import { Route as DemoApiNamesRouteImport } from './routes/demo/api.names'
 import { Route as ApiAiCompleteTestRouteImport } from './routes/api/ai/complete-test'
-import { Route as DemoStartSsrIndexRouteImport } from './routes/demo/start.ssr.index'
-import { Route as DemoStartSsrSpaModeRouteImport } from './routes/demo/start.ssr.spa-mode'
-import { Route as DemoStartSsrFullSsrRouteImport } from './routes/demo/start.ssr.full-ssr'
-import { Route as DemoStartSsrDataOnlyRouteImport } from './routes/demo/start.ssr.data-only'
+import { Route as deprecatedLegacyAppRouteImport } from './routes/(deprecated)/legacy/_app'
+import { Route as deprecatedLegacyAppIndexRouteImport } from './routes/(deprecated)/legacy/_app/index'
+import { Route as deprecatedLegacyAppCollectionIndexRouteImport } from './routes/(deprecated)/legacy/_app/collection/index'
+import { Route as deprecatedLegacyAppBrowseIndexRouteImport } from './routes/(deprecated)/legacy/_app/browse/index'
+import { Route as deprecatedLegacyAppAccountIndexRouteImport } from './routes/(deprecated)/legacy/_app/account/index'
+import { Route as deprecatedLegacyAppTakeQuizQuizIdRouteImport } from './routes/(deprecated)/legacy/_app/take-quiz/$quizId'
 
 const V2RouteImport = createFileRoute('/v2')()
+const deprecatedLegacyRouteImport = createFileRoute('/(deprecated)/legacy')()
 
 const V2Route = V2RouteImport.update({
   id: '/v2',
   path: '/v2',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AppRoute = AppRouteImport.update({
-  id: '/_app',
+const deprecatedLegacyRoute = deprecatedLegacyRouteImport.update({
+  id: '/(deprecated)/legacy',
+  path: '/legacy',
   getParentRoute: () => rootRouteImport,
-} as any)
-const DemoIndexRoute = DemoIndexRouteImport.update({
-  id: '/demo/',
-  path: '/demo/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AppIndexRoute = AppIndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => AppRoute,
 } as any)
 const V2OnboardRoute = V2OnboardRouteImport.update({
   id: '/onboard',
@@ -75,11 +58,6 @@ const V2Appv2LayoutRoute = V2Appv2LayoutRouteImport.update({
   id: '/_appv2Layout',
   getParentRoute: () => V2Route,
 } as any)
-const TakeQuizQuizIdRoute = TakeQuizQuizIdRouteImport.update({
-  id: '/take-quiz/$quizId',
-  path: '/take-quiz/$quizId',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const DotwellKnownFarcasterDotjsonRoute =
   DotwellKnownFarcasterDotjsonRouteImport.update({
     id: '/.well-known/farcaster.json',
@@ -90,26 +68,6 @@ const V2Appv2LayoutIndexRoute = V2Appv2LayoutIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => V2Appv2LayoutRoute,
-} as any)
-const DemoMinikitIndexRoute = DemoMinikitIndexRouteImport.update({
-  id: '/demo/minikit/',
-  path: '/demo/minikit/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AppCollectionIndexRoute = AppCollectionIndexRouteImport.update({
-  id: '/collection/',
-  path: '/collection/',
-  getParentRoute: () => AppRoute,
-} as any)
-const AppBrowseIndexRoute = AppBrowseIndexRouteImport.update({
-  id: '/browse/',
-  path: '/browse/',
-  getParentRoute: () => AppRoute,
-} as any)
-const AppAccountIndexRoute = AppAccountIndexRouteImport.update({
-  id: '/account/',
-  path: '/account/',
-  getParentRoute: () => AppRoute,
 } as any)
 const V2QuizQuizIdRoute = V2QuizQuizIdRouteImport.update({
   id: '/quiz/$quizId',
@@ -151,58 +109,52 @@ const V2Appv2LayoutAccountRoute = V2Appv2LayoutAccountRouteImport.update({
   path: '/account',
   getParentRoute: () => V2Appv2LayoutRoute,
 } as any)
-const DemoStartServerFuncsRoute = DemoStartServerFuncsRouteImport.update({
-  id: '/demo/start/server-funcs',
-  path: '/demo/start/server-funcs',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const DemoStartApiRequestRoute = DemoStartApiRequestRouteImport.update({
-  id: '/demo/start/api-request',
-  path: '/demo/start/api-request',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const DemoApiNamesRoute = DemoApiNamesRouteImport.update({
-  id: '/demo/api/names',
-  path: '/demo/api/names',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const ApiAiCompleteTestRoute = ApiAiCompleteTestRouteImport.update({
   id: '/api/ai/complete-test',
   path: '/api/ai/complete-test',
   getParentRoute: () => rootRouteImport,
 } as any)
-const DemoStartSsrIndexRoute = DemoStartSsrIndexRouteImport.update({
-  id: '/demo/start/ssr/',
-  path: '/demo/start/ssr/',
-  getParentRoute: () => rootRouteImport,
+const deprecatedLegacyAppRoute = deprecatedLegacyAppRouteImport.update({
+  id: '/_app',
+  getParentRoute: () => deprecatedLegacyRoute,
 } as any)
-const DemoStartSsrSpaModeRoute = DemoStartSsrSpaModeRouteImport.update({
-  id: '/demo/start/ssr/spa-mode',
-  path: '/demo/start/ssr/spa-mode',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const DemoStartSsrFullSsrRoute = DemoStartSsrFullSsrRouteImport.update({
-  id: '/demo/start/ssr/full-ssr',
-  path: '/demo/start/ssr/full-ssr',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const DemoStartSsrDataOnlyRoute = DemoStartSsrDataOnlyRouteImport.update({
-  id: '/demo/start/ssr/data-only',
-  path: '/demo/start/ssr/data-only',
-  getParentRoute: () => rootRouteImport,
-} as any)
+const deprecatedLegacyAppIndexRoute =
+  deprecatedLegacyAppIndexRouteImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => deprecatedLegacyAppRoute,
+  } as any)
+const deprecatedLegacyAppCollectionIndexRoute =
+  deprecatedLegacyAppCollectionIndexRouteImport.update({
+    id: '/collection/',
+    path: '/collection/',
+    getParentRoute: () => deprecatedLegacyAppRoute,
+  } as any)
+const deprecatedLegacyAppBrowseIndexRoute =
+  deprecatedLegacyAppBrowseIndexRouteImport.update({
+    id: '/browse/',
+    path: '/browse/',
+    getParentRoute: () => deprecatedLegacyAppRoute,
+  } as any)
+const deprecatedLegacyAppAccountIndexRoute =
+  deprecatedLegacyAppAccountIndexRouteImport.update({
+    id: '/account/',
+    path: '/account/',
+    getParentRoute: () => deprecatedLegacyAppRoute,
+  } as any)
+const deprecatedLegacyAppTakeQuizQuizIdRoute =
+  deprecatedLegacyAppTakeQuizQuizIdRouteImport.update({
+    id: '/take-quiz/$quizId',
+    path: '/take-quiz/$quizId',
+    getParentRoute: () => deprecatedLegacyAppRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/.well-known/farcaster.json': typeof DotwellKnownFarcasterDotjsonRoute
-  '/take-quiz/$quizId': typeof TakeQuizQuizIdRoute
   '/v2': typeof V2GeneralLayoutRouteWithChildren
   '/v2/onboard': typeof V2OnboardRoute
-  '/': typeof AppIndexRoute
-  '/demo': typeof DemoIndexRoute
+  '/legacy': typeof deprecatedLegacyAppRouteWithChildren
   '/api/ai/complete-test': typeof ApiAiCompleteTestRoute
-  '/demo/api/names': typeof DemoApiNamesRoute
-  '/demo/start/api-request': typeof DemoStartApiRequestRoute
-  '/demo/start/server-funcs': typeof DemoStartServerFuncsRoute
   '/v2/account': typeof V2Appv2LayoutAccountRoute
   '/v2/collection': typeof V2Appv2LayoutCollectionRoute
   '/v2/about': typeof V2GeneralLayoutAboutRoute
@@ -211,27 +163,19 @@ export interface FileRoutesByFullPath {
   '/v2/privacy': typeof V2GeneralLayoutPrivacyRoute
   '/v2/profile': typeof V2GeneralLayoutProfileRoute
   '/v2/quiz/$quizId': typeof V2QuizQuizIdRoute
-  '/account': typeof AppAccountIndexRoute
-  '/browse': typeof AppBrowseIndexRoute
-  '/collection': typeof AppCollectionIndexRoute
-  '/demo/minikit': typeof DemoMinikitIndexRoute
   '/v2/': typeof V2Appv2LayoutIndexRoute
-  '/demo/start/ssr/data-only': typeof DemoStartSsrDataOnlyRoute
-  '/demo/start/ssr/full-ssr': typeof DemoStartSsrFullSsrRoute
-  '/demo/start/ssr/spa-mode': typeof DemoStartSsrSpaModeRoute
-  '/demo/start/ssr': typeof DemoStartSsrIndexRoute
+  '/legacy/': typeof deprecatedLegacyAppIndexRoute
+  '/legacy/take-quiz/$quizId': typeof deprecatedLegacyAppTakeQuizQuizIdRoute
+  '/legacy/account': typeof deprecatedLegacyAppAccountIndexRoute
+  '/legacy/browse': typeof deprecatedLegacyAppBrowseIndexRoute
+  '/legacy/collection': typeof deprecatedLegacyAppCollectionIndexRoute
 }
 export interface FileRoutesByTo {
   '/.well-known/farcaster.json': typeof DotwellKnownFarcasterDotjsonRoute
-  '/take-quiz/$quizId': typeof TakeQuizQuizIdRoute
   '/v2': typeof V2Appv2LayoutIndexRoute
   '/v2/onboard': typeof V2OnboardRoute
-  '/': typeof AppIndexRoute
-  '/demo': typeof DemoIndexRoute
+  '/legacy': typeof deprecatedLegacyAppIndexRoute
   '/api/ai/complete-test': typeof ApiAiCompleteTestRoute
-  '/demo/api/names': typeof DemoApiNamesRoute
-  '/demo/start/api-request': typeof DemoStartApiRequestRoute
-  '/demo/start/server-funcs': typeof DemoStartServerFuncsRoute
   '/v2/account': typeof V2Appv2LayoutAccountRoute
   '/v2/collection': typeof V2Appv2LayoutCollectionRoute
   '/v2/about': typeof V2GeneralLayoutAboutRoute
@@ -240,30 +184,21 @@ export interface FileRoutesByTo {
   '/v2/privacy': typeof V2GeneralLayoutPrivacyRoute
   '/v2/profile': typeof V2GeneralLayoutProfileRoute
   '/v2/quiz/$quizId': typeof V2QuizQuizIdRoute
-  '/account': typeof AppAccountIndexRoute
-  '/browse': typeof AppBrowseIndexRoute
-  '/collection': typeof AppCollectionIndexRoute
-  '/demo/minikit': typeof DemoMinikitIndexRoute
-  '/demo/start/ssr/data-only': typeof DemoStartSsrDataOnlyRoute
-  '/demo/start/ssr/full-ssr': typeof DemoStartSsrFullSsrRoute
-  '/demo/start/ssr/spa-mode': typeof DemoStartSsrSpaModeRoute
-  '/demo/start/ssr': typeof DemoStartSsrIndexRoute
+  '/legacy/take-quiz/$quizId': typeof deprecatedLegacyAppTakeQuizQuizIdRoute
+  '/legacy/account': typeof deprecatedLegacyAppAccountIndexRoute
+  '/legacy/browse': typeof deprecatedLegacyAppBrowseIndexRoute
+  '/legacy/collection': typeof deprecatedLegacyAppCollectionIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
-  '/_app': typeof AppRouteWithChildren
   '/.well-known/farcaster.json': typeof DotwellKnownFarcasterDotjsonRoute
-  '/take-quiz/$quizId': typeof TakeQuizQuizIdRoute
   '/v2': typeof V2RouteWithChildren
   '/v2/_appv2Layout': typeof V2Appv2LayoutRouteWithChildren
   '/v2/_generalLayout': typeof V2GeneralLayoutRouteWithChildren
   '/v2/onboard': typeof V2OnboardRoute
-  '/_app/': typeof AppIndexRoute
-  '/demo/': typeof DemoIndexRoute
+  '/(deprecated)/legacy': typeof deprecatedLegacyRouteWithChildren
+  '/(deprecated)/legacy/_app': typeof deprecatedLegacyAppRouteWithChildren
   '/api/ai/complete-test': typeof ApiAiCompleteTestRoute
-  '/demo/api/names': typeof DemoApiNamesRoute
-  '/demo/start/api-request': typeof DemoStartApiRequestRoute
-  '/demo/start/server-funcs': typeof DemoStartServerFuncsRoute
   '/v2/_appv2Layout/account': typeof V2Appv2LayoutAccountRoute
   '/v2/_appv2Layout/collection': typeof V2Appv2LayoutCollectionRoute
   '/v2/_generalLayout/about': typeof V2GeneralLayoutAboutRoute
@@ -272,29 +207,21 @@ export interface FileRoutesById {
   '/v2/_generalLayout/privacy': typeof V2GeneralLayoutPrivacyRoute
   '/v2/_generalLayout/profile': typeof V2GeneralLayoutProfileRoute
   '/v2/quiz/$quizId': typeof V2QuizQuizIdRoute
-  '/_app/account/': typeof AppAccountIndexRoute
-  '/_app/browse/': typeof AppBrowseIndexRoute
-  '/_app/collection/': typeof AppCollectionIndexRoute
-  '/demo/minikit/': typeof DemoMinikitIndexRoute
   '/v2/_appv2Layout/': typeof V2Appv2LayoutIndexRoute
-  '/demo/start/ssr/data-only': typeof DemoStartSsrDataOnlyRoute
-  '/demo/start/ssr/full-ssr': typeof DemoStartSsrFullSsrRoute
-  '/demo/start/ssr/spa-mode': typeof DemoStartSsrSpaModeRoute
-  '/demo/start/ssr/': typeof DemoStartSsrIndexRoute
+  '/(deprecated)/legacy/_app/': typeof deprecatedLegacyAppIndexRoute
+  '/(deprecated)/legacy/_app/take-quiz/$quizId': typeof deprecatedLegacyAppTakeQuizQuizIdRoute
+  '/(deprecated)/legacy/_app/account/': typeof deprecatedLegacyAppAccountIndexRoute
+  '/(deprecated)/legacy/_app/browse/': typeof deprecatedLegacyAppBrowseIndexRoute
+  '/(deprecated)/legacy/_app/collection/': typeof deprecatedLegacyAppCollectionIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/.well-known/farcaster.json'
-    | '/take-quiz/$quizId'
     | '/v2'
     | '/v2/onboard'
-    | '/'
-    | '/demo'
+    | '/legacy'
     | '/api/ai/complete-test'
-    | '/demo/api/names'
-    | '/demo/start/api-request'
-    | '/demo/start/server-funcs'
     | '/v2/account'
     | '/v2/collection'
     | '/v2/about'
@@ -303,27 +230,19 @@ export interface FileRouteTypes {
     | '/v2/privacy'
     | '/v2/profile'
     | '/v2/quiz/$quizId'
-    | '/account'
-    | '/browse'
-    | '/collection'
-    | '/demo/minikit'
     | '/v2/'
-    | '/demo/start/ssr/data-only'
-    | '/demo/start/ssr/full-ssr'
-    | '/demo/start/ssr/spa-mode'
-    | '/demo/start/ssr'
+    | '/legacy/'
+    | '/legacy/take-quiz/$quizId'
+    | '/legacy/account'
+    | '/legacy/browse'
+    | '/legacy/collection'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/.well-known/farcaster.json'
-    | '/take-quiz/$quizId'
     | '/v2'
     | '/v2/onboard'
-    | '/'
-    | '/demo'
+    | '/legacy'
     | '/api/ai/complete-test'
-    | '/demo/api/names'
-    | '/demo/start/api-request'
-    | '/demo/start/server-funcs'
     | '/v2/account'
     | '/v2/collection'
     | '/v2/about'
@@ -332,29 +251,20 @@ export interface FileRouteTypes {
     | '/v2/privacy'
     | '/v2/profile'
     | '/v2/quiz/$quizId'
-    | '/account'
-    | '/browse'
-    | '/collection'
-    | '/demo/minikit'
-    | '/demo/start/ssr/data-only'
-    | '/demo/start/ssr/full-ssr'
-    | '/demo/start/ssr/spa-mode'
-    | '/demo/start/ssr'
+    | '/legacy/take-quiz/$quizId'
+    | '/legacy/account'
+    | '/legacy/browse'
+    | '/legacy/collection'
   id:
     | '__root__'
-    | '/_app'
     | '/.well-known/farcaster.json'
-    | '/take-quiz/$quizId'
     | '/v2'
     | '/v2/_appv2Layout'
     | '/v2/_generalLayout'
     | '/v2/onboard'
-    | '/_app/'
-    | '/demo/'
+    | '/(deprecated)/legacy'
+    | '/(deprecated)/legacy/_app'
     | '/api/ai/complete-test'
-    | '/demo/api/names'
-    | '/demo/start/api-request'
-    | '/demo/start/server-funcs'
     | '/v2/_appv2Layout/account'
     | '/v2/_appv2Layout/collection'
     | '/v2/_generalLayout/about'
@@ -363,32 +273,19 @@ export interface FileRouteTypes {
     | '/v2/_generalLayout/privacy'
     | '/v2/_generalLayout/profile'
     | '/v2/quiz/$quizId'
-    | '/_app/account/'
-    | '/_app/browse/'
-    | '/_app/collection/'
-    | '/demo/minikit/'
     | '/v2/_appv2Layout/'
-    | '/demo/start/ssr/data-only'
-    | '/demo/start/ssr/full-ssr'
-    | '/demo/start/ssr/spa-mode'
-    | '/demo/start/ssr/'
+    | '/(deprecated)/legacy/_app/'
+    | '/(deprecated)/legacy/_app/take-quiz/$quizId'
+    | '/(deprecated)/legacy/_app/account/'
+    | '/(deprecated)/legacy/_app/browse/'
+    | '/(deprecated)/legacy/_app/collection/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  AppRoute: typeof AppRouteWithChildren
   DotwellKnownFarcasterDotjsonRoute: typeof DotwellKnownFarcasterDotjsonRoute
-  TakeQuizQuizIdRoute: typeof TakeQuizQuizIdRoute
   V2Route: typeof V2RouteWithChildren
-  DemoIndexRoute: typeof DemoIndexRoute
+  deprecatedLegacyRoute: typeof deprecatedLegacyRouteWithChildren
   ApiAiCompleteTestRoute: typeof ApiAiCompleteTestRoute
-  DemoApiNamesRoute: typeof DemoApiNamesRoute
-  DemoStartApiRequestRoute: typeof DemoStartApiRequestRoute
-  DemoStartServerFuncsRoute: typeof DemoStartServerFuncsRoute
-  DemoMinikitIndexRoute: typeof DemoMinikitIndexRoute
-  DemoStartSsrDataOnlyRoute: typeof DemoStartSsrDataOnlyRoute
-  DemoStartSsrFullSsrRoute: typeof DemoStartSsrFullSsrRoute
-  DemoStartSsrSpaModeRoute: typeof DemoStartSsrSpaModeRoute
-  DemoStartSsrIndexRoute: typeof DemoStartSsrIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -400,26 +297,12 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof V2RouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/_app': {
-      id: '/_app'
-      path: ''
-      fullPath: ''
-      preLoaderRoute: typeof AppRouteImport
+    '/(deprecated)/legacy': {
+      id: '/(deprecated)/legacy'
+      path: '/legacy'
+      fullPath: '/legacy'
+      preLoaderRoute: typeof deprecatedLegacyRouteImport
       parentRoute: typeof rootRouteImport
-    }
-    '/demo/': {
-      id: '/demo/'
-      path: '/demo'
-      fullPath: '/demo'
-      preLoaderRoute: typeof DemoIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/_app/': {
-      id: '/_app/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof AppIndexRouteImport
-      parentRoute: typeof AppRoute
     }
     '/v2/onboard': {
       id: '/v2/onboard'
@@ -442,13 +325,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof V2Appv2LayoutRouteImport
       parentRoute: typeof V2Route
     }
-    '/take-quiz/$quizId': {
-      id: '/take-quiz/$quizId'
-      path: '/take-quiz/$quizId'
-      fullPath: '/take-quiz/$quizId'
-      preLoaderRoute: typeof TakeQuizQuizIdRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/.well-known/farcaster.json': {
       id: '/.well-known/farcaster.json'
       path: '/.well-known/farcaster.json'
@@ -462,34 +338,6 @@ declare module '@tanstack/react-router' {
       fullPath: '/v2/'
       preLoaderRoute: typeof V2Appv2LayoutIndexRouteImport
       parentRoute: typeof V2Appv2LayoutRoute
-    }
-    '/demo/minikit/': {
-      id: '/demo/minikit/'
-      path: '/demo/minikit'
-      fullPath: '/demo/minikit'
-      preLoaderRoute: typeof DemoMinikitIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/_app/collection/': {
-      id: '/_app/collection/'
-      path: '/collection'
-      fullPath: '/collection'
-      preLoaderRoute: typeof AppCollectionIndexRouteImport
-      parentRoute: typeof AppRoute
-    }
-    '/_app/browse/': {
-      id: '/_app/browse/'
-      path: '/browse'
-      fullPath: '/browse'
-      preLoaderRoute: typeof AppBrowseIndexRouteImport
-      parentRoute: typeof AppRoute
-    }
-    '/_app/account/': {
-      id: '/_app/account/'
-      path: '/account'
-      fullPath: '/account'
-      preLoaderRoute: typeof AppAccountIndexRouteImport
-      parentRoute: typeof AppRoute
     }
     '/v2/quiz/$quizId': {
       id: '/v2/quiz/$quizId'
@@ -547,27 +395,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof V2Appv2LayoutAccountRouteImport
       parentRoute: typeof V2Appv2LayoutRoute
     }
-    '/demo/start/server-funcs': {
-      id: '/demo/start/server-funcs'
-      path: '/demo/start/server-funcs'
-      fullPath: '/demo/start/server-funcs'
-      preLoaderRoute: typeof DemoStartServerFuncsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/demo/start/api-request': {
-      id: '/demo/start/api-request'
-      path: '/demo/start/api-request'
-      fullPath: '/demo/start/api-request'
-      preLoaderRoute: typeof DemoStartApiRequestRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/demo/api/names': {
-      id: '/demo/api/names'
-      path: '/demo/api/names'
-      fullPath: '/demo/api/names'
-      preLoaderRoute: typeof DemoApiNamesRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/api/ai/complete-test': {
       id: '/api/ai/complete-test'
       path: '/api/ai/complete-test'
@@ -575,52 +402,50 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiAiCompleteTestRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/demo/start/ssr/': {
-      id: '/demo/start/ssr/'
-      path: '/demo/start/ssr'
-      fullPath: '/demo/start/ssr'
-      preLoaderRoute: typeof DemoStartSsrIndexRouteImport
-      parentRoute: typeof rootRouteImport
+    '/(deprecated)/legacy/_app': {
+      id: '/(deprecated)/legacy/_app'
+      path: '/legacy'
+      fullPath: '/legacy'
+      preLoaderRoute: typeof deprecatedLegacyAppRouteImport
+      parentRoute: typeof deprecatedLegacyRoute
     }
-    '/demo/start/ssr/spa-mode': {
-      id: '/demo/start/ssr/spa-mode'
-      path: '/demo/start/ssr/spa-mode'
-      fullPath: '/demo/start/ssr/spa-mode'
-      preLoaderRoute: typeof DemoStartSsrSpaModeRouteImport
-      parentRoute: typeof rootRouteImport
+    '/(deprecated)/legacy/_app/': {
+      id: '/(deprecated)/legacy/_app/'
+      path: '/'
+      fullPath: '/legacy/'
+      preLoaderRoute: typeof deprecatedLegacyAppIndexRouteImport
+      parentRoute: typeof deprecatedLegacyAppRoute
     }
-    '/demo/start/ssr/full-ssr': {
-      id: '/demo/start/ssr/full-ssr'
-      path: '/demo/start/ssr/full-ssr'
-      fullPath: '/demo/start/ssr/full-ssr'
-      preLoaderRoute: typeof DemoStartSsrFullSsrRouteImport
-      parentRoute: typeof rootRouteImport
+    '/(deprecated)/legacy/_app/collection/': {
+      id: '/(deprecated)/legacy/_app/collection/'
+      path: '/collection'
+      fullPath: '/legacy/collection'
+      preLoaderRoute: typeof deprecatedLegacyAppCollectionIndexRouteImport
+      parentRoute: typeof deprecatedLegacyAppRoute
     }
-    '/demo/start/ssr/data-only': {
-      id: '/demo/start/ssr/data-only'
-      path: '/demo/start/ssr/data-only'
-      fullPath: '/demo/start/ssr/data-only'
-      preLoaderRoute: typeof DemoStartSsrDataOnlyRouteImport
-      parentRoute: typeof rootRouteImport
+    '/(deprecated)/legacy/_app/browse/': {
+      id: '/(deprecated)/legacy/_app/browse/'
+      path: '/browse'
+      fullPath: '/legacy/browse'
+      preLoaderRoute: typeof deprecatedLegacyAppBrowseIndexRouteImport
+      parentRoute: typeof deprecatedLegacyAppRoute
+    }
+    '/(deprecated)/legacy/_app/account/': {
+      id: '/(deprecated)/legacy/_app/account/'
+      path: '/account'
+      fullPath: '/legacy/account'
+      preLoaderRoute: typeof deprecatedLegacyAppAccountIndexRouteImport
+      parentRoute: typeof deprecatedLegacyAppRoute
+    }
+    '/(deprecated)/legacy/_app/take-quiz/$quizId': {
+      id: '/(deprecated)/legacy/_app/take-quiz/$quizId'
+      path: '/take-quiz/$quizId'
+      fullPath: '/legacy/take-quiz/$quizId'
+      preLoaderRoute: typeof deprecatedLegacyAppTakeQuizQuizIdRouteImport
+      parentRoute: typeof deprecatedLegacyAppRoute
     }
   }
 }
-
-interface AppRouteChildren {
-  AppIndexRoute: typeof AppIndexRoute
-  AppAccountIndexRoute: typeof AppAccountIndexRoute
-  AppBrowseIndexRoute: typeof AppBrowseIndexRoute
-  AppCollectionIndexRoute: typeof AppCollectionIndexRoute
-}
-
-const AppRouteChildren: AppRouteChildren = {
-  AppIndexRoute: AppIndexRoute,
-  AppAccountIndexRoute: AppAccountIndexRoute,
-  AppBrowseIndexRoute: AppBrowseIndexRoute,
-  AppCollectionIndexRoute: AppCollectionIndexRoute,
-}
-
-const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
 
 interface V2Appv2LayoutRouteChildren {
   V2Appv2LayoutAccountRoute: typeof V2Appv2LayoutAccountRoute
@@ -674,21 +499,43 @@ const V2RouteChildren: V2RouteChildren = {
 
 const V2RouteWithChildren = V2Route._addFileChildren(V2RouteChildren)
 
+interface deprecatedLegacyAppRouteChildren {
+  deprecatedLegacyAppIndexRoute: typeof deprecatedLegacyAppIndexRoute
+  deprecatedLegacyAppTakeQuizQuizIdRoute: typeof deprecatedLegacyAppTakeQuizQuizIdRoute
+  deprecatedLegacyAppAccountIndexRoute: typeof deprecatedLegacyAppAccountIndexRoute
+  deprecatedLegacyAppBrowseIndexRoute: typeof deprecatedLegacyAppBrowseIndexRoute
+  deprecatedLegacyAppCollectionIndexRoute: typeof deprecatedLegacyAppCollectionIndexRoute
+}
+
+const deprecatedLegacyAppRouteChildren: deprecatedLegacyAppRouteChildren = {
+  deprecatedLegacyAppIndexRoute: deprecatedLegacyAppIndexRoute,
+  deprecatedLegacyAppTakeQuizQuizIdRoute:
+    deprecatedLegacyAppTakeQuizQuizIdRoute,
+  deprecatedLegacyAppAccountIndexRoute: deprecatedLegacyAppAccountIndexRoute,
+  deprecatedLegacyAppBrowseIndexRoute: deprecatedLegacyAppBrowseIndexRoute,
+  deprecatedLegacyAppCollectionIndexRoute:
+    deprecatedLegacyAppCollectionIndexRoute,
+}
+
+const deprecatedLegacyAppRouteWithChildren =
+  deprecatedLegacyAppRoute._addFileChildren(deprecatedLegacyAppRouteChildren)
+
+interface deprecatedLegacyRouteChildren {
+  deprecatedLegacyAppRoute: typeof deprecatedLegacyAppRouteWithChildren
+}
+
+const deprecatedLegacyRouteChildren: deprecatedLegacyRouteChildren = {
+  deprecatedLegacyAppRoute: deprecatedLegacyAppRouteWithChildren,
+}
+
+const deprecatedLegacyRouteWithChildren =
+  deprecatedLegacyRoute._addFileChildren(deprecatedLegacyRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
-  AppRoute: AppRouteWithChildren,
   DotwellKnownFarcasterDotjsonRoute: DotwellKnownFarcasterDotjsonRoute,
-  TakeQuizQuizIdRoute: TakeQuizQuizIdRoute,
   V2Route: V2RouteWithChildren,
-  DemoIndexRoute: DemoIndexRoute,
+  deprecatedLegacyRoute: deprecatedLegacyRouteWithChildren,
   ApiAiCompleteTestRoute: ApiAiCompleteTestRoute,
-  DemoApiNamesRoute: DemoApiNamesRoute,
-  DemoStartApiRequestRoute: DemoStartApiRequestRoute,
-  DemoStartServerFuncsRoute: DemoStartServerFuncsRoute,
-  DemoMinikitIndexRoute: DemoMinikitIndexRoute,
-  DemoStartSsrDataOnlyRoute: DemoStartSsrDataOnlyRoute,
-  DemoStartSsrFullSsrRoute: DemoStartSsrFullSsrRoute,
-  DemoStartSsrSpaModeRoute: DemoStartSsrSpaModeRoute,
-  DemoStartSsrIndexRoute: DemoStartSsrIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
