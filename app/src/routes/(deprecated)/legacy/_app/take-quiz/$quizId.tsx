@@ -1,7 +1,7 @@
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { useState } from 'react'
 import { useReadContract } from 'wagmi'
-import quizManagerContract from '@/lib/contract/quizManager'
+import quizManagerContract from '../../-lib/contract/quizManager'
 import { useQuery } from '@tanstack/react-query'
 import { ArrowLeft } from 'lucide-react'
 import { SafeArea } from '@coinbase/onchainkit/minikit'
@@ -14,7 +14,7 @@ import {
   TransactionStatusLabel, 
   TransactionStatusAction 
 } from '@coinbase/onchainkit/transaction'
-import { RootProvider } from '@/components/RootProvider'
+import { RootProvider } from '../../-components/RootProvider'
 
 // Type definitions
 interface PersonalityData {
