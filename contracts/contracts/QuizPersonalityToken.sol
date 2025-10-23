@@ -6,11 +6,10 @@ import {AccessControl} from "@openzeppelin/contracts/access/AccessControl.sol";
 import {ERC1155} from "@openzeppelin/contracts/token/ERC1155/ERC1155.sol";
 import {Strings} from "@openzeppelin/contracts/utils/Strings.sol";
 
-contract PersonalityToken is ERC1155, AccessControl {
+contract QuizPersonalityToken is ERC1155, AccessControl {
     string[] private _metadataURI;
-    string private _contractURI;
 
-    bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
+    bytes32 public constant QUIZ_MANAGER_ROLE = keccak256("QUIZ_MANAGER_ROLE");
 
     event TokenMinted(address indexed user, uint256 tokenId, uint256 quizId);
 
@@ -19,32 +18,29 @@ contract PersonalityToken is ERC1155, AccessControl {
         _metadataURI.push(_uri);
     }
 
-    function setURI(string memory newuri) public onlyRole(DEFAULT_ADMIN_ROLE) {
-        _setURI(newuri);
-        _contractURI = newuri;
-    }
-
-    function pushHash(string memory newuri) public onlyRole(MINTER_ROLE) {
-        _metadataURI.push(newuri);
+    function createNewCollection(
+        string memory _newCollectionCID
+    ) external onlyRole(QUIZ_MANAGER_ROLE) {
+        _metadataURI.push(_newCollectionCID);
     }
 
     function mint(
         address to,
-        uint256 tokenId,
-        uint256 quizId
-    ) external onlyRole(MINTER_ROLE) {
+        uint256 tokenId
+    ) external onlyRole(QUIZ_MANAGER_ROLE) {
         _mint(to, tokenId, 1, "");
+        uint256 quizId = (tokenId / 1000);
         emit TokenMinted(to, tokenId, quizId);
-    }
-
-    function contractURI() public view returns (string memory) {
-        return string(abi.encodePacked(_contractURI, "collection.json"));
     }
 
     function uri(
         uint256 tokenId
     ) public view virtual override returns (string memory) {
         uint256 quizId = (tokenId / 1000);
+        require(
+            bytes(_metadataURI[quizId]).length > 0,
+            "Metadata URI is empty"
+        );
         return
             string(
                 abi.encodePacked(

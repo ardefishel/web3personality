@@ -1,22 +1,21 @@
 import { buildModule } from "@nomicfoundation/hardhat-ignition/modules";
 
+const TOKEN_CONTRACT_METADATA = process.env.TOKEN_CONTRACT_METADATA || "";
+const QUIZ_MANAGER_ROLE =
+  "0x8cbba69751e2ad12031a020b3cdf7f24f20225e09530064c9ad9fa187f4075ca";
 
-export default buildModule("QuizModuleProject0001",  (m) => {
-
-  const MINTER_ROLE = "0x9f2df0fed2c77648de5860a4cc508cd0818c85b8b8a1ab4ceeef8d981c8956a6"; // keccak256 generated  
-  
-  const personalityTokenContract = m.contract("PersonalityToken",["https://ipfs.io/ipfs/bafybeic2lhp3yj3l3ejdeivebo7lb5cwoluqn4eqzk4witbc7azz3zsg3u/collection.json"]);
-
-  const quizManagerContract = m.contract("QuizManager", [personalityTokenContract], {
-    after: [personalityTokenContract]
-  })
-
-  m.call(personalityTokenContract, "grantRole", [MINTER_ROLE, quizManagerContract], {
-    id: "grantMinterRoleQuizContract0001"
+export default buildModule("QuizManager001", (m) => {
+  const tokenContract = m.contract("QuizPersonalityToken", [
+    TOKEN_CONTRACT_METADATA,
+  ]);
+  const managerContract = m.contract("QuizManager", [tokenContract], {
+    after: [tokenContract],
   });
-
-  return { 
-    personalityTokenContract,
-    quizManagerContract
-   };
+  m.call(tokenContract, "grantRole", [QUIZ_MANAGER_ROLE, managerContract], {
+    after: [managerContract],
+  });
+  return {
+    tokenContract,
+    managerContract,
+  };
 });

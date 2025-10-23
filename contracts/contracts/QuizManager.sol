@@ -3,16 +3,16 @@
 pragma solidity ^0.8.27;
 
 import "@openzeppelin/contracts/access/Ownable.sol";
-import {PersonalityToken} from "./PersonalityToken.sol";
+import {QuizPersonalityToken} from "./QuizPersonalityToken.sol";
 
 contract QuizManager is Ownable {
-    PersonalityToken public personalityToken;
+    QuizPersonalityToken public quizPersonalityTokenContract;
 
     uint256 public quizIdCounter;
 
     struct Quiz {
         uint256 quizId;
-        string quizHash; // IPFS hash containing quiz questions
+        string quizCid; // IPFS hash containing quiz questions
         bool isActive;
         mapping(string => uint256) personalityToTokenId;
     }
@@ -22,7 +22,7 @@ contract QuizManager is Ownable {
 
     event QuizCreated(
         uint256 indexed quizId,
-        string quizHash,
+        string quizCid,
         uint256 personalitiesCount
     );
     event QuizActivated(uint256 indexed quizId, address indexed by);
@@ -34,17 +34,22 @@ contract QuizManager is Ownable {
         uint256 tokenId
     );
 
-    constructor(address _personalityToken) Ownable(msg.sender) {
-        require(_personalityToken != address(0), "invalid token address");
-        personalityToken = PersonalityToken(_personalityToken);
+    constructor(address _quizPersonalityTokenContract) Ownable(msg.sender) {
+        require(
+            _quizPersonalityTokenContract != address(0),
+            "invalid token address"
+        );
+        quizPersonalityTokenContract = QuizPersonalityToken(
+            _quizPersonalityTokenContract
+        );
         quizIdCounter = 1;
     }
 
     function createQuiz(
-        string memory _quizHash,
+        string memory _quizCid,
         string[] memory _personalities
     ) external onlyOwner {
-        require(bytes(_quizHash).length > 0, "empty quiz hash");
+        require(bytes(_quizCid).length > 0, "empty quiz hash");
         require(_personalities.length > 0, "no personalities provided");
 
         // Ensure personalities are non-empty and unique
@@ -63,18 +68,18 @@ contract QuizManager is Ownable {
 
         newQuiz.quizId = quizIdCounter;
         newQuiz.isActive = false;
-        newQuiz.quizHash = _quizHash;
+        newQuiz.quizCid = _quizCid;
 
         for (uint256 i = 0; i < _personalities.length; i++) {
             uint256 tokenId = (newQuiz.quizId * 1000) + i;
             newQuiz.personalityToTokenId[_personalities[i]] = tokenId;
         }
 
-        personalityToken.pushHash(newQuiz.quizHash);
+        quizPersonalityTokenContract.createNewCollection(newQuiz.quizCid);
 
         quizIdCounter++;
 
-        emit QuizCreated(newQuiz.quizId, _quizHash, _personalities.length);
+        emit QuizCreated(newQuiz.quizId, _quizCid, _personalities.length);
     }
 
     function completeQuiz(
@@ -95,7 +100,7 @@ contract QuizManager is Ownable {
 
         hasParticipated[msg.sender][_quizId] = true;
 
-        personalityToken.mint(msg.sender, _tokenId, _quizId);
+        quizPersonalityTokenContract.mint(msg.sender, _tokenId);
 
         emit QuizCompleted(_quizId, msg.sender, _quizPersonality, _tokenId);
     }
@@ -122,6 +127,6 @@ contract QuizManager is Ownable {
         require(quizzes[_quizId].quizId != 0, "quiz does not exists");
 
         Quiz storage quiz = quizzes[_quizId];
-        return (quiz.quizId, quiz.quizHash, quiz.isActive);
+        return (quiz.quizId, quiz.quizCid, quiz.isActive);
     }
 }
