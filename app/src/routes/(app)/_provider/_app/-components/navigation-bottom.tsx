@@ -4,7 +4,7 @@ import { HomeIcon, Layers2, User2 } from "lucide-react";
 function BottomNavigation() {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
 
-  const isHome = pathname.startsWith("");
+  const isHome = pathname === "/";
   const isCollection = pathname.includes("/collection");
   const isProfile = pathname.includes("/account");
 
@@ -13,17 +13,17 @@ function BottomNavigation() {
       className="dock lg:hidden max-w-md mx-auto dock-xl bg-base-100/95 backdrop-blur-sm supports-[backdrop-filter]:bg-base-100/90 border-t border-base-300"
       aria-label="Main navigation"
     >
-      <NavButton icon={<HomeIcon />} label="Home" to="." active={isHome} />
+      <NavButton icon={<HomeIcon />} label="Home" to="/" active={isHome} />
       <NavButton
         icon={<Layers2 />}
         label="Collection"
-        to="./collection"
+        to="/collection"
         active={isCollection}
       />
       <NavButton
         icon={<User2 />}
         label="Profile"
-        to="./account"
+        to="/account"
         active={isProfile}
       />
     </nav>

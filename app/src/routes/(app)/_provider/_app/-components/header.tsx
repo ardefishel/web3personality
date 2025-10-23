@@ -1,5 +1,8 @@
 import { Brand } from "@/components/brand";
-import { useRouterState } from "@tanstack/react-router";
+import { useRouterState, Link } from "@tanstack/react-router";
+import { useAccount } from "wagmi";
+import { useAvatar, useName } from "@coinbase/onchainkit/identity";
+import { ConnectWallet } from "@coinbase/onchainkit/wallet";
 
 function AppHeader() {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
@@ -18,18 +21,39 @@ function AppHeader() {
 }
 
 function UserAvatar() {
+  const { address, isConnected } = useAccount();
+  const { data: ensName } = useName({ address });
+  const { data: avatar } = useAvatar({ ensName: ensName || "" });
+
+  if (!isConnected) {
+    return (
+      <ConnectWallet
+        render={({ onClick, isLoading }) => (
+          <button
+            onClick={onClick}
+            disabled={isLoading}
+            className="btn btn-accent btn-sm rounded-full"
+          >
+            {isLoading ? (
+              <span className="loading loading-spinner loading-xs"></span>
+            ) : (
+              "Connect"
+            )}
+          </button>
+        )}
+      />
+    );
+  }
+
   return (
-    <button
-      className="avatar hover:opacity-80 transition-opacity"
-      aria-label="User profile"
-    >
+    <Link to="/account" className="avatar hover:opacity-80 transition-opacity">
       <div className="mask mask-squircle w-10">
         <img
-          src="https://img.daisyui.com/images/profile/demo/distracted1@192.webp"
+          src={avatar || `https://api.dicebear.com/7.x/shapes/svg?seed=${address}`}
           alt="User avatar"
         />
       </div>
-    </button>
+    </Link>
   );
 }
 

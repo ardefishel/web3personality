@@ -39,10 +39,10 @@ function GeneralHeader() {
   };
 
   return (
-    <header className="navbar bg-base-100/95 backdrop-blur-sm fixed top-0 w-full shadow-sm px-4 lg:px-8 py-3 z-10 border-b border-base-300">
-      <div className="max-w-md lg:max-w-4xl mx-auto w-full flex items-center gap-3">
+    <header className="bg-base-100/95 backdrop-blur-sm fixed top-0 left-0 right-0 shadow-sm z-10 border-b border-base-300">
+      <div className="max-w-md lg:max-w-4xl mx-auto w-full px-4 lg:px-8 py-3 flex items-center gap-3">
         <button
-          onClick={() => navigate({ to: "/v2/account" })}
+          onClick={() => navigate({ to: "/account" })}
           className="btn btn-ghost btn-circle btn-sm"
           aria-label="Go back"
         >
