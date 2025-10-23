@@ -1,6 +1,7 @@
 import { Search } from "lucide-react";
 import { useState } from "react";
 import { QuizDetailDrawer } from "./quiz-detail-drawer";
+import { useQuizzes } from "@/lib";
 
 export interface QuizData {
   id: string;
@@ -292,6 +293,7 @@ const MOCK_QUIZZES: QuizData[] = [
 export function QuizBrowser() {
   const [selectedQuiz, setSelectedQuiz] = useState<QuizData | null>(null);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const { data: quizzes, isLoading } = useQuizzes();
 
   const handleQuizClick = (quiz: QuizData) => {
     setSelectedQuiz(quiz);
@@ -306,7 +308,19 @@ export function QuizBrowser() {
           subtitle="Find the perfect personality test for you"
         />
         <QuizSearchBar />
-        <QuizGrid quizzes={MOCK_QUIZZES} onQuizClick={handleQuizClick} />
+        {isLoading ? (
+          <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 lg:gap-6">
+            {[1, 2, 3, 4].map((i) => (
+              <div key={i} className="skeleton h-48 lg:h-56 rounded-3xl" />
+            ))}
+          </div>
+        ) : quizzes.length === 0 ? (
+          <div className="text-center py-12">
+            <p className="text-base-content/70">No quizzes available yet</p>
+          </div>
+        ) : (
+          <QuizGrid quizzes={quizzes} onQuizClick={handleQuizClick} />
+        )}
       </section>
 
       <QuizDetailDrawer

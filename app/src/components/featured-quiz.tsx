@@ -1,15 +1,19 @@
 import { useState } from "react";
-import { QuizData } from "./list-quiz";
 import { QuizDetailDrawer } from "./quiz-detail-drawer";
+import { useFeaturedQuiz } from "@/lib";
 
-export function FeaturedQuizHighlight() {
+interface FeaturedQuizHighlightProps {
+  quizId?: number;
+}
+
+export function FeaturedQuizHighlight({ quizId }: FeaturedQuizHighlightProps = {}) {
   return (
     <section className="space-y-4">
       <SectionHeader
         title="Discover Your Type"
         subtitle="Take our featured personality quiz"
       />
-      <FeaturedQuizCard />
+      <FeaturedQuizCard quizId={quizId} />
     </section>
   );
 }
@@ -28,61 +32,42 @@ function SectionHeader({ title, subtitle }: SectionHeaderProps) {
   );
 }
 
-const MOCK_FEATURED_QUIZ: QuizData = {
-  id: "0001",
-  title: "Career Compass",
-  category: "Professional",
-  description:
-    "Discover your ideal career path and work style. This comprehensive assessment analyzes your strengths, preferences, and natural talents to guide you toward fulfilling professional opportunities.",
-  featuredImage:
-    "https://img.daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.webp",
-  personalityTypes: [
-    {
-      id: "leader",
-      imageUrl:
-        "https://img.daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.webp",
-      name: "The Leader",
-    },
-    {
-      id: "innovator",
-      imageUrl:
-        "https://img.daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.webp",
-      name: "The Innovator",
-    },
-    {
-      id: "supporter",
-      imageUrl:
-        "https://img.daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.webp",
-      name: "The Supporter",
-    },
-    {
-      id: "analyst",
-      imageUrl:
-        "https://img.daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.webp",
-      name: "The Analyst",
-    },
-    {
-      id: "creator",
-      imageUrl:
-        "https://img.daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.webp",
-      name: "The Creator",
-    },
-  ],
-  questions: [
-    "I prefer to wander through strange galaxies rather than stick to a single star system.",
-    "I recharge best when floating alone in my spaceship, far from the cosmic buzz.",
-    "When chaos erupts on the space station, I’m the first to keep calm and fix things.",
-    "I believe intuition is more reliable than star charts and data logs.",
-    "I often take the pilot’s seat, even if I’ve never flown that type of ship before.",
-  ],
-};
+interface FeaturedQuizCardProps {
+  quizId?: number;
+}
 
-function FeaturedQuizCard() {
+function FeaturedQuizCard({ quizId }: FeaturedQuizCardProps = {}) {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const { data: featuredQuiz, isLoading } = useFeaturedQuiz(quizId);
 
   const handleQuizClick = () => {
     setIsDrawerOpen(true);
   };
+
+  if (isLoading) {
+    return (
+      <article className="card bg-base-300 rounded-4xl overflow-hidden">
+        <div className="p-6 lg:p-8 space-y-4">
+          <div className="flex items-center gap-4">
+            <div className="skeleton h-6 w-20"></div>
+            <div className="skeleton h-4 w-24"></div>
+          </div>
+          <div className="skeleton h-8 w-3/4"></div>
+          <div className="skeleton h-20 w-full"></div>
+        </div>
+      </article>
+    );
+  }
+
+  if (!featuredQuiz) {
+    return (
+      <article className="card bg-base-300 rounded-4xl overflow-hidden">
+        <div className="p-6 lg:p-8 text-center">
+          <p className="text-base-content/70">No featured quiz available</p>
+        </div>
+      </article>
+    );
+  }
 
   return (
     <article className="card bg-base-300 rounded-4xl overflow-hidden">
@@ -91,21 +76,20 @@ function FeaturedQuizCard() {
           <div className="flex items-center justify-between lg:justify-start lg:gap-4">
             <span className="badge badge-soft badge-accent">Featured</span>
             <span className="text-xs text-base-content/60">
-              12 personalities
+              {featuredQuiz.personalityTypes.length} personalities
             </span>
           </div>
 
           <h3 className="text-2xl lg:text-3xl font-bold leading-tight">
-            What's Your Cosmic Personality?
+            {featuredQuiz.title}
           </h3>
 
           <p className="text-sm lg:text-base text-base-content/70">
-            Explore the universe within you and discover your celestial
-            archetype
+            {featuredQuiz.description}
           </p>
         </div>
 
-        <QuestionPreviewCarousel items={MOCK_FEATURED_QUIZ.personalityTypes} />
+        <QuestionPreviewCarousel items={featuredQuiz.personalityTypes} />
       </div>
 
       <div className="p-6 lg:p-8 pt-4 lg:pt-0">
@@ -120,7 +104,7 @@ function FeaturedQuizCard() {
       <QuizDetailDrawer
         open={isDrawerOpen}
         onOpenChange={setIsDrawerOpen}
-        quiz={MOCK_FEATURED_QUIZ}
+        quiz={featuredQuiz}
       />
     </article>
   );

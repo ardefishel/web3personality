@@ -9,7 +9,7 @@ export const Route = createFileRoute("/(app)/_provider/_app/")({
 function HomePage() {
   return (
     <div className="space-y-8 lg:space-y-12">
-      <FeaturedQuizHighlight />
+      <FeaturedQuizHighlight quizId={1}/>
       <QuizBrowser />
     </div>
   );
