@@ -68,6 +68,13 @@ const MOCK_FEATURED_QUIZ: QuizData = {
       name: "The Creator",
     },
   ],
+  questions: [
+    "I prefer to wander through strange galaxies rather than stick to a single star system.",
+    "I recharge best when floating alone in my spaceship, far from the cosmic buzz.",
+    "When chaos erupts on the space station, I’m the first to keep calm and fix things.",
+    "I believe intuition is more reliable than star charts and data logs.",
+    "I often take the pilot’s seat, even if I’ve never flown that type of ship before.",
+  ],
 };
 
 function FeaturedQuizCard() {
@@ -83,7 +90,9 @@ function FeaturedQuizCard() {
         <div className="p-6 lg:p-0 space-y-4 lg:space-y-6 lg:flex lg:flex-col lg:justify-center">
           <div className="flex items-center justify-between lg:justify-start lg:gap-4">
             <span className="badge badge-soft badge-accent">Featured</span>
-            <span className="text-xs text-base-content/60">12 personalities</span>
+            <span className="text-xs text-base-content/60">
+              12 personalities
+            </span>
           </div>
 
           <h3 className="text-2xl lg:text-3xl font-bold leading-tight">
@@ -91,13 +100,14 @@ function FeaturedQuizCard() {
           </h3>
 
           <p className="text-sm lg:text-base text-base-content/70">
-            Explore the universe within you and discover your celestial archetype
+            Explore the universe within you and discover your celestial
+            archetype
           </p>
         </div>
-        
+
         <QuestionPreviewCarousel items={MOCK_FEATURED_QUIZ.personalityTypes} />
       </div>
-      
+
       <div className="p-6 lg:p-8 pt-4 lg:pt-0">
         <button
           onClick={handleQuizClick}
@@ -106,13 +116,12 @@ function FeaturedQuizCard() {
           Start Quiz
         </button>
       </div>
-      
+
       <QuizDetailDrawer
         open={isDrawerOpen}
         onOpenChange={setIsDrawerOpen}
         quiz={MOCK_FEATURED_QUIZ}
       />
-
     </article>
   );
 }

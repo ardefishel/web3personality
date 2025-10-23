@@ -13,6 +13,7 @@ export interface QuizData {
     imageUrl: string;
     name: string;
   }>;
+  questions: string[];
 }
 
 const MOCK_QUIZZES: QuizData[] = [
@@ -56,6 +57,13 @@ const MOCK_QUIZZES: QuizData[] = [
         name: "The Creator",
       },
     ],
+    questions: [
+      "I prefer to wander through strange galaxies rather than stick to a single star system.",
+      "I recharge best when floating alone in my spaceship, far from the cosmic buzz.",
+      "When chaos erupts on the space station, I’m the first to keep calm and fix things.",
+      "I believe intuition is more reliable than star charts and data logs.",
+      "I often take the pilot’s seat, even if I’ve never flown that type of ship before.",
+    ],
   },
   {
     id: "0002",
@@ -97,6 +105,13 @@ const MOCK_QUIZZES: QuizData[] = [
         name: "Physical Touch",
       },
     ],
+    questions: [
+      "I prefer to wander through strange galaxies rather than stick to a single star system.",
+      "I recharge best when floating alone in my spaceship, far from the cosmic buzz.",
+      "When chaos erupts on the space station, I’m the first to keep calm and fix things.",
+      "I believe intuition is more reliable than star charts and data logs.",
+      "I often take the pilot’s seat, even if I’ve never flown that type of ship before.",
+    ],
   },
   {
     id: "0003",
@@ -132,6 +147,13 @@ const MOCK_QUIZZES: QuizData[] = [
         name: "The Performer",
       },
     ],
+    questions: [
+      "I prefer to wander through strange galaxies rather than stick to a single star system.",
+      "I recharge best when floating alone in my spaceship, far from the cosmic buzz.",
+      "When chaos erupts on the space station, I’m the first to keep calm and fix things.",
+      "I believe intuition is more reliable than star charts and data logs.",
+      "I often take the pilot’s seat, even if I’ve never flown that type of ship before.",
+    ],
   },
   {
     id: "0004",
@@ -166,6 +188,13 @@ const MOCK_QUIZZES: QuizData[] = [
           "https://img.daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.webp",
         name: "The Pacesetter",
       },
+    ],
+    questions: [
+      "I prefer to wander through strange galaxies rather than stick to a single star system.",
+      "I recharge best when floating alone in my spaceship, far from the cosmic buzz.",
+      "When chaos erupts on the space station, I’m the first to keep calm and fix things.",
+      "I believe intuition is more reliable than star charts and data logs.",
+      "I often take the pilot’s seat, even if I’ve never flown that type of ship before.",
     ],
   },
   {
@@ -208,6 +237,13 @@ const MOCK_QUIZZES: QuizData[] = [
         name: "Photo Hunter",
       },
     ],
+    questions: [
+      "I prefer to wander through strange galaxies rather than stick to a single star system.",
+      "I recharge best when floating alone in my spaceship, far from the cosmic buzz.",
+      "When chaos erupts on the space station, I’m the first to keep calm and fix things.",
+      "I believe intuition is more reliable than star charts and data logs.",
+      "I often take the pilot’s seat, even if I’ve never flown that type of ship before.",
+    ],
   },
   {
     id: "0006",
@@ -242,6 +278,13 @@ const MOCK_QUIZZES: QuizData[] = [
           "https://img.daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.webp",
         name: "Expressive Speaker",
       },
+    ],
+    questions: [
+      "I prefer to wander through strange galaxies rather than stick to a single star system.",
+      "I recharge best when floating alone in my spaceship, far from the cosmic buzz.",
+      "When chaos erupts on the space station, I’m the first to keep calm and fix things.",
+      "I believe intuition is more reliable than star charts and data logs.",
+      "I often take the pilot’s seat, even if I’ve never flown that type of ship before.",
     ],
   },
 ];
@@ -293,11 +336,7 @@ function QuizSearchBar() {
   return (
     <label className="input input-bordered w-full rounded-full flex items-center gap-2">
       <Search className="w-4 h-4 opacity-70" />
-      <input
-        type="search"
-        placeholder="Search quizzes..."
-        className="grow"
-      />
+      <input type="search" placeholder="Search quizzes..." className="grow" />
     </label>
   );
 }
@@ -311,7 +350,11 @@ function QuizGrid({ quizzes, onQuizClick }: QuizGridProps) {
   return (
     <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 lg:gap-6">
       {quizzes.map((quiz) => (
-        <QuizGridCard key={quiz.id} quiz={quiz} onClick={() => onQuizClick(quiz)} />
+        <QuizGridCard
+          key={quiz.id}
+          quiz={quiz}
+          onClick={() => onQuizClick(quiz)}
+        />
       ))}
     </div>
   );

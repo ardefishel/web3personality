@@ -1,4 +1,5 @@
 import { Drawer } from "vaul";
+import { useNavigate } from "@tanstack/react-router";
 
 interface PersonalityType {
   id: string;
@@ -139,8 +140,10 @@ interface StartQuizButtonProps {
 }
 
 function StartQuizButton({ quizId }: StartQuizButtonProps) {
+  const navigate = useNavigate();
+  
   const handleStartQuiz = () => {
-    console.log("Starting quiz:", quizId);
+    navigate({ to: `/v2/quiz/${quizId}` });
   };
 
   return (

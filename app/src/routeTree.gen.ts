@@ -24,6 +24,7 @@ import { Route as DemoMinikitIndexRouteImport } from './routes/demo/minikit/inde
 import { Route as AppCollectionIndexRouteImport } from './routes/_app/collection/index'
 import { Route as AppBrowseIndexRouteImport } from './routes/_app/browse/index'
 import { Route as AppAccountIndexRouteImport } from './routes/_app/account/index'
+import { Route as V2QuizQuizIdRouteImport } from './routes/v2/quiz/$quizId'
 import { Route as V2GeneralLayoutProfileRouteImport } from './routes/v2/_generalLayout.profile'
 import { Route as V2GeneralLayoutPrivacyRouteImport } from './routes/v2/_generalLayout.privacy'
 import { Route as V2GeneralLayoutNetworkRouteImport } from './routes/v2/_generalLayout.network'
@@ -109,6 +110,11 @@ const AppAccountIndexRoute = AppAccountIndexRouteImport.update({
   id: '/account/',
   path: '/account/',
   getParentRoute: () => AppRoute,
+} as any)
+const V2QuizQuizIdRoute = V2QuizQuizIdRouteImport.update({
+  id: '/quiz/$quizId',
+  path: '/quiz/$quizId',
+  getParentRoute: () => V2Route,
 } as any)
 const V2GeneralLayoutProfileRoute = V2GeneralLayoutProfileRouteImport.update({
   id: '/profile',
@@ -204,6 +210,7 @@ export interface FileRoutesByFullPath {
   '/v2/network': typeof V2GeneralLayoutNetworkRoute
   '/v2/privacy': typeof V2GeneralLayoutPrivacyRoute
   '/v2/profile': typeof V2GeneralLayoutProfileRoute
+  '/v2/quiz/$quizId': typeof V2QuizQuizIdRoute
   '/account': typeof AppAccountIndexRoute
   '/browse': typeof AppBrowseIndexRoute
   '/collection': typeof AppCollectionIndexRoute
@@ -232,6 +239,7 @@ export interface FileRoutesByTo {
   '/v2/network': typeof V2GeneralLayoutNetworkRoute
   '/v2/privacy': typeof V2GeneralLayoutPrivacyRoute
   '/v2/profile': typeof V2GeneralLayoutProfileRoute
+  '/v2/quiz/$quizId': typeof V2QuizQuizIdRoute
   '/account': typeof AppAccountIndexRoute
   '/browse': typeof AppBrowseIndexRoute
   '/collection': typeof AppCollectionIndexRoute
@@ -263,6 +271,7 @@ export interface FileRoutesById {
   '/v2/_generalLayout/network': typeof V2GeneralLayoutNetworkRoute
   '/v2/_generalLayout/privacy': typeof V2GeneralLayoutPrivacyRoute
   '/v2/_generalLayout/profile': typeof V2GeneralLayoutProfileRoute
+  '/v2/quiz/$quizId': typeof V2QuizQuizIdRoute
   '/_app/account/': typeof AppAccountIndexRoute
   '/_app/browse/': typeof AppBrowseIndexRoute
   '/_app/collection/': typeof AppCollectionIndexRoute
@@ -293,6 +302,7 @@ export interface FileRouteTypes {
     | '/v2/network'
     | '/v2/privacy'
     | '/v2/profile'
+    | '/v2/quiz/$quizId'
     | '/account'
     | '/browse'
     | '/collection'
@@ -321,6 +331,7 @@ export interface FileRouteTypes {
     | '/v2/network'
     | '/v2/privacy'
     | '/v2/profile'
+    | '/v2/quiz/$quizId'
     | '/account'
     | '/browse'
     | '/collection'
@@ -351,6 +362,7 @@ export interface FileRouteTypes {
     | '/v2/_generalLayout/network'
     | '/v2/_generalLayout/privacy'
     | '/v2/_generalLayout/profile'
+    | '/v2/quiz/$quizId'
     | '/_app/account/'
     | '/_app/browse/'
     | '/_app/collection/'
@@ -478,6 +490,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/account'
       preLoaderRoute: typeof AppAccountIndexRouteImport
       parentRoute: typeof AppRoute
+    }
+    '/v2/quiz/$quizId': {
+      id: '/v2/quiz/$quizId'
+      path: '/quiz/$quizId'
+      fullPath: '/v2/quiz/$quizId'
+      preLoaderRoute: typeof V2QuizQuizIdRouteImport
+      parentRoute: typeof V2Route
     }
     '/v2/_generalLayout/profile': {
       id: '/v2/_generalLayout/profile'
@@ -643,12 +662,14 @@ interface V2RouteChildren {
   V2Appv2LayoutRoute: typeof V2Appv2LayoutRouteWithChildren
   V2GeneralLayoutRoute: typeof V2GeneralLayoutRouteWithChildren
   V2OnboardRoute: typeof V2OnboardRoute
+  V2QuizQuizIdRoute: typeof V2QuizQuizIdRoute
 }
 
 const V2RouteChildren: V2RouteChildren = {
   V2Appv2LayoutRoute: V2Appv2LayoutRouteWithChildren,
   V2GeneralLayoutRoute: V2GeneralLayoutRouteWithChildren,
   V2OnboardRoute: V2OnboardRoute,
+  V2QuizQuizIdRoute: V2QuizQuizIdRoute,
 }
 
 const V2RouteWithChildren = V2Route._addFileChildren(V2RouteChildren)
