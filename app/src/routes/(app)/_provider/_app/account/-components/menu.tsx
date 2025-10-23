@@ -1,4 +1,5 @@
-import { ChevronRight, Link } from "lucide-react";
+import { Link } from "@tanstack/react-router";
+import { ChevronRight } from "lucide-react";
 
 interface MenuSectionProps {
   title?: string;
