@@ -15,6 +15,7 @@ import { Route as V2OnboardRouteImport } from './routes/v2/onboard'
 import { Route as V2GeneralLayoutRouteImport } from './routes/v2/_generalLayout'
 import { Route as V2Appv2LayoutRouteImport } from './routes/v2/_appv2Layout'
 import { Route as DotwellKnownFarcasterDotjsonRouteImport } from './routes/[.]well-known/farcaster[.]json'
+import { Route as appProviderRouteRouteImport } from './routes/(app)/_provider/route'
 import { Route as V2Appv2LayoutIndexRouteImport } from './routes/v2/_appv2Layout.index'
 import { Route as V2QuizQuizIdRouteImport } from './routes/v2/quiz/$quizId'
 import { Route as V2GeneralLayoutProfileRouteImport } from './routes/v2/_generalLayout.profile'
@@ -26,18 +27,34 @@ import { Route as V2Appv2LayoutCollectionRouteImport } from './routes/v2/_appv2L
 import { Route as V2Appv2LayoutAccountRouteImport } from './routes/v2/_appv2Layout.account'
 import { Route as ApiAiCompleteTestRouteImport } from './routes/api/ai/complete-test'
 import { Route as deprecatedLegacyAppRouteImport } from './routes/(deprecated)/legacy/_app'
+import { Route as appProviderOnboardRouteImport } from './routes/(app)/_provider/onboard'
+import { Route as appProviderGeneralRouteRouteImport } from './routes/(app)/_provider/_general/route'
+import { Route as appProviderAppRouteRouteImport } from './routes/(app)/_provider/_app/route'
 import { Route as deprecatedLegacyAppIndexRouteImport } from './routes/(deprecated)/legacy/_app/index'
+import { Route as appProviderAppIndexRouteImport } from './routes/(app)/_provider/_app/index'
+import { Route as appProviderGeneralProfileRouteImport } from './routes/(app)/_provider/_general/profile'
+import { Route as appProviderGeneralPrivacyRouteImport } from './routes/(app)/_provider/_general/privacy'
+import { Route as appProviderGeneralNetworkRouteImport } from './routes/(app)/_provider/_general/network'
+import { Route as appProviderGeneralFaqRouteImport } from './routes/(app)/_provider/_general/faq'
+import { Route as appProviderGeneralAboutRouteImport } from './routes/(app)/_provider/_general/about'
 import { Route as deprecatedLegacyAppCollectionIndexRouteImport } from './routes/(deprecated)/legacy/_app/collection/index'
 import { Route as deprecatedLegacyAppBrowseIndexRouteImport } from './routes/(deprecated)/legacy/_app/browse/index'
 import { Route as deprecatedLegacyAppAccountIndexRouteImport } from './routes/(deprecated)/legacy/_app/account/index'
+import { Route as appProviderAppCollectionIndexRouteImport } from './routes/(app)/_provider/_app/collection/index'
+import { Route as appProviderAppAccountIndexRouteImport } from './routes/(app)/_provider/_app/account/index'
 import { Route as deprecatedLegacyAppTakeQuizQuizIdRouteImport } from './routes/(deprecated)/legacy/_app/take-quiz/$quizId'
 
 const V2RouteImport = createFileRoute('/v2')()
+const appRouteImport = createFileRoute('/(app)')()
 const deprecatedLegacyRouteImport = createFileRoute('/(deprecated)/legacy')()
 
 const V2Route = V2RouteImport.update({
   id: '/v2',
   path: '/v2',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const appRoute = appRouteImport.update({
+  id: '/(app)',
   getParentRoute: () => rootRouteImport,
 } as any)
 const deprecatedLegacyRoute = deprecatedLegacyRouteImport.update({
@@ -64,6 +81,10 @@ const DotwellKnownFarcasterDotjsonRoute =
     path: '/.well-known/farcaster.json',
     getParentRoute: () => rootRouteImport,
   } as any)
+const appProviderRouteRoute = appProviderRouteRouteImport.update({
+  id: '/_provider',
+  getParentRoute: () => appRoute,
+} as any)
 const V2Appv2LayoutIndexRoute = V2Appv2LayoutIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -118,12 +139,58 @@ const deprecatedLegacyAppRoute = deprecatedLegacyAppRouteImport.update({
   id: '/_app',
   getParentRoute: () => deprecatedLegacyRoute,
 } as any)
+const appProviderOnboardRoute = appProviderOnboardRouteImport.update({
+  id: '/onboard',
+  path: '/onboard',
+  getParentRoute: () => appProviderRouteRoute,
+} as any)
+const appProviderGeneralRouteRoute = appProviderGeneralRouteRouteImport.update({
+  id: '/_general',
+  getParentRoute: () => appProviderRouteRoute,
+} as any)
+const appProviderAppRouteRoute = appProviderAppRouteRouteImport.update({
+  id: '/_app',
+  getParentRoute: () => appProviderRouteRoute,
+} as any)
 const deprecatedLegacyAppIndexRoute =
   deprecatedLegacyAppIndexRouteImport.update({
     id: '/',
     path: '/',
     getParentRoute: () => deprecatedLegacyAppRoute,
   } as any)
+const appProviderAppIndexRoute = appProviderAppIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => appProviderAppRouteRoute,
+} as any)
+const appProviderGeneralProfileRoute =
+  appProviderGeneralProfileRouteImport.update({
+    id: '/profile',
+    path: '/profile',
+    getParentRoute: () => appProviderGeneralRouteRoute,
+  } as any)
+const appProviderGeneralPrivacyRoute =
+  appProviderGeneralPrivacyRouteImport.update({
+    id: '/privacy',
+    path: '/privacy',
+    getParentRoute: () => appProviderGeneralRouteRoute,
+  } as any)
+const appProviderGeneralNetworkRoute =
+  appProviderGeneralNetworkRouteImport.update({
+    id: '/network',
+    path: '/network',
+    getParentRoute: () => appProviderGeneralRouteRoute,
+  } as any)
+const appProviderGeneralFaqRoute = appProviderGeneralFaqRouteImport.update({
+  id: '/faq',
+  path: '/faq',
+  getParentRoute: () => appProviderGeneralRouteRoute,
+} as any)
+const appProviderGeneralAboutRoute = appProviderGeneralAboutRouteImport.update({
+  id: '/about',
+  path: '/about',
+  getParentRoute: () => appProviderGeneralRouteRoute,
+} as any)
 const deprecatedLegacyAppCollectionIndexRoute =
   deprecatedLegacyAppCollectionIndexRouteImport.update({
     id: '/collection/',
@@ -142,6 +209,18 @@ const deprecatedLegacyAppAccountIndexRoute =
     path: '/account/',
     getParentRoute: () => deprecatedLegacyAppRoute,
   } as any)
+const appProviderAppCollectionIndexRoute =
+  appProviderAppCollectionIndexRouteImport.update({
+    id: '/collection/',
+    path: '/collection/',
+    getParentRoute: () => appProviderAppRouteRoute,
+  } as any)
+const appProviderAppAccountIndexRoute =
+  appProviderAppAccountIndexRouteImport.update({
+    id: '/account/',
+    path: '/account/',
+    getParentRoute: () => appProviderAppRouteRoute,
+  } as any)
 const deprecatedLegacyAppTakeQuizQuizIdRoute =
   deprecatedLegacyAppTakeQuizQuizIdRouteImport.update({
     id: '/take-quiz/$quizId',
@@ -150,9 +229,11 @@ const deprecatedLegacyAppTakeQuizQuizIdRoute =
   } as any)
 
 export interface FileRoutesByFullPath {
+  '/': typeof appProviderAppIndexRoute
   '/.well-known/farcaster.json': typeof DotwellKnownFarcasterDotjsonRoute
   '/v2': typeof V2GeneralLayoutRouteWithChildren
   '/v2/onboard': typeof V2OnboardRoute
+  '/onboard': typeof appProviderOnboardRoute
   '/legacy': typeof deprecatedLegacyAppRouteWithChildren
   '/api/ai/complete-test': typeof ApiAiCompleteTestRoute
   '/v2/account': typeof V2Appv2LayoutAccountRoute
@@ -164,16 +245,25 @@ export interface FileRoutesByFullPath {
   '/v2/profile': typeof V2GeneralLayoutProfileRoute
   '/v2/quiz/$quizId': typeof V2QuizQuizIdRoute
   '/v2/': typeof V2Appv2LayoutIndexRoute
+  '/about': typeof appProviderGeneralAboutRoute
+  '/faq': typeof appProviderGeneralFaqRoute
+  '/network': typeof appProviderGeneralNetworkRoute
+  '/privacy': typeof appProviderGeneralPrivacyRoute
+  '/profile': typeof appProviderGeneralProfileRoute
   '/legacy/': typeof deprecatedLegacyAppIndexRoute
   '/legacy/take-quiz/$quizId': typeof deprecatedLegacyAppTakeQuizQuizIdRoute
+  '/account': typeof appProviderAppAccountIndexRoute
+  '/collection': typeof appProviderAppCollectionIndexRoute
   '/legacy/account': typeof deprecatedLegacyAppAccountIndexRoute
   '/legacy/browse': typeof deprecatedLegacyAppBrowseIndexRoute
   '/legacy/collection': typeof deprecatedLegacyAppCollectionIndexRoute
 }
 export interface FileRoutesByTo {
+  '/': typeof appProviderAppIndexRoute
   '/.well-known/farcaster.json': typeof DotwellKnownFarcasterDotjsonRoute
   '/v2': typeof V2Appv2LayoutIndexRoute
   '/v2/onboard': typeof V2OnboardRoute
+  '/onboard': typeof appProviderOnboardRoute
   '/legacy': typeof deprecatedLegacyAppIndexRoute
   '/api/ai/complete-test': typeof ApiAiCompleteTestRoute
   '/v2/account': typeof V2Appv2LayoutAccountRoute
@@ -184,18 +274,30 @@ export interface FileRoutesByTo {
   '/v2/privacy': typeof V2GeneralLayoutPrivacyRoute
   '/v2/profile': typeof V2GeneralLayoutProfileRoute
   '/v2/quiz/$quizId': typeof V2QuizQuizIdRoute
+  '/about': typeof appProviderGeneralAboutRoute
+  '/faq': typeof appProviderGeneralFaqRoute
+  '/network': typeof appProviderGeneralNetworkRoute
+  '/privacy': typeof appProviderGeneralPrivacyRoute
+  '/profile': typeof appProviderGeneralProfileRoute
   '/legacy/take-quiz/$quizId': typeof deprecatedLegacyAppTakeQuizQuizIdRoute
+  '/account': typeof appProviderAppAccountIndexRoute
+  '/collection': typeof appProviderAppCollectionIndexRoute
   '/legacy/account': typeof deprecatedLegacyAppAccountIndexRoute
   '/legacy/browse': typeof deprecatedLegacyAppBrowseIndexRoute
   '/legacy/collection': typeof deprecatedLegacyAppCollectionIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
+  '/(app)': typeof appRouteWithChildren
+  '/(app)/_provider': typeof appProviderRouteRouteWithChildren
   '/.well-known/farcaster.json': typeof DotwellKnownFarcasterDotjsonRoute
   '/v2': typeof V2RouteWithChildren
   '/v2/_appv2Layout': typeof V2Appv2LayoutRouteWithChildren
   '/v2/_generalLayout': typeof V2GeneralLayoutRouteWithChildren
   '/v2/onboard': typeof V2OnboardRoute
+  '/(app)/_provider/_app': typeof appProviderAppRouteRouteWithChildren
+  '/(app)/_provider/_general': typeof appProviderGeneralRouteRouteWithChildren
+  '/(app)/_provider/onboard': typeof appProviderOnboardRoute
   '/(deprecated)/legacy': typeof deprecatedLegacyRouteWithChildren
   '/(deprecated)/legacy/_app': typeof deprecatedLegacyAppRouteWithChildren
   '/api/ai/complete-test': typeof ApiAiCompleteTestRoute
@@ -208,8 +310,16 @@ export interface FileRoutesById {
   '/v2/_generalLayout/profile': typeof V2GeneralLayoutProfileRoute
   '/v2/quiz/$quizId': typeof V2QuizQuizIdRoute
   '/v2/_appv2Layout/': typeof V2Appv2LayoutIndexRoute
+  '/(app)/_provider/_general/about': typeof appProviderGeneralAboutRoute
+  '/(app)/_provider/_general/faq': typeof appProviderGeneralFaqRoute
+  '/(app)/_provider/_general/network': typeof appProviderGeneralNetworkRoute
+  '/(app)/_provider/_general/privacy': typeof appProviderGeneralPrivacyRoute
+  '/(app)/_provider/_general/profile': typeof appProviderGeneralProfileRoute
+  '/(app)/_provider/_app/': typeof appProviderAppIndexRoute
   '/(deprecated)/legacy/_app/': typeof deprecatedLegacyAppIndexRoute
   '/(deprecated)/legacy/_app/take-quiz/$quizId': typeof deprecatedLegacyAppTakeQuizQuizIdRoute
+  '/(app)/_provider/_app/account/': typeof appProviderAppAccountIndexRoute
+  '/(app)/_provider/_app/collection/': typeof appProviderAppCollectionIndexRoute
   '/(deprecated)/legacy/_app/account/': typeof deprecatedLegacyAppAccountIndexRoute
   '/(deprecated)/legacy/_app/browse/': typeof deprecatedLegacyAppBrowseIndexRoute
   '/(deprecated)/legacy/_app/collection/': typeof deprecatedLegacyAppCollectionIndexRoute
@@ -217,9 +327,11 @@ export interface FileRoutesById {
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
+    | '/'
     | '/.well-known/farcaster.json'
     | '/v2'
     | '/v2/onboard'
+    | '/onboard'
     | '/legacy'
     | '/api/ai/complete-test'
     | '/v2/account'
@@ -231,16 +343,25 @@ export interface FileRouteTypes {
     | '/v2/profile'
     | '/v2/quiz/$quizId'
     | '/v2/'
+    | '/about'
+    | '/faq'
+    | '/network'
+    | '/privacy'
+    | '/profile'
     | '/legacy/'
     | '/legacy/take-quiz/$quizId'
+    | '/account'
+    | '/collection'
     | '/legacy/account'
     | '/legacy/browse'
     | '/legacy/collection'
   fileRoutesByTo: FileRoutesByTo
   to:
+    | '/'
     | '/.well-known/farcaster.json'
     | '/v2'
     | '/v2/onboard'
+    | '/onboard'
     | '/legacy'
     | '/api/ai/complete-test'
     | '/v2/account'
@@ -251,17 +372,29 @@ export interface FileRouteTypes {
     | '/v2/privacy'
     | '/v2/profile'
     | '/v2/quiz/$quizId'
+    | '/about'
+    | '/faq'
+    | '/network'
+    | '/privacy'
+    | '/profile'
     | '/legacy/take-quiz/$quizId'
+    | '/account'
+    | '/collection'
     | '/legacy/account'
     | '/legacy/browse'
     | '/legacy/collection'
   id:
     | '__root__'
+    | '/(app)'
+    | '/(app)/_provider'
     | '/.well-known/farcaster.json'
     | '/v2'
     | '/v2/_appv2Layout'
     | '/v2/_generalLayout'
     | '/v2/onboard'
+    | '/(app)/_provider/_app'
+    | '/(app)/_provider/_general'
+    | '/(app)/_provider/onboard'
     | '/(deprecated)/legacy'
     | '/(deprecated)/legacy/_app'
     | '/api/ai/complete-test'
@@ -274,14 +407,23 @@ export interface FileRouteTypes {
     | '/v2/_generalLayout/profile'
     | '/v2/quiz/$quizId'
     | '/v2/_appv2Layout/'
+    | '/(app)/_provider/_general/about'
+    | '/(app)/_provider/_general/faq'
+    | '/(app)/_provider/_general/network'
+    | '/(app)/_provider/_general/privacy'
+    | '/(app)/_provider/_general/profile'
+    | '/(app)/_provider/_app/'
     | '/(deprecated)/legacy/_app/'
     | '/(deprecated)/legacy/_app/take-quiz/$quizId'
+    | '/(app)/_provider/_app/account/'
+    | '/(app)/_provider/_app/collection/'
     | '/(deprecated)/legacy/_app/account/'
     | '/(deprecated)/legacy/_app/browse/'
     | '/(deprecated)/legacy/_app/collection/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
+  appRoute: typeof appRouteWithChildren
   DotwellKnownFarcasterDotjsonRoute: typeof DotwellKnownFarcasterDotjsonRoute
   V2Route: typeof V2RouteWithChildren
   deprecatedLegacyRoute: typeof deprecatedLegacyRouteWithChildren
@@ -295,6 +437,13 @@ declare module '@tanstack/react-router' {
       path: '/v2'
       fullPath: '/v2'
       preLoaderRoute: typeof V2RouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/(app)': {
+      id: '/(app)'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof appRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/(deprecated)/legacy': {
@@ -331,6 +480,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/.well-known/farcaster.json'
       preLoaderRoute: typeof DotwellKnownFarcasterDotjsonRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/(app)/_provider': {
+      id: '/(app)/_provider'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof appProviderRouteRouteImport
+      parentRoute: typeof appRoute
     }
     '/v2/_appv2Layout/': {
       id: '/v2/_appv2Layout/'
@@ -409,12 +565,75 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof deprecatedLegacyAppRouteImport
       parentRoute: typeof deprecatedLegacyRoute
     }
+    '/(app)/_provider/onboard': {
+      id: '/(app)/_provider/onboard'
+      path: '/onboard'
+      fullPath: '/onboard'
+      preLoaderRoute: typeof appProviderOnboardRouteImport
+      parentRoute: typeof appProviderRouteRoute
+    }
+    '/(app)/_provider/_general': {
+      id: '/(app)/_provider/_general'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof appProviderGeneralRouteRouteImport
+      parentRoute: typeof appProviderRouteRoute
+    }
+    '/(app)/_provider/_app': {
+      id: '/(app)/_provider/_app'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof appProviderAppRouteRouteImport
+      parentRoute: typeof appProviderRouteRoute
+    }
     '/(deprecated)/legacy/_app/': {
       id: '/(deprecated)/legacy/_app/'
       path: '/'
       fullPath: '/legacy/'
       preLoaderRoute: typeof deprecatedLegacyAppIndexRouteImport
       parentRoute: typeof deprecatedLegacyAppRoute
+    }
+    '/(app)/_provider/_app/': {
+      id: '/(app)/_provider/_app/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof appProviderAppIndexRouteImport
+      parentRoute: typeof appProviderAppRouteRoute
+    }
+    '/(app)/_provider/_general/profile': {
+      id: '/(app)/_provider/_general/profile'
+      path: '/profile'
+      fullPath: '/profile'
+      preLoaderRoute: typeof appProviderGeneralProfileRouteImport
+      parentRoute: typeof appProviderGeneralRouteRoute
+    }
+    '/(app)/_provider/_general/privacy': {
+      id: '/(app)/_provider/_general/privacy'
+      path: '/privacy'
+      fullPath: '/privacy'
+      preLoaderRoute: typeof appProviderGeneralPrivacyRouteImport
+      parentRoute: typeof appProviderGeneralRouteRoute
+    }
+    '/(app)/_provider/_general/network': {
+      id: '/(app)/_provider/_general/network'
+      path: '/network'
+      fullPath: '/network'
+      preLoaderRoute: typeof appProviderGeneralNetworkRouteImport
+      parentRoute: typeof appProviderGeneralRouteRoute
+    }
+    '/(app)/_provider/_general/faq': {
+      id: '/(app)/_provider/_general/faq'
+      path: '/faq'
+      fullPath: '/faq'
+      preLoaderRoute: typeof appProviderGeneralFaqRouteImport
+      parentRoute: typeof appProviderGeneralRouteRoute
+    }
+    '/(app)/_provider/_general/about': {
+      id: '/(app)/_provider/_general/about'
+      path: '/about'
+      fullPath: '/about'
+      preLoaderRoute: typeof appProviderGeneralAboutRouteImport
+      parentRoute: typeof appProviderGeneralRouteRoute
     }
     '/(deprecated)/legacy/_app/collection/': {
       id: '/(deprecated)/legacy/_app/collection/'
@@ -437,6 +656,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof deprecatedLegacyAppAccountIndexRouteImport
       parentRoute: typeof deprecatedLegacyAppRoute
     }
+    '/(app)/_provider/_app/collection/': {
+      id: '/(app)/_provider/_app/collection/'
+      path: '/collection'
+      fullPath: '/collection'
+      preLoaderRoute: typeof appProviderAppCollectionIndexRouteImport
+      parentRoute: typeof appProviderAppRouteRoute
+    }
+    '/(app)/_provider/_app/account/': {
+      id: '/(app)/_provider/_app/account/'
+      path: '/account'
+      fullPath: '/account'
+      preLoaderRoute: typeof appProviderAppAccountIndexRouteImport
+      parentRoute: typeof appProviderAppRouteRoute
+    }
     '/(deprecated)/legacy/_app/take-quiz/$quizId': {
       id: '/(deprecated)/legacy/_app/take-quiz/$quizId'
       path: '/take-quiz/$quizId'
@@ -446,6 +679,68 @@ declare module '@tanstack/react-router' {
     }
   }
 }
+
+interface appProviderAppRouteRouteChildren {
+  appProviderAppIndexRoute: typeof appProviderAppIndexRoute
+  appProviderAppAccountIndexRoute: typeof appProviderAppAccountIndexRoute
+  appProviderAppCollectionIndexRoute: typeof appProviderAppCollectionIndexRoute
+}
+
+const appProviderAppRouteRouteChildren: appProviderAppRouteRouteChildren = {
+  appProviderAppIndexRoute: appProviderAppIndexRoute,
+  appProviderAppAccountIndexRoute: appProviderAppAccountIndexRoute,
+  appProviderAppCollectionIndexRoute: appProviderAppCollectionIndexRoute,
+}
+
+const appProviderAppRouteRouteWithChildren =
+  appProviderAppRouteRoute._addFileChildren(appProviderAppRouteRouteChildren)
+
+interface appProviderGeneralRouteRouteChildren {
+  appProviderGeneralAboutRoute: typeof appProviderGeneralAboutRoute
+  appProviderGeneralFaqRoute: typeof appProviderGeneralFaqRoute
+  appProviderGeneralNetworkRoute: typeof appProviderGeneralNetworkRoute
+  appProviderGeneralPrivacyRoute: typeof appProviderGeneralPrivacyRoute
+  appProviderGeneralProfileRoute: typeof appProviderGeneralProfileRoute
+}
+
+const appProviderGeneralRouteRouteChildren: appProviderGeneralRouteRouteChildren =
+  {
+    appProviderGeneralAboutRoute: appProviderGeneralAboutRoute,
+    appProviderGeneralFaqRoute: appProviderGeneralFaqRoute,
+    appProviderGeneralNetworkRoute: appProviderGeneralNetworkRoute,
+    appProviderGeneralPrivacyRoute: appProviderGeneralPrivacyRoute,
+    appProviderGeneralProfileRoute: appProviderGeneralProfileRoute,
+  }
+
+const appProviderGeneralRouteRouteWithChildren =
+  appProviderGeneralRouteRoute._addFileChildren(
+    appProviderGeneralRouteRouteChildren,
+  )
+
+interface appProviderRouteRouteChildren {
+  appProviderAppRouteRoute: typeof appProviderAppRouteRouteWithChildren
+  appProviderGeneralRouteRoute: typeof appProviderGeneralRouteRouteWithChildren
+  appProviderOnboardRoute: typeof appProviderOnboardRoute
+}
+
+const appProviderRouteRouteChildren: appProviderRouteRouteChildren = {
+  appProviderAppRouteRoute: appProviderAppRouteRouteWithChildren,
+  appProviderGeneralRouteRoute: appProviderGeneralRouteRouteWithChildren,
+  appProviderOnboardRoute: appProviderOnboardRoute,
+}
+
+const appProviderRouteRouteWithChildren =
+  appProviderRouteRoute._addFileChildren(appProviderRouteRouteChildren)
+
+interface appRouteChildren {
+  appProviderRouteRoute: typeof appProviderRouteRouteWithChildren
+}
+
+const appRouteChildren: appRouteChildren = {
+  appProviderRouteRoute: appProviderRouteRouteWithChildren,
+}
+
+const appRouteWithChildren = appRoute._addFileChildren(appRouteChildren)
 
 interface V2Appv2LayoutRouteChildren {
   V2Appv2LayoutAccountRoute: typeof V2Appv2LayoutAccountRoute
@@ -532,6 +827,7 @@ const deprecatedLegacyRouteWithChildren =
   deprecatedLegacyRoute._addFileChildren(deprecatedLegacyRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
+  appRoute: appRouteWithChildren,
   DotwellKnownFarcasterDotjsonRoute: DotwellKnownFarcasterDotjsonRoute,
   V2Route: V2RouteWithChildren,
   deprecatedLegacyRoute: deprecatedLegacyRouteWithChildren,
