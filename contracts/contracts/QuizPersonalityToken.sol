@@ -9,6 +9,9 @@ import {Strings} from "@openzeppelin/contracts/utils/Strings.sol";
 contract QuizPersonalityToken is ERC1155, AccessControl {
     string[] private _metadataURI;
 
+    string public name = "Quiz Personality Token";
+    string public symbol = "QPT";
+
     bytes32 public constant QUIZ_MANAGER_ROLE = keccak256("QUIZ_MANAGER_ROLE");
 
     event TokenMinted(address indexed user, uint256 tokenId, uint256 quizId);
