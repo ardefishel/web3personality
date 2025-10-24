@@ -29,7 +29,6 @@ export const Route = createFileRoute("/.well-known/farcaster.json")({
             iconUrl: `${publicUrl}/android-chrome-512x512.png`, // Using 512x512 as closest to 1024x1024 requirement
             splashImageUrl: `${publicUrl}/api/og-image/png`,
             splashBackgroundColor: "#0f172a",
-            webhookUrl: "",
             subtitle: brandSubtitle.substring(0, 30), // Max 30 chars for Farcaster compliance
             description: brandDescription, // Max 170 chars enforced above
             screenshotUrls: [],
