@@ -96,6 +96,24 @@ export const Route = createRootRoute({
           property: "fc:frame:button:1:target",
           content: publicUrl,
         },
+        // Farcaster Mini App metadata
+        {
+          name: "fc:miniapp",
+          content: JSON.stringify({
+            version: "next",
+            imageUrl: `${publicUrl}/api/og-image/png`,
+            button: {
+              title: "Take Test",
+              action: {
+                type: "launch_miniapp",
+                name: brandName,
+                url: publicUrl,
+                splashImageUrl: `${publicUrl}/api/og-image/png`,
+                splashBackgroundColor: "#0f172a",
+              },
+            },
+          }),
+        },
       ],
       links: [
         {
