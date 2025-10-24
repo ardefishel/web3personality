@@ -8,8 +8,6 @@
 // You should NOT make any changes in this file as it will be overwritten.
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
-import { createFileRoute } from '@tanstack/react-router'
-
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as V2OnboardRouteImport } from './routes/v2/onboard'
 import { Route as V2GeneralLayoutRouteImport } from './routes/v2/_generalLayout'
@@ -25,6 +23,7 @@ import { Route as V2GeneralLayoutFaqRouteImport } from './routes/v2/_generalLayo
 import { Route as V2GeneralLayoutAboutRouteImport } from './routes/v2/_generalLayout.about'
 import { Route as V2Appv2LayoutCollectionRouteImport } from './routes/v2/_appv2Layout.collection'
 import { Route as V2Appv2LayoutAccountRouteImport } from './routes/v2/_appv2Layout.account'
+import { Route as ApiOgImagePngRouteImport } from './routes/api/og-image.png'
 import { Route as ApiAiCompleteTestRouteImport } from './routes/api/ai/complete-test'
 import { Route as deprecatedLegacyAppRouteImport } from './routes/(deprecated)/legacy/_app'
 import { Route as appProviderOnboardRouteImport } from './routes/(app)/_provider/onboard'
@@ -45,24 +44,6 @@ import { Route as appProviderAppAccountIndexRouteImport } from './routes/(app)/_
 import { Route as deprecatedLegacyAppTakeQuizQuizIdRouteImport } from './routes/(deprecated)/legacy/_app/take-quiz/$quizId'
 import { Route as appProviderAppQuizQuizIdRouteImport } from './routes/(app)/_provider/_app/quiz/$quizId'
 
-const V2RouteImport = createFileRoute('/v2')()
-const appRouteImport = createFileRoute('/(app)')()
-const deprecatedLegacyRouteImport = createFileRoute('/(deprecated)/legacy')()
-
-const V2Route = V2RouteImport.update({
-  id: '/v2',
-  path: '/v2',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const appRoute = appRouteImport.update({
-  id: '/(app)',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const deprecatedLegacyRoute = deprecatedLegacyRouteImport.update({
-  id: '/(deprecated)/legacy',
-  path: '/legacy',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const V2OnboardRoute = V2OnboardRouteImport.update({
   id: '/onboard',
   path: '/onboard',
@@ -130,6 +111,11 @@ const V2Appv2LayoutAccountRoute = V2Appv2LayoutAccountRouteImport.update({
   id: '/account',
   path: '/account',
   getParentRoute: () => V2Appv2LayoutRoute,
+} as any)
+const ApiOgImagePngRoute = ApiOgImagePngRouteImport.update({
+  id: '/api/og-image/png',
+  path: '/api/og-image/png',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const ApiAiCompleteTestRoute = ApiAiCompleteTestRouteImport.update({
   id: '/api/ai/complete-test',
@@ -236,13 +222,13 @@ const appProviderAppQuizQuizIdRoute =
   } as any)
 
 export interface FileRoutesByFullPath {
-  '/': typeof appProviderAppIndexRoute
   '/.well-known/farcaster.json': typeof DotwellKnownFarcasterDotjsonRoute
   '/v2': typeof V2GeneralLayoutRouteWithChildren
   '/v2/onboard': typeof V2OnboardRoute
   '/onboard': typeof appProviderOnboardRoute
   '/legacy': typeof deprecatedLegacyAppRouteWithChildren
   '/api/ai/complete-test': typeof ApiAiCompleteTestRoute
+  '/api/og-image/png': typeof ApiOgImagePngRoute
   '/v2/account': typeof V2Appv2LayoutAccountRoute
   '/v2/collection': typeof V2Appv2LayoutCollectionRoute
   '/v2/about': typeof V2GeneralLayoutAboutRoute
@@ -257,6 +243,7 @@ export interface FileRoutesByFullPath {
   '/network': typeof appProviderGeneralNetworkRoute
   '/privacy': typeof appProviderGeneralPrivacyRoute
   '/profile': typeof appProviderGeneralProfileRoute
+  '/': typeof appProviderAppIndexRoute
   '/legacy/': typeof deprecatedLegacyAppIndexRoute
   '/quiz/$quizId': typeof appProviderAppQuizQuizIdRoute
   '/legacy/take-quiz/$quizId': typeof deprecatedLegacyAppTakeQuizQuizIdRoute
@@ -267,13 +254,12 @@ export interface FileRoutesByFullPath {
   '/legacy/collection': typeof deprecatedLegacyAppCollectionIndexRoute
 }
 export interface FileRoutesByTo {
-  '/': typeof appProviderAppIndexRoute
   '/.well-known/farcaster.json': typeof DotwellKnownFarcasterDotjsonRoute
   '/v2': typeof V2Appv2LayoutIndexRoute
   '/v2/onboard': typeof V2OnboardRoute
   '/onboard': typeof appProviderOnboardRoute
-  '/legacy': typeof deprecatedLegacyAppIndexRoute
   '/api/ai/complete-test': typeof ApiAiCompleteTestRoute
+  '/api/og-image/png': typeof ApiOgImagePngRoute
   '/v2/account': typeof V2Appv2LayoutAccountRoute
   '/v2/collection': typeof V2Appv2LayoutCollectionRoute
   '/v2/about': typeof V2GeneralLayoutAboutRoute
@@ -287,6 +273,8 @@ export interface FileRoutesByTo {
   '/network': typeof appProviderGeneralNetworkRoute
   '/privacy': typeof appProviderGeneralPrivacyRoute
   '/profile': typeof appProviderGeneralProfileRoute
+  '/': typeof appProviderAppIndexRoute
+  '/legacy': typeof deprecatedLegacyAppIndexRoute
   '/quiz/$quizId': typeof appProviderAppQuizQuizIdRoute
   '/legacy/take-quiz/$quizId': typeof deprecatedLegacyAppTakeQuizQuizIdRoute
   '/account': typeof appProviderAppAccountIndexRoute
@@ -297,19 +285,17 @@ export interface FileRoutesByTo {
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
-  '/(app)': typeof appRouteWithChildren
   '/(app)/_provider': typeof appProviderRouteRouteWithChildren
   '/.well-known/farcaster.json': typeof DotwellKnownFarcasterDotjsonRoute
-  '/v2': typeof V2RouteWithChildren
   '/v2/_appv2Layout': typeof V2Appv2LayoutRouteWithChildren
   '/v2/_generalLayout': typeof V2GeneralLayoutRouteWithChildren
   '/v2/onboard': typeof V2OnboardRoute
   '/(app)/_provider/_app': typeof appProviderAppRouteRouteWithChildren
   '/(app)/_provider/_general': typeof appProviderGeneralRouteRouteWithChildren
   '/(app)/_provider/onboard': typeof appProviderOnboardRoute
-  '/(deprecated)/legacy': typeof deprecatedLegacyRouteWithChildren
   '/(deprecated)/legacy/_app': typeof deprecatedLegacyAppRouteWithChildren
   '/api/ai/complete-test': typeof ApiAiCompleteTestRoute
+  '/api/og-image/png': typeof ApiOgImagePngRoute
   '/v2/_appv2Layout/account': typeof V2Appv2LayoutAccountRoute
   '/v2/_appv2Layout/collection': typeof V2Appv2LayoutCollectionRoute
   '/v2/_generalLayout/about': typeof V2GeneralLayoutAboutRoute
@@ -337,13 +323,13 @@ export interface FileRoutesById {
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    | '/'
     | '/.well-known/farcaster.json'
     | '/v2'
     | '/v2/onboard'
     | '/onboard'
     | '/legacy'
     | '/api/ai/complete-test'
+    | '/api/og-image/png'
     | '/v2/account'
     | '/v2/collection'
     | '/v2/about'
@@ -358,6 +344,7 @@ export interface FileRouteTypes {
     | '/network'
     | '/privacy'
     | '/profile'
+    | '/'
     | '/legacy/'
     | '/quiz/$quizId'
     | '/legacy/take-quiz/$quizId'
@@ -368,13 +355,12 @@ export interface FileRouteTypes {
     | '/legacy/collection'
   fileRoutesByTo: FileRoutesByTo
   to:
-    | '/'
     | '/.well-known/farcaster.json'
     | '/v2'
     | '/v2/onboard'
     | '/onboard'
-    | '/legacy'
     | '/api/ai/complete-test'
+    | '/api/og-image/png'
     | '/v2/account'
     | '/v2/collection'
     | '/v2/about'
@@ -388,6 +374,8 @@ export interface FileRouteTypes {
     | '/network'
     | '/privacy'
     | '/profile'
+    | '/'
+    | '/legacy'
     | '/quiz/$quizId'
     | '/legacy/take-quiz/$quizId'
     | '/account'
@@ -397,19 +385,17 @@ export interface FileRouteTypes {
     | '/legacy/collection'
   id:
     | '__root__'
-    | '/(app)'
     | '/(app)/_provider'
     | '/.well-known/farcaster.json'
-    | '/v2'
     | '/v2/_appv2Layout'
     | '/v2/_generalLayout'
     | '/v2/onboard'
     | '/(app)/_provider/_app'
     | '/(app)/_provider/_general'
     | '/(app)/_provider/onboard'
-    | '/(deprecated)/legacy'
     | '/(deprecated)/legacy/_app'
     | '/api/ai/complete-test'
+    | '/api/og-image/png'
     | '/v2/_appv2Layout/account'
     | '/v2/_appv2Layout/collection'
     | '/v2/_generalLayout/about'
@@ -436,36 +422,13 @@ export interface FileRouteTypes {
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  appRoute: typeof appRouteWithChildren
   DotwellKnownFarcasterDotjsonRoute: typeof DotwellKnownFarcasterDotjsonRoute
-  V2Route: typeof V2RouteWithChildren
-  deprecatedLegacyRoute: typeof deprecatedLegacyRouteWithChildren
   ApiAiCompleteTestRoute: typeof ApiAiCompleteTestRoute
+  ApiOgImagePngRoute: typeof ApiOgImagePngRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/v2': {
-      id: '/v2'
-      path: '/v2'
-      fullPath: '/v2'
-      preLoaderRoute: typeof V2RouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/(app)': {
-      id: '/(app)'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof appRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/(deprecated)/legacy': {
-      id: '/(deprecated)/legacy'
-      path: '/legacy'
-      fullPath: '/legacy'
-      preLoaderRoute: typeof deprecatedLegacyRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/v2/onboard': {
       id: '/v2/onboard'
       path: '/onboard'
@@ -482,7 +445,7 @@ declare module '@tanstack/react-router' {
     }
     '/v2/_appv2Layout': {
       id: '/v2/_appv2Layout'
-      path: '/v2'
+      path: ''
       fullPath: '/v2'
       preLoaderRoute: typeof V2Appv2LayoutRouteImport
       parentRoute: typeof V2Route
@@ -496,8 +459,8 @@ declare module '@tanstack/react-router' {
     }
     '/(app)/_provider': {
       id: '/(app)/_provider'
-      path: '/'
-      fullPath: '/'
+      path: ''
+      fullPath: ''
       preLoaderRoute: typeof appProviderRouteRouteImport
       parentRoute: typeof appRoute
     }
@@ -564,6 +527,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof V2Appv2LayoutAccountRouteImport
       parentRoute: typeof V2Appv2LayoutRoute
     }
+    '/api/og-image/png': {
+      id: '/api/og-image/png'
+      path: '/api/og-image/png'
+      fullPath: '/api/og-image/png'
+      preLoaderRoute: typeof ApiOgImagePngRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/ai/complete-test': {
       id: '/api/ai/complete-test'
       path: '/api/ai/complete-test'
@@ -573,7 +543,7 @@ declare module '@tanstack/react-router' {
     }
     '/(deprecated)/legacy/_app': {
       id: '/(deprecated)/legacy/_app'
-      path: '/legacy'
+      path: ''
       fullPath: '/legacy'
       preLoaderRoute: typeof deprecatedLegacyAppRouteImport
       parentRoute: typeof deprecatedLegacyRoute
@@ -700,160 +670,10 @@ declare module '@tanstack/react-router' {
   }
 }
 
-interface appProviderAppRouteRouteChildren {
-  appProviderAppIndexRoute: typeof appProviderAppIndexRoute
-  appProviderAppQuizQuizIdRoute: typeof appProviderAppQuizQuizIdRoute
-  appProviderAppAccountIndexRoute: typeof appProviderAppAccountIndexRoute
-  appProviderAppCollectionIndexRoute: typeof appProviderAppCollectionIndexRoute
-}
-
-const appProviderAppRouteRouteChildren: appProviderAppRouteRouteChildren = {
-  appProviderAppIndexRoute: appProviderAppIndexRoute,
-  appProviderAppQuizQuizIdRoute: appProviderAppQuizQuizIdRoute,
-  appProviderAppAccountIndexRoute: appProviderAppAccountIndexRoute,
-  appProviderAppCollectionIndexRoute: appProviderAppCollectionIndexRoute,
-}
-
-const appProviderAppRouteRouteWithChildren =
-  appProviderAppRouteRoute._addFileChildren(appProviderAppRouteRouteChildren)
-
-interface appProviderGeneralRouteRouteChildren {
-  appProviderGeneralAboutRoute: typeof appProviderGeneralAboutRoute
-  appProviderGeneralFaqRoute: typeof appProviderGeneralFaqRoute
-  appProviderGeneralNetworkRoute: typeof appProviderGeneralNetworkRoute
-  appProviderGeneralPrivacyRoute: typeof appProviderGeneralPrivacyRoute
-  appProviderGeneralProfileRoute: typeof appProviderGeneralProfileRoute
-}
-
-const appProviderGeneralRouteRouteChildren: appProviderGeneralRouteRouteChildren =
-  {
-    appProviderGeneralAboutRoute: appProviderGeneralAboutRoute,
-    appProviderGeneralFaqRoute: appProviderGeneralFaqRoute,
-    appProviderGeneralNetworkRoute: appProviderGeneralNetworkRoute,
-    appProviderGeneralPrivacyRoute: appProviderGeneralPrivacyRoute,
-    appProviderGeneralProfileRoute: appProviderGeneralProfileRoute,
-  }
-
-const appProviderGeneralRouteRouteWithChildren =
-  appProviderGeneralRouteRoute._addFileChildren(
-    appProviderGeneralRouteRouteChildren,
-  )
-
-interface appProviderRouteRouteChildren {
-  appProviderAppRouteRoute: typeof appProviderAppRouteRouteWithChildren
-  appProviderGeneralRouteRoute: typeof appProviderGeneralRouteRouteWithChildren
-  appProviderOnboardRoute: typeof appProviderOnboardRoute
-}
-
-const appProviderRouteRouteChildren: appProviderRouteRouteChildren = {
-  appProviderAppRouteRoute: appProviderAppRouteRouteWithChildren,
-  appProviderGeneralRouteRoute: appProviderGeneralRouteRouteWithChildren,
-  appProviderOnboardRoute: appProviderOnboardRoute,
-}
-
-const appProviderRouteRouteWithChildren =
-  appProviderRouteRoute._addFileChildren(appProviderRouteRouteChildren)
-
-interface appRouteChildren {
-  appProviderRouteRoute: typeof appProviderRouteRouteWithChildren
-}
-
-const appRouteChildren: appRouteChildren = {
-  appProviderRouteRoute: appProviderRouteRouteWithChildren,
-}
-
-const appRouteWithChildren = appRoute._addFileChildren(appRouteChildren)
-
-interface V2Appv2LayoutRouteChildren {
-  V2Appv2LayoutAccountRoute: typeof V2Appv2LayoutAccountRoute
-  V2Appv2LayoutCollectionRoute: typeof V2Appv2LayoutCollectionRoute
-  V2Appv2LayoutIndexRoute: typeof V2Appv2LayoutIndexRoute
-}
-
-const V2Appv2LayoutRouteChildren: V2Appv2LayoutRouteChildren = {
-  V2Appv2LayoutAccountRoute: V2Appv2LayoutAccountRoute,
-  V2Appv2LayoutCollectionRoute: V2Appv2LayoutCollectionRoute,
-  V2Appv2LayoutIndexRoute: V2Appv2LayoutIndexRoute,
-}
-
-const V2Appv2LayoutRouteWithChildren = V2Appv2LayoutRoute._addFileChildren(
-  V2Appv2LayoutRouteChildren,
-)
-
-interface V2GeneralLayoutRouteChildren {
-  V2GeneralLayoutAboutRoute: typeof V2GeneralLayoutAboutRoute
-  V2GeneralLayoutFaqRoute: typeof V2GeneralLayoutFaqRoute
-  V2GeneralLayoutNetworkRoute: typeof V2GeneralLayoutNetworkRoute
-  V2GeneralLayoutPrivacyRoute: typeof V2GeneralLayoutPrivacyRoute
-  V2GeneralLayoutProfileRoute: typeof V2GeneralLayoutProfileRoute
-}
-
-const V2GeneralLayoutRouteChildren: V2GeneralLayoutRouteChildren = {
-  V2GeneralLayoutAboutRoute: V2GeneralLayoutAboutRoute,
-  V2GeneralLayoutFaqRoute: V2GeneralLayoutFaqRoute,
-  V2GeneralLayoutNetworkRoute: V2GeneralLayoutNetworkRoute,
-  V2GeneralLayoutPrivacyRoute: V2GeneralLayoutPrivacyRoute,
-  V2GeneralLayoutProfileRoute: V2GeneralLayoutProfileRoute,
-}
-
-const V2GeneralLayoutRouteWithChildren = V2GeneralLayoutRoute._addFileChildren(
-  V2GeneralLayoutRouteChildren,
-)
-
-interface V2RouteChildren {
-  V2Appv2LayoutRoute: typeof V2Appv2LayoutRouteWithChildren
-  V2GeneralLayoutRoute: typeof V2GeneralLayoutRouteWithChildren
-  V2OnboardRoute: typeof V2OnboardRoute
-  V2QuizQuizIdRoute: typeof V2QuizQuizIdRoute
-}
-
-const V2RouteChildren: V2RouteChildren = {
-  V2Appv2LayoutRoute: V2Appv2LayoutRouteWithChildren,
-  V2GeneralLayoutRoute: V2GeneralLayoutRouteWithChildren,
-  V2OnboardRoute: V2OnboardRoute,
-  V2QuizQuizIdRoute: V2QuizQuizIdRoute,
-}
-
-const V2RouteWithChildren = V2Route._addFileChildren(V2RouteChildren)
-
-interface deprecatedLegacyAppRouteChildren {
-  deprecatedLegacyAppIndexRoute: typeof deprecatedLegacyAppIndexRoute
-  deprecatedLegacyAppTakeQuizQuizIdRoute: typeof deprecatedLegacyAppTakeQuizQuizIdRoute
-  deprecatedLegacyAppAccountIndexRoute: typeof deprecatedLegacyAppAccountIndexRoute
-  deprecatedLegacyAppBrowseIndexRoute: typeof deprecatedLegacyAppBrowseIndexRoute
-  deprecatedLegacyAppCollectionIndexRoute: typeof deprecatedLegacyAppCollectionIndexRoute
-}
-
-const deprecatedLegacyAppRouteChildren: deprecatedLegacyAppRouteChildren = {
-  deprecatedLegacyAppIndexRoute: deprecatedLegacyAppIndexRoute,
-  deprecatedLegacyAppTakeQuizQuizIdRoute:
-    deprecatedLegacyAppTakeQuizQuizIdRoute,
-  deprecatedLegacyAppAccountIndexRoute: deprecatedLegacyAppAccountIndexRoute,
-  deprecatedLegacyAppBrowseIndexRoute: deprecatedLegacyAppBrowseIndexRoute,
-  deprecatedLegacyAppCollectionIndexRoute:
-    deprecatedLegacyAppCollectionIndexRoute,
-}
-
-const deprecatedLegacyAppRouteWithChildren =
-  deprecatedLegacyAppRoute._addFileChildren(deprecatedLegacyAppRouteChildren)
-
-interface deprecatedLegacyRouteChildren {
-  deprecatedLegacyAppRoute: typeof deprecatedLegacyAppRouteWithChildren
-}
-
-const deprecatedLegacyRouteChildren: deprecatedLegacyRouteChildren = {
-  deprecatedLegacyAppRoute: deprecatedLegacyAppRouteWithChildren,
-}
-
-const deprecatedLegacyRouteWithChildren =
-  deprecatedLegacyRoute._addFileChildren(deprecatedLegacyRouteChildren)
-
 const rootRouteChildren: RootRouteChildren = {
-  appRoute: appRouteWithChildren,
   DotwellKnownFarcasterDotjsonRoute: DotwellKnownFarcasterDotjsonRoute,
-  V2Route: V2RouteWithChildren,
-  deprecatedLegacyRoute: deprecatedLegacyRouteWithChildren,
   ApiAiCompleteTestRoute: ApiAiCompleteTestRoute,
+  ApiOgImagePngRoute: ApiOgImagePngRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

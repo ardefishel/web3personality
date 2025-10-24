@@ -13,6 +13,58 @@ function UserProfile() {
     return `${addr.slice(0, 6)}...${addr.slice(-4)}`;
   };
 
+  const getProfileUrl = () => {
+    const baseUrl = "https://web3personality.vercel.app";
+    if (address) {
+      return `${baseUrl}/profile/${address}`;
+    }
+    return baseUrl;
+  };
+
+  const handleFarcasterShare = () => {
+    const profileUrl = getProfileUrl();
+    const text = encodeURIComponent(
+      `Check out my Web3Personality profile! Discover your on-chain personality on Base.`
+    );
+    const shareUrl = `https://warpcast.com/~/compose?text=${text}&embeds[]=${encodeURIComponent(profileUrl)}`;
+    window.open(shareUrl, "_blank", "noopener,noreferrer");
+  };
+
+  const handleTwitterShare = () => {
+    const profileUrl = getProfileUrl();
+    const text = encodeURIComponent(
+      `Check out my Web3Personality profile! Discover your on-chain personality on Base. ${profileUrl}`
+    );
+    const shareUrl = `https://twitter.com/intent/tweet?text=${text}`;
+    window.open(shareUrl, "_blank", "noopener,noreferrer");
+  };
+
+  const handleInstagramShare = async () => {
+    const profileUrl = getProfileUrl();
+    try {
+      if (navigator.share) {
+        await navigator.share({
+          title: "Web3Personality Profile",
+          text: "Check out my Web3Personality profile!",
+          url: profileUrl,
+        });
+      } else {
+        // Fallback: copy to clipboard
+        await navigator.clipboard.writeText(profileUrl);
+        alert("Profile link copied to clipboard! Share it on Instagram.");
+      }
+    } catch (error) {
+      console.error("Error sharing:", error);
+      // Fallback to clipboard
+      try {
+        await navigator.clipboard.writeText(profileUrl);
+        alert("Profile link copied to clipboard!");
+      } catch (clipboardError) {
+        console.error("Clipboard error:", clipboardError);
+      }
+    }
+  };
+
   if (!isConnected) {
     return (
       <div className="bg-base-300 rounded-2xl p-8 space-y-4 text-center">
@@ -86,13 +138,13 @@ function UserProfile() {
                 ></path>
               </svg>
             }
-            onClick={() => {}}
+            onClick={handleFarcasterShare}
           />
-          <SocialButton name="X" icon={<Twitter />} onClick={() => {}} />
+          <SocialButton name="X" icon={<Twitter />} onClick={handleTwitterShare} />
           <SocialButton
             name="Instagram"
             icon={<Instagram />}
-            onClick={() => {}}
+            onClick={handleInstagramShare}
           />
         </div>
       </div>
