@@ -6,15 +6,16 @@ import { useQuery } from '@tanstack/react-query'
 import { ArrowLeft } from 'lucide-react'
 import { SafeArea } from '@coinbase/onchainkit/minikit'
 import { Wallet } from '@coinbase/onchainkit/wallet'
-import { 
-  Transaction, 
-  TransactionButton, 
-  TransactionSponsor, 
-  TransactionStatus, 
-  TransactionStatusLabel, 
-  TransactionStatusAction 
+import {
+  Transaction,
+  TransactionButton,
+  TransactionSponsor,
+  TransactionStatus,
+  TransactionStatusLabel,
+  TransactionStatusAction
 } from '@coinbase/onchainkit/transaction'
 import { RootProvider } from '../../-components/RootProvider'
+import { Logo } from '@/components/brand'
 
 // Type definitions
 interface PersonalityData {
@@ -60,13 +61,13 @@ function CustomTopBar() {
   return (
     <div className="navbar bg-base-100 px-4 py-2 border-b border-base-300">
       <div className="flex-1 flex items-center gap-2">
-        <button 
+        <button
           onClick={() => navigate({ to: '/browse' })}
           className="btn btn-ghost btn-circle"
         >
           <ArrowLeft className="h-5 w-5" />
         </button>
-        <img src="/w3p-logo.png" alt="W3P" className="h-6 w-auto" />
+        <img src={Logo} alt="W3P" className="h-6 w-auto" />
         <span className="font-bold text-lg">Quiz</span>
       </div>
       <div className="flex-none">

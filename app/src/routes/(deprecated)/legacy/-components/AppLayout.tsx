@@ -2,6 +2,7 @@ import { Wallet } from "@coinbase/onchainkit/wallet";
 import { Link } from "@tanstack/react-router";
 import { SafeArea } from "@coinbase/onchainkit/minikit";
 import React from "react";
+import { Logo } from "@/components/brand";
 
 type Props = {
   children: React.ReactNode;
@@ -11,7 +12,7 @@ function TopBar() {
   return (
     <div className="navbar px-4 py-2 lg:px-6">
       <div className="flex-1 flex items-center gap-1">
-        <img src="/w3p-logo.png" alt="W3P" className="h-8 w-auto" />
+        <img src={Logo} alt="W3P" className="h-8 w-auto" />
         <h2 className="text-white font-bold text-lg lg:text-xl">Web3Personality</h2>
       </div>
       <div className="flex-none">
@@ -171,7 +172,7 @@ function DesktopSidebar() {
     <aside className="hidden lg:flex w-64 flex-col bg-base-200 border-r border-base-300">
       <div className="p-6 border-b border-base-300">
         <div className="flex items-center gap-3">
-          <img src="/w3p-logo.png" alt="W3P" className="h-10 w-auto" />
+          <img src={Logo} alt="W3P" className="h-10 w-auto" />
           <h2 className="font-bold text-lg">Web3Personality</h2>
         </div>
       </div>

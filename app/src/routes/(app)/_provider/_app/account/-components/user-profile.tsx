@@ -1,13 +1,13 @@
 import { Twitter, Instagram } from "lucide-react";
 import { useAccount } from "wagmi";
-import { useAvatar, useName } from "@coinbase/onchainkit/identity";
+import { Avatar, useName } from "@coinbase/onchainkit/identity";
 import { ConnectWallet } from "@coinbase/onchainkit/wallet";
 import SocialButton from "./social-button";
+import { base } from "viem/chains";
 
 function UserProfile() {
   const { address, isConnected } = useAccount();
   const { data: ensName } = useName({ address });
-  const { data: avatar } = useAvatar({ ensName: ensName || "" });
 
   const formatAddress = (addr: string) => {
     return `${addr.slice(0, 6)}...${addr.slice(-4)}`;
@@ -44,13 +44,12 @@ function UserProfile() {
   return (
     <div className="bg-base-300 rounded-2xl p-6 space-y-6">
       <div className="flex items-center gap-4">
-        <div className="avatar">
-          <div className="mask mask-squircle w-20 ring-2 ring-primary ring-offset-2 ring-offset-base-100">
-            <img
-              src={avatar || `https://api.dicebear.com/7.x/shapes/svg?seed=${address}`}
-              alt="User avatar"
-            />
-          </div>
+        <div className="ring-2 ring-primary ring-offset-2 ring-offset-base-100 rounded-[20px]">
+          <Avatar
+            address={address}
+            chain={base}
+            className="mask mask-squircle w-20 h-20"
+          />
         </div>
         <div className="flex-1">
           <h2 className="font-bold text-xl">{ensName || formatAddress(address!)}</h2>

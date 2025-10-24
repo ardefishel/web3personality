@@ -1,5 +1,6 @@
 import { Drawer } from 'vaul'
 import type { PersonalityNFT } from '@/lib'
+import { X } from 'lucide-react'
 
 interface PersonalityDrawerProps {
   open: boolean
@@ -13,10 +14,10 @@ export function PersonalityDrawer({ open, onOpenChange, nft }: PersonalityDrawer
   return (
     <Drawer.Root open={open} onOpenChange={onOpenChange}>
       <Drawer.Portal>
-        <Drawer.Overlay className="fixed inset-0 bg-black/40 z-40" />
-        <Drawer.Content className="bg-base-100 flex flex-col fixed bottom-0 left-0 right-0 min-h-[80vh] lg:min-h-[75vh] rounded-t-3xl lg:rounded-t-2xl z-50 max-w-md lg:max-w-none mx-auto">
+        <Drawer.Overlay className="fixed inset-0 bg-black/40 z-40" onClick={() => onOpenChange(false)} />
+        <Drawer.Content className="bg-base-100 flex flex-col fixed bottom-0 left-0 right-0 min-h-[70vh] max-h-[90vh] lg:min-h-[75vh] rounded-t-3xl lg:rounded-t-2xl z-50 max-w-md lg:max-w-none mx-auto">
           <div className="flex-1 overflow-y-auto">
-            <DrawerHandle />
+            <DrawerHandle onClose={() => onOpenChange(false)} />
             <div className="lg:max-w-6xl lg:mx-auto lg:px-8">
               <div className="lg:grid lg:grid-cols-5 lg:gap-8 lg:py-8">
                 {/* Personality Image */}
@@ -47,10 +48,21 @@ export function PersonalityDrawer({ open, onOpenChange, nft }: PersonalityDrawer
   )
 }
 
-function DrawerHandle() {
+function DrawerHandle({ onClose }: { onClose: () => void }) {
   return (
-    <div className="sticky top-0 z-10 bg-base-100 pt-4 pb-2">
-      <div className="mx-auto w-12 h-1.5 flex-shrink-0 rounded-full bg-base-300" />
+    <div className="sticky top-0 z-10 bg-base-100 pt-4 pb-2 border-b border-base-200">
+      <div className="flex items-center justify-between px-4">
+        <div className="flex-1 flex justify-center">
+          <div className="w-12 h-1.5 flex-shrink-0 rounded-full bg-base-300" />
+        </div>
+        <button
+          onClick={onClose}
+          className="btn btn-sm btn-circle btn-ghost flex-shrink-0"
+          aria-label="Close drawer"
+        >
+          <X className="h-5 w-5" />
+        </button>
+      </div>
     </div>
   )
 }

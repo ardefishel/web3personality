@@ -2,6 +2,7 @@ import {
   createFileRoute,
   Outlet,
   useNavigate,
+  useRouterState,
 } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { useAccount } from "wagmi";
@@ -19,10 +20,12 @@ function MobileLayout() {
   const navigate = useNavigate();
   const { isConnected } = useAccount();
   const [checkDone, setCheckDone] = useState(false);
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const isQuizPage = pathname.includes("/quiz/");
 
   useEffect(() => {
     const hasVisited = localStorage.getItem("hasVisitedApp");
-    
+
     if (!hasVisited && !isConnected) {
       navigate({ to: "/onboard", replace: true });
     } else {
@@ -32,6 +35,15 @@ function MobileLayout() {
 
   if (!checkDone) {
     return null;
+  }
+
+  // Quiz page has its own layout, so render it without the app wrapper
+  if (isQuizPage) {
+    return (
+      <div className="min-h-dvh relative bg-base-100">
+        <Outlet />
+      </div>
+    );
   }
 
   return (

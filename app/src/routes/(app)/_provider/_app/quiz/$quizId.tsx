@@ -13,6 +13,7 @@ import {
 } from '@coinbase/onchainkit/transaction'
 import { useAccount } from 'wagmi'
 import { useQuiz, quizManagerContract } from '@/lib'
+import { Logo } from '@/components/brand'
 
 // Type definitions
 interface PersonalityResult {
@@ -37,19 +38,21 @@ function CustomTopBar() {
   const navigate = useNavigate()
 
   return (
-    <div className="navbar bg-base-100 px-4 py-2 border-b border-base-300">
-      <div className="flex-1 flex items-center gap-2">
-        <button
-          onClick={() => navigate({ to: '/' })}
-          className="btn btn-ghost btn-circle"
-        >
-          <ArrowLeft className="h-5 w-5" />
-        </button>
-        <img src="/w3p-logo.png" alt="W3P" className="h-6 w-auto" />
-        <span className="font-bold text-lg">Quiz</span>
-      </div>
-      <div className="flex-none">
-        <Wallet />
+    <div className="navbar bg-base-100/95 backdrop-blur-sm fixed top-0 left-0 right-0 px-4 py-2 border-b border-base-300 z-10">
+      <div className="max-w-md mx-auto w-full flex items-center justify-between">
+        <div className="flex-1 flex items-center gap-2">
+          <button
+            onClick={() => navigate({ to: '/' })}
+            className="btn btn-ghost btn-circle"
+          >
+            <ArrowLeft className="h-5 w-5" />
+          </button>
+          <img src={Logo} alt="W3P" className="h-6 w-auto" />
+          <span className="font-bold text-lg">Quiz</span>
+        </div>
+        <div className="flex-none">
+          <Wallet />
+        </div>
       </div>
     </div>
   )
@@ -192,7 +195,7 @@ function TakeQuizComponent() {
   // Show loading while checking wallet connection
   if (!isConnected) {
     return (
-      <div className="min-h-dvh flex flex-col">
+      <div className="min-h-dvh flex flex-col bg-base-100">
         <CustomTopBar />
         <div className="flex-1 flex items-center justify-center">
           <div className="text-center">
@@ -206,7 +209,7 @@ function TakeQuizComponent() {
 
   if (isLoading) {
     return (
-      <div className="min-h-dvh flex flex-col">
+      <div className="min-h-dvh flex flex-col bg-base-100">
         <CustomTopBar />
         <div className="flex-1 flex items-center justify-center">
           <div className="text-center">
@@ -220,7 +223,7 @@ function TakeQuizComponent() {
 
   if (error || !quizDetail) {
     return (
-      <div className="min-h-dvh flex flex-col">
+      <div className="min-h-dvh flex flex-col bg-base-100">
         <CustomTopBar />
         <div className="flex-1 flex items-center justify-center">
           <div className="text-center">
@@ -238,7 +241,7 @@ function TakeQuizComponent() {
 
   if (!isActive) {
     return (
-      <div className="min-h-dvh flex flex-col">
+      <div className="min-h-dvh flex flex-col bg-base-100">
         <CustomTopBar />
         <div className="flex-1 flex items-center justify-center">
           <div className="text-center">
@@ -255,11 +258,10 @@ function TakeQuizComponent() {
   }
 
   return (
-    <div className="min-h-dvh flex flex-col">
+    <div className="min-h-dvh flex flex-col bg-base-100">
       <CustomTopBar />
 
-      <div className="flex-1 px-4 py-6">
-        <div className="max-w-2xl mx-auto">
+      <div className="flex-1 px-4 py-6 pt-20 max-w-md mx-auto w-full">
           {/* Quiz Header */}
           <div className="mb-8">
             <div className="card bg-base-100 shadow-xl">
@@ -369,7 +371,6 @@ function TakeQuizComponent() {
               </div>
             </div>
           </div>
-        </div>
       </div>
 
       {/* Personality Result Modal */}

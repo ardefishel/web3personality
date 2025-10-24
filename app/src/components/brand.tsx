@@ -8,3 +8,6 @@ export function Brand() {
     </span>
   );
 }
+
+// Export the logo separately for use in places that need just the logo
+export { Type3Logo as Logo }
