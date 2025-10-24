@@ -1,5 +1,7 @@
 import satori from "satori";
 import { Resvg } from "@resvg/resvg-js";
+import { readFile } from "fs/promises";
+import { join } from "path";
 
 export interface OgImageProps {
   title?: string;
@@ -9,11 +11,15 @@ export interface OgImageProps {
 }
 
 export async function generateOgImage({
-  title = "Web3Personality",
-  description = "Discover your on-chain personality on Base",
+  title,
+  description,
   personalityType,
   userAddress,
 }: OgImageProps) {
+  // Use environment variables for brand configuration
+  const brandName = title || process.env.VITE_BRAND_NAME || "Web3Personality";
+  const brandDomain = process.env.VITE_BRAND_DOMAIN || "web3personality.vercel.app";
+  const defaultDescription = description || "Discover your on-chain personality";
   // Load fonts
   const interBold = await fetch(
     "https://fonts.googleapis.com/css2?family=Inter:wght@700&display=swap"
@@ -24,6 +30,21 @@ export async function generateOgImage({
     ? await fetch(fontUrl).then((res) => res.arrayBuffer())
     : undefined;
 
+  // Load logo
+  let logoBase64 = "";
+  try {
+    const logoPath = join(process.cwd(), "public", "typ3-logo.png");
+    const logoBuffer = await readFile(logoPath);
+    logoBase64 = `data:image/png;base64,${logoBuffer.toString("base64")}`;
+  } catch (error) {
+    console.error("Failed to load logo:", error);
+  }
+
+  // Brand colors - using cyan/turquoise accent
+  const accentColor = "#00D9D9"; // Cyan accent from the logo
+  const darkBg = "#0f172a"; // Dark slate background
+  const accentGradient = "linear-gradient(135deg, #00D9D9 0%, #0891b2 100%)"; // Cyan gradient
+
   // Generate SVG with satori
   const svg = await satori(
     <div
@@ -32,101 +53,143 @@ export async function generateOgImage({
         height: "100%",
         display: "flex",
         flexDirection: "column",
-        backgroundColor: "#0f172a",
-        backgroundImage: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
-        padding: "80px",
+        backgroundColor: darkBg,
+        padding: "0",
         color: "white",
         fontFamily: "Inter",
+        position: "relative",
       }}
     >
-      {/* Logo/Brand Section */}
+      {/* Background Gradient Overlay */}
       <div
         style={{
-          display: "flex",
-          alignItems: "center",
-          marginBottom: "60px",
+          position: "absolute",
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          background: accentGradient,
+          opacity: 0.15,
         }}
-      >
-        <div
-          style={{
-            fontSize: 32,
-            fontWeight: 700,
-            color: "white",
-          }}
-        >
-          {title}
-        </div>
-      </div>
+      />
 
-      {/* Main Content */}
+      {/* Content Container */}
       <div
         style={{
           display: "flex",
           flexDirection: "column",
-          flex: 1,
-          justifyContent: "center",
+          padding: "80px",
+          height: "100%",
+          position: "relative",
+          zIndex: 1,
         }}
       >
-        {personalityType && (
+        {/* Logo/Brand Header */}
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            marginBottom: "60px",
+          }}
+        >
+          {logoBase64 && (
+            <img
+              src={logoBase64}
+              width={64}
+              height={64}
+              style={{
+                marginRight: "20px",
+              }}
+            />
+          )}
           <div
             style={{
-              fontSize: 72,
+              fontSize: 36,
               fontWeight: 700,
-              marginBottom: "30px",
-              color: "white",
+              color: accentColor,
             }}
           >
-            {personalityType}
+            {brandName}
           </div>
-        )}
-
-        <div
-          style={{
-            fontSize: 36,
-            color: "rgba(255, 255, 255, 0.9)",
-            marginBottom: "20px",
-          }}
-        >
-          {description}
         </div>
 
-        {userAddress && (
+        {/* Main Content */}
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            flex: 1,
+            justifyContent: "center",
+          }}
+        >
+          {personalityType && (
+            <div
+              style={{
+                fontSize: 80,
+                fontWeight: 700,
+                marginBottom: "30px",
+                color: accentColor,
+                lineHeight: 1.1,
+              }}
+            >
+              {personalityType}
+            </div>
+          )}
+
           <div
             style={{
-              fontSize: 24,
-              color: "rgba(255, 255, 255, 0.7)",
-              fontFamily: "monospace",
+              fontSize: 40,
+              color: "rgba(255, 255, 255, 0.95)",
+              marginBottom: "20px",
+              lineHeight: 1.3,
             }}
           >
-            {userAddress.slice(0, 6)}...{userAddress.slice(-4)}
+            {defaultDescription}
           </div>
-        )}
-      </div>
 
-      {/* Footer */}
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          marginTop: "40px",
-        }}
-      >
-        <div
-          style={{
-            fontSize: 24,
-            color: "rgba(255, 255, 255, 0.8)",
-          }}
-        >
-          Built on Base 🔵
+          {userAddress && (
+            <div
+              style={{
+                fontSize: 28,
+                color: accentColor,
+                fontFamily: "monospace",
+                marginTop: "20px",
+              }}
+            >
+              {userAddress.slice(0, 6)}...{userAddress.slice(-4)}
+            </div>
+          )}
         </div>
+
+        {/* Footer */}
         <div
           style={{
-            fontSize: 20,
-            color: "rgba(255, 255, 255, 0.7)",
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            marginTop: "40px",
+            borderTop: `2px solid ${accentColor}33`,
+            paddingTop: "30px",
           }}
         >
-          web3personality.vercel.app
+          <div
+            style={{
+              fontSize: 26,
+              color: "rgba(255, 255, 255, 0.9)",
+              display: "flex",
+              alignItems: "center",
+            }}
+          >
+            Built on Base 🔵
+          </div>
+          <div
+            style={{
+              fontSize: 22,
+              color: accentColor,
+            }}
+          >
+            {brandDomain}
+          </div>
         </div>
       </div>
     </div>,
