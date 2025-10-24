@@ -1,4 +1,4 @@
-import Typ3Logo from "./assets/typ3-logo.png";
+import Typ3Logo from "./assets/type3-logo.png";
 
 export function Brand() {
   return (
