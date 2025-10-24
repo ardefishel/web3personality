@@ -82,6 +82,8 @@ export async function generateOgImage({
           height: "100%",
           position: "relative",
           zIndex: 1,
+          alignItems: "center",
+          justifyContent: "center",
         }}
       >
         {/* Logo/Brand Header */}
@@ -89,6 +91,7 @@ export async function generateOgImage({
           style={{
             display: "flex",
             alignItems: "center",
+            justifyContent: "center",
             marginBottom: "60px",
           }}
         >
@@ -118,8 +121,9 @@ export async function generateOgImage({
           style={{
             display: "flex",
             flexDirection: "column",
-            flex: 1,
+            alignItems: "center",
             justifyContent: "center",
+            textAlign: "center",
           }}
         >
           {personalityType && (
@@ -142,6 +146,7 @@ export async function generateOgImage({
               color: "rgba(255, 255, 255, 0.95)",
               marginBottom: "20px",
               lineHeight: 1.3,
+              maxWidth: "900px",
             }}
           >
             {defaultDescription}
@@ -165,11 +170,13 @@ export async function generateOgImage({
         <div
           style={{
             display: "flex",
-            justifyContent: "space-between",
+            flexDirection: "column",
             alignItems: "center",
-            marginTop: "40px",
+            justifyContent: "center",
+            marginTop: "60px",
             borderTop: `2px solid ${accentColor}33`,
             paddingTop: "30px",
+            gap: "15px",
           }}
         >
           <div
