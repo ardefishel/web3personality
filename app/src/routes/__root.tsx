@@ -5,6 +5,7 @@ import ockCss from "@coinbase/onchainkit/styles.css?url";
 
 export const Route = createRootRoute({
   head: () => {
+    const brandName = import.meta.env.VITE_BRAND_NAME || "Web3Personality";
     const brandTitle = import.meta.env.VITE_BRAND_TITLE || "Web3Personality - Discover Your On-Chain Personality | Built on Base";
     const brandDescription = import.meta.env.VITE_BRAND_DESCRIPTION || "Unlock your Web3 identity! Take engaging personality quizzes and mint your results as permanent NFT credentials on Base blockchain. Join the on-chain personality revolution.";
     const brandOgTitle = import.meta.env.VITE_BRAND_OG_TITLE || "Web3Personality - Discover Your On-Chain Personality";

@@ -6,8 +6,10 @@ export const Route = createFileRoute("/.well-known/farcaster.json")({
     handlers: {
       GET: () => {
         const brandName = process.env.VITE_BRAND_NAME || "Web3Personality";
+        const brandSubtitle = process.env.VITE_BRAND_SUBTITLE || "On-chain personality tests";
         const publicUrl = process.env.VITE_PUBLIC_URL || "https://web3personality.vercel.app";
-        const brandDescription = process.env.VITE_BRAND_DESCRIPTION || "Unlock your Web3 identity! Take engaging personality quizzes and mint your results as permanent NFT credentials on Base blockchain.";
+        // Description max 170 chars for Farcaster compliance
+        const brandDescription = process.env.VITE_BRAND_DESCRIPTION?.substring(0, 170) || "Take personality quizzes and mint your results as NFT credentials on Base blockchain. Build your verifiable Web3 identity on-chain.";
         const brandOgTitle = process.env.VITE_BRAND_OG_TITLE || "Web3Personality - Discover Your On-Chain Personality";
         const brandOgDescription = process.env.VITE_BRAND_OG_DESCRIPTION || "Take interactive personality quizzes and immortalize your results on-chain. Build your verifiable Web3 identity with NFT-backed personality credentials on Base.";
 
@@ -24,15 +26,15 @@ export const Route = createFileRoute("/.well-known/farcaster.json")({
             version: "1",
             name: brandName,
             homeUrl: publicUrl,
-            iconUrl: `${publicUrl}/typ3-logo.png`,
+            iconUrl: `${publicUrl}/android-chrome-512x512.png`, // Using 512x512 as closest to 1024x1024 requirement
             splashImageUrl: `${publicUrl}/api/og-image/png`,
             splashBackgroundColor: "#0f172a",
             webhookUrl: "",
-            subtitle: "Discover your on-chain identity",
-            description: brandDescription,
+            subtitle: brandSubtitle.substring(0, 30), // Max 30 chars for Farcaster compliance
+            description: brandDescription, // Max 170 chars enforced above
             screenshotUrls: [],
             primaryCategory: "social",
-            tags: ["personality", "web3", "nft", "base", "onchain", "identity"],
+            tags: ["personality", "web3", "nft", "base", "onchain"],
             heroImageUrl: `${publicUrl}/api/og-image/png`,
             tagline: "Unlock your Web3 personality",
             ogTitle: brandOgTitle,
