@@ -7,7 +7,7 @@ import { network } from "hardhat";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const THEME_FOLDER_TITLE = "01-space-cat";
+const THEME_FOLDER_TITLE = "03-lovewild-arcana";
 const NETWORK_NAME = "baseSepolia";
 const themeFolderPath = path.join(
   __dirname,
@@ -58,6 +58,7 @@ interface ThemeDefaultExport {
 
 interface PersonalityMetadata {
   name: string;
+  description: string;
   tokenId: number;
   image: string;
   attributes: Array<{ trait_type: string; value: string }>;
@@ -72,6 +73,7 @@ interface CollectionMetadata {
   attributes: string[];
   personalities: Array<{
     name: string;
+    description: string;
     tokenId: number;
     image: string;
     attributes: Array<{ trait_type: string; value: string }>;
@@ -114,6 +116,23 @@ function capitalizeEachWord(sentence: string) {
     console.log(`   • Description: ${themeData.description}`);
     console.log(`   • Questions: ${themeData.questions.length}`);
     console.log(`   • Attributes: ${themeData.attributes.join(", ")}`);
+
+    // Step 1.5: Load personality descriptions from desc.json
+    console.log("\n📝 Loading personality descriptions...");
+    const descPath = path.join(themeFolderPath, "desc.json");
+    let personalityDescriptions: Array<{
+      name: string;
+      description: string;
+      attributes: Array<{ trait_type: string; value: string }>;
+    }> = [];
+
+    if (fs.existsSync(descPath)) {
+      const descData = JSON.parse(fs.readFileSync(descPath, "utf-8"));
+      personalityDescriptions = descData;
+      console.log(`✅ Loaded ${personalityDescriptions.length} personality descriptions`);
+    } else {
+      console.log(`⚠️  No desc.json found, personalities will have empty descriptions`);
+    }
 
     // Step 2: Connect to blockchain and get quiz ID
     console.log("\n🌐 Connecting to blockchain...");
@@ -173,8 +192,15 @@ function capitalizeEachWord(sentence: string) {
 
       const personalityName = capitalizeEachWord(name.split("_").join(" "));
 
+      // Find matching description from desc.json
+      const descEntry = personalityDescriptions.find(
+        (desc) => desc.name === personalityName
+      );
+      const description = descEntry?.description || "";
+
       return {
         name: personalityName,
+        description,
         tokenId,
         attributes: personalityAttributes,
         originalFilename: img,
@@ -322,6 +348,7 @@ function capitalizeEachWord(sentence: string) {
 
         const metadata: PersonalityMetadata = {
           name: personality.name,
+          description: personality.description,
           tokenId: personality.tokenId,
           image: imageUrl,
           attributes: personality.attributes,
@@ -354,6 +381,7 @@ function capitalizeEachWord(sentence: string) {
         const imageUrl = `https://ipfs.io/ipfs/${imageCid}/${personality.tokenId}${ext}`;
         return {
           name: personality.name,
+          description: personality.description,
           tokenId: personality.tokenId,
           image: imageUrl,
           attributes: personality.attributes,

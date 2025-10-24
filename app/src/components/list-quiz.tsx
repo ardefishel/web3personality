@@ -2,6 +2,8 @@ import { Search } from "lucide-react";
 import { useState } from "react";
 import { QuizDetailDrawer } from "./quiz-detail-drawer";
 import { useQuizzes } from "@/lib";
+import { useAccount, useReadContracts } from "wagmi";
+import { quizManagerContract } from "@/lib/contracts";
 
 export interface QuizData {
   id: string;
@@ -293,12 +295,53 @@ const MOCK_QUIZZES: QuizData[] = [
 export function QuizBrowser() {
   const [selectedQuiz, setSelectedQuiz] = useState<QuizData | null>(null);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const { address } = useAccount();
   const { data: quizzes, isLoading } = useQuizzes();
+
+  // Get participation status for all quizzes if user is connected
+  const { data: participationData } = useReadContracts({
+    contracts: address
+      ? quizzes.map((quiz) => ({
+          ...quizManagerContract,
+          functionName: "hasParticipated",
+          args: [address, BigInt(quiz.id)],
+        }))
+      : [],
+  });
 
   const handleQuizClick = (quiz: QuizData) => {
     setSelectedQuiz(quiz);
     setIsDrawerOpen(true);
   };
+
+  // Filter quizzes:
+  // 1. Only show active quizzes
+  // 2. Filter by search query (case-insensitive, title only)
+  const filteredQuizzes = quizzes.filter((quiz, index) => {
+    // Filter out inactive quizzes
+    if (!(quiz as any).isActive) return false;
+
+    // Filter by search query
+    if (!quiz.title.toLowerCase().includes(searchQuery.toLowerCase())) {
+      return false;
+    }
+
+    return true;
+  });
+
+  // Map participation status to filtered quizzes
+  const quizzesWithStatus = filteredQuizzes.map((quiz) => {
+    const originalIndex = quizzes.findIndex((q) => q.id === quiz.id);
+    const hasParticipated = address && participationData
+      ? participationData[originalIndex]?.result === true
+      : false;
+
+    return {
+      ...quiz,
+      hasParticipated,
+    };
+  });
 
   return (
     <>
@@ -307,19 +350,23 @@ export function QuizBrowser() {
           title="Explore All Quizzes"
           subtitle="Find the perfect personality test for you"
         />
-        <QuizSearchBar />
+        <QuizSearchBar value={searchQuery} onChange={setSearchQuery} />
         {isLoading ? (
           <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 lg:gap-6">
             {[1, 2, 3, 4].map((i) => (
               <div key={i} className="skeleton h-48 lg:h-56 rounded-3xl" />
             ))}
           </div>
-        ) : quizzes.length === 0 ? (
+        ) : quizzesWithStatus.length === 0 ? (
           <div className="text-center py-12">
-            <p className="text-base-content/70">No quizzes available yet</p>
+            <p className="text-base-content/70">
+              {searchQuery
+                ? `No quizzes found matching "${searchQuery}"`
+                : "No quizzes available yet"}
+            </p>
           </div>
         ) : (
-          <QuizGrid quizzes={quizzes} onQuizClick={handleQuizClick} />
+          <QuizGrid quizzes={quizzesWithStatus} onQuizClick={handleQuizClick} />
         )}
       </section>
 
@@ -346,17 +393,28 @@ function SectionHeader({ title, subtitle }: SectionHeaderProps) {
   );
 }
 
-function QuizSearchBar() {
+interface QuizSearchBarProps {
+  value: string;
+  onChange: (value: string) => void;
+}
+
+function QuizSearchBar({ value, onChange }: QuizSearchBarProps) {
   return (
     <label className="input input-bordered w-full rounded-full flex items-center gap-2">
       <Search className="w-4 h-4 opacity-70" />
-      <input type="search" placeholder="Search quizzes..." className="grow" />
+      <input
+        type="search"
+        placeholder="Search quizzes by title..."
+        className="grow"
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+      />
     </label>
   );
 }
 
 interface QuizGridProps {
-  quizzes: QuizData[];
+  quizzes: (QuizData & { hasParticipated: boolean })[];
   onQuizClick: (quiz: QuizData) => void;
 }
 
@@ -367,6 +425,7 @@ function QuizGrid({ quizzes, onQuizClick }: QuizGridProps) {
         <QuizGridCard
           key={quiz.id}
           quiz={quiz}
+          hasParticipated={quiz.hasParticipated}
           onClick={() => onQuizClick(quiz)}
         />
       ))}
@@ -376,31 +435,72 @@ function QuizGrid({ quizzes, onQuizClick }: QuizGridProps) {
 
 interface QuizGridCardProps {
   quiz: QuizData;
+  hasParticipated: boolean;
   onClick: () => void;
 }
 
-function QuizGridCard({ quiz, onClick }: QuizGridCardProps) {
+function QuizGridCard({ quiz, hasParticipated, onClick }: QuizGridCardProps) {
+  const imageUrl = quiz.featuredImage || quiz.personalityTypes[0]?.imageUrl || 'https://via.placeholder.com/400x300?text=Quiz'
+
   return (
     <article
       onClick={onClick}
-      className="card bg-gradient-to-br from-accent to-accent/80 h-48 lg:h-56 relative overflow-hidden cursor-pointer transition-transform hover:scale-105 active:scale-95"
+      className="group card h-56 lg:h-64 relative overflow-hidden cursor-pointer transition-all hover:shadow-2xl hover:scale-[1.02] active:scale-95 rounded-2xl"
     >
-      <div className="absolute inset-0 bg-[url('https://img.daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.webp')] bg-cover bg-center opacity-20" />
+      {/* Background Image */}
+      <div
+        className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110"
+        style={{ backgroundImage: `url(${imageUrl})` }}
+      />
 
-      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
+      {/* Gradient Overlay - Only bottom half */}
+      <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
 
-      <div className="relative h-full p-4 lg:p-6 flex flex-col justify-between">
-        <div>
-          <span className="badge badge-sm badge-ghost">{quiz.category}</span>
+      {/* Content */}
+      <div className="relative h-full p-4 flex flex-col justify-between">
+        {/* Top Section - Badges */}
+        <div className="flex items-start justify-between gap-2">
+          <span className="badge badge-sm bg-black/70 text-white border-0 backdrop-blur-sm shadow-lg">
+            {quiz.category}
+          </span>
+          {hasParticipated && (
+            <div className="badge badge-success badge-sm gap-1 shadow-lg">
+              <span>✓</span>
+              <span className="hidden sm:inline">Done</span>
+            </div>
+          )}
         </div>
 
-        <div className="space-y-1">
-          <div className="text-xs text-white/70">#{quiz.id}</div>
-          <h4 className="text-lg lg:text-xl font-bold text-white leading-tight line-clamp-2">
+        {/* Bottom Section - Title & Info */}
+        <div className="space-y-2">
+          <h4 className="text-lg lg:text-xl font-bold text-white leading-tight line-clamp-2 drop-shadow-lg">
             {quiz.title}
           </h4>
+          <div className="flex items-center justify-between text-white/80 text-xs">
+            <span className="flex items-center gap-1">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-3.5 w-3.5"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
+                />
+              </svg>
+              {quiz.personalityTypes.length} types
+            </span>
+            <span className="text-white/60">#{quiz.id}</span>
+          </div>
         </div>
       </div>
+
+      {/* Hover shine effect */}
+      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
     </article>
   );
 }

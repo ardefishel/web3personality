@@ -14,3 +14,8 @@ export {
   useActiveQuizzes,
   type IPFSCollectionMetadata,
 } from './hooks/useQuizzes'
+
+export {
+  useUserCollection,
+  type PersonalityNFT,
+} from './hooks/useUserCollection'

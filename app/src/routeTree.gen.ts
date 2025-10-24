@@ -43,6 +43,7 @@ import { Route as deprecatedLegacyAppAccountIndexRouteImport } from './routes/(d
 import { Route as appProviderAppCollectionIndexRouteImport } from './routes/(app)/_provider/_app/collection/index'
 import { Route as appProviderAppAccountIndexRouteImport } from './routes/(app)/_provider/_app/account/index'
 import { Route as deprecatedLegacyAppTakeQuizQuizIdRouteImport } from './routes/(deprecated)/legacy/_app/take-quiz/$quizId'
+import { Route as appProviderAppQuizQuizIdRouteImport } from './routes/(app)/_provider/_app/quiz/$quizId'
 
 const V2RouteImport = createFileRoute('/v2')()
 const appRouteImport = createFileRoute('/(app)')()
@@ -227,6 +228,12 @@ const deprecatedLegacyAppTakeQuizQuizIdRoute =
     path: '/take-quiz/$quizId',
     getParentRoute: () => deprecatedLegacyAppRoute,
   } as any)
+const appProviderAppQuizQuizIdRoute =
+  appProviderAppQuizQuizIdRouteImport.update({
+    id: '/quiz/$quizId',
+    path: '/quiz/$quizId',
+    getParentRoute: () => appProviderAppRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof appProviderAppIndexRoute
@@ -251,6 +258,7 @@ export interface FileRoutesByFullPath {
   '/privacy': typeof appProviderGeneralPrivacyRoute
   '/profile': typeof appProviderGeneralProfileRoute
   '/legacy/': typeof deprecatedLegacyAppIndexRoute
+  '/quiz/$quizId': typeof appProviderAppQuizQuizIdRoute
   '/legacy/take-quiz/$quizId': typeof deprecatedLegacyAppTakeQuizQuizIdRoute
   '/account': typeof appProviderAppAccountIndexRoute
   '/collection': typeof appProviderAppCollectionIndexRoute
@@ -279,6 +287,7 @@ export interface FileRoutesByTo {
   '/network': typeof appProviderGeneralNetworkRoute
   '/privacy': typeof appProviderGeneralPrivacyRoute
   '/profile': typeof appProviderGeneralProfileRoute
+  '/quiz/$quizId': typeof appProviderAppQuizQuizIdRoute
   '/legacy/take-quiz/$quizId': typeof deprecatedLegacyAppTakeQuizQuizIdRoute
   '/account': typeof appProviderAppAccountIndexRoute
   '/collection': typeof appProviderAppCollectionIndexRoute
@@ -317,6 +326,7 @@ export interface FileRoutesById {
   '/(app)/_provider/_general/profile': typeof appProviderGeneralProfileRoute
   '/(app)/_provider/_app/': typeof appProviderAppIndexRoute
   '/(deprecated)/legacy/_app/': typeof deprecatedLegacyAppIndexRoute
+  '/(app)/_provider/_app/quiz/$quizId': typeof appProviderAppQuizQuizIdRoute
   '/(deprecated)/legacy/_app/take-quiz/$quizId': typeof deprecatedLegacyAppTakeQuizQuizIdRoute
   '/(app)/_provider/_app/account/': typeof appProviderAppAccountIndexRoute
   '/(app)/_provider/_app/collection/': typeof appProviderAppCollectionIndexRoute
@@ -349,6 +359,7 @@ export interface FileRouteTypes {
     | '/privacy'
     | '/profile'
     | '/legacy/'
+    | '/quiz/$quizId'
     | '/legacy/take-quiz/$quizId'
     | '/account'
     | '/collection'
@@ -377,6 +388,7 @@ export interface FileRouteTypes {
     | '/network'
     | '/privacy'
     | '/profile'
+    | '/quiz/$quizId'
     | '/legacy/take-quiz/$quizId'
     | '/account'
     | '/collection'
@@ -414,6 +426,7 @@ export interface FileRouteTypes {
     | '/(app)/_provider/_general/profile'
     | '/(app)/_provider/_app/'
     | '/(deprecated)/legacy/_app/'
+    | '/(app)/_provider/_app/quiz/$quizId'
     | '/(deprecated)/legacy/_app/take-quiz/$quizId'
     | '/(app)/_provider/_app/account/'
     | '/(app)/_provider/_app/collection/'
@@ -677,17 +690,26 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof deprecatedLegacyAppTakeQuizQuizIdRouteImport
       parentRoute: typeof deprecatedLegacyAppRoute
     }
+    '/(app)/_provider/_app/quiz/$quizId': {
+      id: '/(app)/_provider/_app/quiz/$quizId'
+      path: '/quiz/$quizId'
+      fullPath: '/quiz/$quizId'
+      preLoaderRoute: typeof appProviderAppQuizQuizIdRouteImport
+      parentRoute: typeof appProviderAppRouteRoute
+    }
   }
 }
 
 interface appProviderAppRouteRouteChildren {
   appProviderAppIndexRoute: typeof appProviderAppIndexRoute
+  appProviderAppQuizQuizIdRoute: typeof appProviderAppQuizQuizIdRoute
   appProviderAppAccountIndexRoute: typeof appProviderAppAccountIndexRoute
   appProviderAppCollectionIndexRoute: typeof appProviderAppCollectionIndexRoute
 }
 
 const appProviderAppRouteRouteChildren: appProviderAppRouteRouteChildren = {
   appProviderAppIndexRoute: appProviderAppIndexRoute,
+  appProviderAppQuizQuizIdRoute: appProviderAppQuizQuizIdRoute,
   appProviderAppAccountIndexRoute: appProviderAppAccountIndexRoute,
   appProviderAppCollectionIndexRoute: appProviderAppCollectionIndexRoute,
 }

@@ -1,5 +1,7 @@
 import { Drawer } from "vaul";
 import { useNavigate } from "@tanstack/react-router";
+import { useAccount, useReadContract } from "wagmi";
+import { quizManagerContract } from "@/lib/contracts";
 
 interface PersonalityType {
   id: string;
@@ -141,10 +143,41 @@ interface StartQuizButtonProps {
 
 function StartQuizButton({ quizId }: StartQuizButtonProps) {
   const navigate = useNavigate();
-  
+  const { address } = useAccount();
+
+  // Check if user has participated in this quiz
+  const { data: hasParticipated } = useReadContract({
+    ...quizManagerContract,
+    functionName: "hasParticipated",
+    args: address ? [address, BigInt(quizId)] : undefined,
+  });
+
   const handleStartQuiz = () => {
-    navigate({ to: `/v2/quiz/${quizId}` });
+    navigate({ to: `/quiz/${quizId}` });
   };
+
+  const handleViewCollection = () => {
+    navigate({ to: '/collection' });
+  };
+
+  if (hasParticipated) {
+    return (
+      <div className="space-y-3">
+        <div className="alert alert-success">
+          <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          <span>You've already completed this quiz!</span>
+        </div>
+        <button
+          onClick={handleViewCollection}
+          className="btn btn-accent w-full lg:self-start rounded-full btn-lg lg:px-12"
+        >
+          View Your Collection
+        </button>
+      </div>
+    );
+  }
 
   return (
     <button

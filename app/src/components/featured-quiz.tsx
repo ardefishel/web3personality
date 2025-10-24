@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { QuizDetailDrawer } from "./quiz-detail-drawer";
 import { useFeaturedQuiz } from "@/lib";
+import { useAccount, useReadContract } from "wagmi";
+import { quizManagerContract } from "@/lib/contracts";
 
 interface FeaturedQuizHighlightProps {
   quizId?: number;
@@ -38,11 +40,24 @@ interface FeaturedQuizCardProps {
 
 function FeaturedQuizCard({ quizId }: FeaturedQuizCardProps = {}) {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-  const { data: featuredQuiz, isLoading } = useFeaturedQuiz(quizId);
+  const { address } = useAccount();
+  const { data: featuredQuiz, isLoading, isActive } = useFeaturedQuiz(quizId);
+
+  // Check if user has participated in this quiz
+  const { data: hasParticipated } = useReadContract({
+    ...quizManagerContract,
+    functionName: "hasParticipated",
+    args: address && featuredQuiz ? [address, BigInt(featuredQuiz.id)] : undefined,
+  });
 
   const handleQuizClick = () => {
     setIsDrawerOpen(true);
   };
+
+  // Don't show featured quiz if inactive
+  if (!isActive) {
+    return null;
+  }
 
   if (isLoading) {
     return (
@@ -74,7 +89,15 @@ function FeaturedQuizCard({ quizId }: FeaturedQuizCardProps = {}) {
       <div className="lg:grid lg:grid-cols-2 lg:gap-8 lg:p-8">
         <div className="p-6 lg:p-0 space-y-4 lg:space-y-6 lg:flex lg:flex-col lg:justify-center">
           <div className="flex items-center justify-between lg:justify-start lg:gap-4">
-            <span className="badge badge-soft badge-accent">Featured</span>
+            <div className="flex items-center gap-2">
+              <span className="badge badge-soft badge-accent">Featured</span>
+              {hasParticipated && (
+                <span className="badge badge-success badge-sm gap-1">
+                  <span>✓</span>
+                  <span>Completed</span>
+                </span>
+              )}
+            </div>
             <span className="text-xs text-base-content/60">
               {featuredQuiz.personalityTypes.length} personalities
             </span>
